@@ -1,4 +1,4 @@
-# 🏛️ LexiScholar v3.2.0 Beta
+# 🏛️ LexiScholar v3.5.0 Beta
 
 > *Özel, Yapay Zeka Destekli Nitel Veri Analizi Platformu.*
 
@@ -35,7 +35,13 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 
 ---
 
-## 🚀 v3.2.0 Beta — Yenilikler
+## 🚀 v3.5.0 Beta — Yenilikler
+
+### 📊 Gelişmiş Görselleştirme Galerisi (v3.5)
+- **Yeni İki Panelli Tasarım:** Grafik ayarları ve ana ekran modern bir iş akışı için birbirinden ayrıldı.
+- **ApexCharts Entegrasyonu:** Daha yumuşak animasyonlar, yüksek çözünürlüklü dışa aktarma ve etkileşimli tooltipler.
+- **Dinamik Filtreleme:** Gösterge (legend) ve veri etiketi (data labels) kontrolleri eklendi.
+- **Mükemmel Uyum:** Tüm grafiklerin pencereye tam sığması ve yüksek DPI desteği optimize edildi.
 
 ### 👥 Takım Çalışması & Güvenirlik (Teamwork)
 - **Kodlayıcı Yönetimi:** Her araştırmacı kendi adına ve rengine göre kodlama yapar.
@@ -80,7 +86,7 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 LexiScholar v3.2.0 Beta
 │
 ├── main.py                  # Giriş noktası, ortam kurulumu
-├── __version__.py           # Merkezi versiyon bilgisi (v3.2.0)
+├── __version__.py           # Merkezi versiyon bilgisi (v3.5.0)
 ├── nlp_engine.py            # NLP işlevleri (duygu, NER, KWIC, konu modeli)
 ├── llm_engine.py            # OpenRouter API wrapper
 │

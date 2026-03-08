@@ -199,9 +199,10 @@ proje_adi/
 
 ## 📸 Ekran Görüntüleri
 
-![Ana Ekran](assets/screenshots/main.png)
-![Bilgi Ansiklopedisi](assets/screenshots/encyclopedia.png)
-![AI Asistan](assets/screenshots/AI_asist.png)
+![Ana Ekran](assets/screenshots/welcome.jpg)
+![Bilgi Ansiklopedisi](assets/screenshots/lexi_pedia.jpg)
+![Görselleştirme Galerisi](assets/screenshots/gallery_v3.5.png)
+![AI Ayarları](assets/screenshots/AI_settings.jpg)
 
 ---
 

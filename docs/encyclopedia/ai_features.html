@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexiScholar Bilgi Ansiklopedisi - Yapay Zeka Özellikleri</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <a href="index.html" style="text-decoration: none;">
+                <div class="logo">
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <span class="logo-text">LexiScholar</span>
+                </div>
+            </a>
+
+            <div class="search-container">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" class="search-input" placeholder="Ara...">
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item"><a href="data_management.html" class="nav-link"><i data-lucide="database"></i> Veri
+                        Yönetimi</a></li>
+                <li class="nav-item"><a href="coding_guide.html" class="nav-link"><i data-lucide="tag"></i> Kodlama
+                        Sistemi</a></li>
+                <li class="nav-item"><a href="analysis_tools.html" class="nav-link"><i data-lucide="bar-chart-3"></i>
+                        Analiz Araçları</a></li>
+                <li class="nav-item"><a href="mixed_methods.html" class="nav-link"><i data-lucide="layers"></i> Karma
+                        Yöntemler</a></li>
+                <li class="nav-item">
+                    <a href="ai_features.html" class="nav-link active"><i data-lucide="sparkles"></i> Yapay Zeka</a>
+                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
+                        <li><a href="openrouter_guide.html" class="sub-nav-link"
+                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
+                                OpenRouter Rehberi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
+                        Görselleştirme</a></li>
+                <li class="nav-item"><a href="teamwork_reliability.html" class="nav-link"><i data-lucide="users"></i>
+                        Takım Çalışması</a></li>
+                <li class="nav-item"><a href="keyboard_shortcuts.html" class="nav-link"><i data-lucide="keyboard"></i>
+                        Kısayollar</a></li>
+            </ul>
+        </aside>
+
+        <main>
+            <section class="content-section" style="margin-top: 2rem;">
+                <h1>Yapay Zeka (AI) Destekli Analiz</h1>
+                <p>LexiScholar, nitel araştırmalarınızın hızını ve derinliğini artırmak için gelişmiş dil modellerini
+                    kullanır. Bu özellikler hem yerel (bilgisayarınızda) hem de bulut tabanlı (API) olarak çalışabilir.
+                </p>
+
+                <div class="feature-item" id="ai-chat">
+                    <h3>Akademik Sohbet ve RAG (Mevcut Belge ile Sohbet)</h3>
+                    <p>Herhangi bir belge açıkken AI panelini kullanarak o belgeye sorular sorabilirsiniz. Sistemin
+                        <strong>RAG (Retrieval-Augmented Generation)</strong> mimarisi sayesinde AI sadece genel
+                        bilgisiyle değil, o belgenin içeriğine hakim olarak cevap verir.
+                    </p>
+                </div>
+
+                <div class="feature-item" id="sentiment">
+                    <h3>Duygu Analizi (Sentiment Analysis)</h3>
+                    <p>Kodlama ağacındaki bir koda bağlı tüm segmentlerin duygu tonunu (Olumlu, Olumsuz, Nötr) BERT
+                        modelleriyle tespit edebilir, bu veriyi nicel değişken olarak raporlarınıza ekleyebilirsiniz.
+                    </p>
+                </div>
+
+                <div class="feature-item" id="ai-suggestions">
+                    <h3>Otomatik Kod Önerileri</h3>
+                    <p>Bir metni seçtiğinizde AI, metnin içeriğine en uygun mevcut kodları veya yeni kodlama önerilerini
+                        sağ taraftaki panelde listeler.</p>
+                </div>
+
+                <div class="feature-item" id="privacy"
+                    style="background-color: #f1f5f9; border-left: 4px solid #4f46e5; padding: 1rem; border-radius: 0.5rem; color: #1e293b;">
+                    <h3 style="color: #4f46e5;">Güvenlik ve Gizlilik</h3>
+                    <p>Veri gizliliği akademik araştırmalar için en kritik konudur:</p>
+                    <ul>
+                        <li><strong>LLM Sohbet:</strong> API üzerinden çalışır (OpenRouter/OpenAI). Veriler şifreli
+                            olarak modele iletilir. <br><a href="openrouter_guide.html"
+                                style="color: #4f46e5; font-weight: 600;">➔ Nasıl API Anahtarı Alırım? (Adım Adım
+                                Rehber)</a></li>
+                        <li><strong>Duygu/Konu Analizi:</strong> Tamamen yereldir. Veri bilgisayarınızdan asla ayrılmaz.
+                            İlk çalıştırmada ~500MB'lık modeller otomatik olarak indirilir.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <footer>
+                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+            </footer>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+    <script src="search.js"></script>
+</body>
+
+</html>

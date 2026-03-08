@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexiScholar Bilgi Ansiklopedisi</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <a href="index.html" style="text-decoration: none;">
+                <div class="logo">
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <span class="logo-text">LexiScholar</span>
+                </div>
+            </a>
+
+            <div class="search-container">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" class="search-input" placeholder="Ara...">
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item"><a href="data_management.html" class="nav-link"><i data-lucide="database"></i> Veri
+                        Yönetimi</a></li>
+                <li class="nav-item"><a href="coding_guide.html" class="nav-link"><i data-lucide="tag"></i> Kodlama
+                        Sistemi</a></li>
+                <li class="nav-item"><a href="analysis_tools.html" class="nav-link"><i data-lucide="bar-chart-3"></i>
+                        Analiz Araçları</a></li>
+                <li class="nav-item"><a href="mixed_methods.html" class="nav-link"><i data-lucide="layers"></i> Karma
+                        Yöntemler</a></li>
+                <li class="nav-item">
+                    <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
+                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
+                        <li><a href="openrouter_guide.html" class="sub-nav-link"
+                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
+                                OpenRouter Rehberi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
+                        Görselleştirme</a></li>
+                <li class="nav-item"><a href="teamwork_reliability.html" class="nav-link"><i data-lucide="users"></i>
+                        Takım Çalışması</a></li>
+                <li class="nav-item"><a href="keyboard_shortcuts.html" class="nav-link"><i data-lucide="keyboard"></i>
+                        Kısayollar</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <header style="display: none;"></header> <!-- Placeholder to maintain consistency -->
+
+            <section class="hero" style="margin-top: 2rem;">
+                <div class="hero-content">
+                    <h1>LexiScholar'ı Keşfedin</h1>
+                    <p>Nitel ve karma yöntem araştırmalarınız için geliştirilmiş en kapsamlı bilgi veri tabanına hoş
+                        geldiniz. Her modülün çalışma prensibini ve akademik ipuçlarını burada bulabilirsiniz.</p>
+                </div>
+            </section>
+
+            <div class="category-grid">
+                <!-- Data Management -->
+                <a href="data_management.html" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="file-up"></i>
+                    </div>
+                    <h3>Veri İçe Aktarma</h3>
+                    <p>Excel anketleri, transkriptler ve ses dosyalarını projeye dahil etmenin en verimli yollarını
+                        öğrenin.</p>
+                </a>
+
+                <!-- Coding -->
+                <a href="coding_guide.html" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="highlighter"></i>
+                    </div>
+                    <h3>Kodlama ve Notlar</h3>
+                    <p>In-Vivo kodlama, hiyerarşik kod ağacı yönetimi ve analitik notlar (memos) ile verinizi
+                        anlamlandırın.</p>
+                </a>
+
+                <!-- Mixed Methods -->
+                <a href="mixed_methods.html" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="combine"></i>
+                    </div>
+                    <h3>Karma Yöntemler</h3>
+                    <p>Nitel veriyi nicel değişkenlerle kıyaslayın, Alıntı Matrisleri ve Yan Yana Görünümler oluşturun.
+                    </p>
+                </a>
+
+                <!-- AI Tools -->
+                <a href="ai_features.html" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="brain-circuit"></i>
+                    </div>
+                    <h3>AI Asistanı</h3>
+                    <p>BERT tabanlı duygu analizi, LDA konu modelleme ve RAG destekli akademik sohbet özelliklerini
+                        keşfedin.</p>
+                </a>
+
+                <!-- Visualizations -->
+                <a href="visualizations.html" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="network"></i>
+                    </div>
+                    <h3>Görselleştirme</h3>
+                    <p>Belge Portreleri, Sankey Diyagramları ve İlişkisel Ağlar ile bulgularınızı etkileyici sunumlara
+                        dönüştürün.</p>
+                </a>
+
+                <!-- Export -->
+                <a href="data_management.html#export" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="download"></i>
+                    </div>
+                    <h3>Dışa Aktarma</h3>
+                    <p>Kod kitapçıkları, raporlar ve ham verileri akademik formatlarda arşivleyin.</p>
+                </a>
+
+                <!-- Teamwork -->
+                <a href="teamwork_reliability.html" class="category-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3>Takım Çalışması</h3>
+                    <p>Grup çalışması, Coder Yönetimi ve IRR analizi ile bilimsel geçerliliği artırın.</p>
+                </a>
+            </div>
+
+            <section class="content-section">
+                <h2>Hızlı Başlangıç</h2>
+                <div class="feature-item">
+                    <h4>Proje Yapısı</h4>
+                    <p>LexiScholar, sol tarafta <strong>Belge Ağacı</strong> ve <strong>Kod Ağacı</strong>, ortada ise
+                        <strong>Metin Tarayıcı</strong> bulunan üçlü bir panel sistemine sahiptir. Sağ taraftaki
+                        <strong>Tepsi</strong> ise geçici olarak kodlara ve AI önerilerine hızlı erişim sağlar.
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <h4>Kodlama Mantığı</h4>
+                    <p>Metin üzerinde herhangi bir alanı seçip sürükleyerek Kod Ağacı'ndaki bir kodun üzerine
+                        bırakmanız, o segmenti kodlamanız için yeterlidir. Sağ tıklayarak <code>In-Vivo Kodlama</code>
+                        seçeneğini seçerseniz, seçtiğiniz metin doğrudan kod adı olarak atanır.</p>
+                </div>
+            </section>
+
+            <footer>
+                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="search.js"></script>
+</body>
+
+</html>

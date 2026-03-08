@@ -1,0 +1,43 @@
+# Environments
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Database files (DO NOT COMMIT PRIAVTE PROJECTS OR MASTER DB)
+*.db
+*.sqlite
+lexischolar.db
+projects/
+
+# Whisper / Model caches
+.cache/
+whisper_models/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# LexiScholar Runtime / Local Data
+lexischolar.log
+recent_projects.json
+lexischolar_walkthrough.html
+
+# Personal / Test Data
+*.pdf
+*.xlsx
+*.docx
+!docs/**/*.docx
+devir_teslim.md
+
+# IDEs
+.vscode/
+.idea/

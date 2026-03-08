@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexiScholar Bilgi Ansiklopedisi - Görselleştirme</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <a href="index.html" style="text-decoration: none;">
+                <div class="logo">
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <span class="logo-text">LexiScholar</span>
+                </div>
+            </a>
+
+            <div class="search-container">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" class="search-input" placeholder="Ara...">
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item"><a href="data_management.html" class="nav-link"><i data-lucide="database"></i> Veri
+                        Yönetimi</a></li>
+                <li class="nav-item"><a href="coding_guide.html" class="nav-link"><i data-lucide="tag"></i> Kodlama
+                        Sistemi</a></li>
+                <li class="nav-item"><a href="analysis_tools.html" class="nav-link"><i data-lucide="bar-chart-3"></i>
+                        Analiz Araçları</a></li>
+                <li class="nav-item"><a href="mixed_methods.html" class="nav-link"><i data-lucide="layers"></i> Karma
+                        Yöntemler</a></li>
+                <li class="nav-item">
+                    <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
+                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
+                        <li><a href="openrouter_guide.html" class="sub-nav-link"
+                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
+                                OpenRouter Rehberi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="visualizations.html" class="nav-link active"><i data-lucide="layout"></i>
+                        Görselleştirme</a></li>
+                <li class="nav-item"><a href="teamwork_reliability.html" class="nav-link"><i data-lucide="users"></i>
+                        Takım Çalışması</a></li>
+                <li class="nav-item"><a href="keyboard_shortcuts.html" class="nav-link"><i data-lucide="keyboard"></i>
+                        Kısayollar</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <section class="content-section" style="margin-top: 2rem;">
+                <h1>Görsel Analiz Araçları</h1>
+                <p>Verinizi sadece okumayın, onu görün. LexiScholar ile nitel bulgularınızı etkileyici grafiklere ve
+                    haritalara dönüştürün.</p>
+
+                <div class="feature-item" id="portrait">
+                    <h2>Belge Portresi (Document Portrait)</h2>
+                    <p>Her belgenin kod yoğunluğunu bir piksel matrisi üzerinden gösterir. Belgenin bütününe dair görsel
+                        bir "parmak izi" sunar.</p>
+                    <div class="visual-guide"
+                        style="background: #1e293b; border-radius: 8px; padding: 1rem; color: #94a3b8; font-family: monospace; font-size: 0.9rem; margin: 10px 0;">
+                        <strong>GÖRSEL OKUMA:</strong><br>
+                        - Her kare metnin bir bölümünü temsil eder.<br>
+                        - Kare rengi, o bölümde yoğunlukta olan kodun rengidir.<br>
+                        - Renksiz (gri) kareler kodlanmamış alanları gösterir.
+                    </div>
+                </div>
+
+                <div class="feature-item" id="sankey">
+                    <h2>Sankey Diyagramı (Akış Grafiği)</h2>
+                    <p>Kodların arasındaki geçişleri ve değişkenlerin kodlara olan akışını dinamik grafiklerle
+                        görselleştirin.</p>
+                    <ul>
+                        <li><strong>Kalınlık:</strong> Çizgilerin kalınlığı, iki kodun birlikte kullanılma frekansını
+                            temsil eder.</li>
+                        <li><strong>Yön:</strong> Verinin temalar arasındaki geçiş yönünü gösterir.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-item" id="network">
+                    <h2>Kodlar Arası İlişkisel Ağ (Graph)</h2>
+                    <p>Hangi kodların birbirine daha yakın olduğunu veya birbiriyle birlikte kullanıldığını
+                        (Co-occurrence) gösteren interaktif ağ haritalarıdır.</p>
+                    <div class="scenario-box"
+                        style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0;">
+                        <span class="scenario-title"
+                            style="font-weight: 700; color: #f59e0b; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.8rem;">NASIL
+                            YORUMLANIR?</span>
+                        - <strong>Düğümler (Nodes):</strong> Kodlarınızı temsil eder. Boyutları kodun toplam kullanım
+                        sayısını simgeler.<br>
+                        - <strong>Kenarlar (Edges):</strong> İki kod arasındaki çizgilerdir. Çizginin kalınlığı bu iki
+                        kodun kaç kez "aynı segmentte" veya "yan yana" geçtiğini gösterir.<br>
+                        - <strong>Kümelenme:</strong> Birbirine çok yakın duran kodlar, analizinizde birer "Tema"
+                        oluşturma potansiyeli taşır.
+                    </div>
+                </div>
+
+                <div class="feature-item" id="charts">
+                    <h2>Grafik Galerisi</h2>
+                    <p>Verilerinizi nicel grafiklere dökerek raporlarınızda kullanın.</p>
+                    <ul>
+                        <li><strong>Çubuk Grafik (Bar Chart):</strong> Kodların frekanslarını kıyaslar.</li>
+                        <li><strong>Pasta Grafik (Pie Chart):</strong> Kodların bütüne olan oranını gösterir.</li>
+                        <li><strong>Güneş Işını (Sunburst):</strong> Hiyerarşik kod yapısını ve alt kodların dağılımını iç içe halkalar şeklinde sunar.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <footer>
+                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+            </footer>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+    <script src="search.js"></script>
+</body>
+
+</html>

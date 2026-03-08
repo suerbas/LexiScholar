@@ -1,0 +1,51 @@
+"""
+Design System Sub-package for LexiScholar
+Aggregates all stylesheets and design tokens.
+"""
+
+from .palette import (
+    COLORS,
+    TYPOGRAPHY,
+    SPACING,
+    DIMENSIONS,
+    ICONS,
+    get_color
+)
+
+from .ribbon_qss import (
+    MENUBAR_STYLE,
+    TOOLBAR_STYLE,
+    RIBBON_GROUP_STYLE,
+    RIBBON_GROUP_NO_BORDER_STYLE,
+    RIBBON_BUTTON_STYLE,
+    RIBBON_LABEL_STYLE,
+    TAB_WIDGET_STYLE
+)
+
+from .main_qss import (
+    CONTEXT_MENU_STYLE,
+    MAIN_WINDOW_STYLE,
+    STATUSBAR_STYLE,
+    TREE_VIEW_STYLE,
+    TEXT_EDIT_STYLE,
+    TABLE_STYLE,
+    SCROLLBAR_STYLE,
+    PANEL_HEADER_STYLE,
+    SCROLL_AREA_STYLE,
+    PANEL_HEADER_CONTAINER_STYLE,
+    PANEL_HEADER_LABEL_STYLE,
+    WINDOW_CONTROL_BTN_STYLE,
+    MINIMIZED_WIDGET_STYLE
+)
+
+from .dialog_qss import (
+    DIALOG_STYLE,
+    SEGMENT_CARD_STYLE,
+    CODING_STRIPES_STYLE,
+    MEMO_DIALOG_STYLE,
+    AI_DIALOG_BROWSER_STYLE,
+    AI_DIALOG_BTN_SECONDARY,
+    AI_DIALOG_BTN_PRIMARY,
+    AI_DIALOG_BTN_SUCCESS,
+    AI_DIALOG_BTN_CLOSE
+)

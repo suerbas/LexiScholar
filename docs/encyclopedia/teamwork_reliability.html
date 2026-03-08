@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takım Çalışması ve Güvenilirlik - LexiScholar Ansiklopedisi</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <a href="index.html" style="text-decoration: none;">
+                <div class="logo">
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <span class="logo-text">LexiScholar</span>
+                </div>
+            </a>
+
+            <div class="search-container">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" class="search-input" placeholder="Ara...">
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item"><a href="data_management.html" class="nav-link"><i data-lucide="database"></i> Veri
+                        Yönetimi</a></li>
+                <li class="nav-item"><a href="coding_guide.html" class="nav-link"><i data-lucide="tag"></i> Kodlama
+                        Sistemi</a></li>
+                <li class="nav-item"><a href="analysis_tools.html" class="nav-link"><i data-lucide="bar-chart-3"></i>
+                        Analiz Araçları</a></li>
+                <li class="nav-item"><a href="mixed_methods.html" class="nav-link"><i data-lucide="layers"></i> Karma
+                        Yöntemler</a></li>
+                <li class="nav-item">
+                    <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
+                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
+                        <li><a href="openrouter_guide.html" class="sub-nav-link"
+                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
+                                OpenRouter Rehberi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
+                        Görselleştirme</a></li>
+                <li class="nav-item"><a href="teamwork_reliability.html" class="nav-link active"><i
+                            data-lucide="users"></i> Takım Çalışması</a></li>
+                <li class="nav-item"><a href="keyboard_shortcuts.html" class="nav-link"><i data-lucide="keyboard"></i>
+                        Kısayollar</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <section class="content-section" style="margin-top: 2rem;">
+                <h1>Grup Çalışması ve Güvenilirlik</h1>
+                <p>Nitel araştırmalar nadiren tek başına yapılır. LexiScholar, birden fazla araştırmacının
+                    (danışman/öğrenci veya ekip arkadaşları) aynı proje üzerinde uyum içinde çalışabilmesi için modern
+                    ve pratik araçlar sunar.</p>
+
+                <div class="feature-item" id="coder-management">
+                    <h2>1. Kodlayıcı Yönetimi (Coder Management)</h2>
+                    <p>Projede birden fazla araştırmacı çalışıyorsa, her bir kişi kendi adıyla ve belirlediği özel
+                        renkle sisteme kaydedilir. Kimin hangi cümleyi hangi kodla işaretlediği veritabanında kullanıcı
+                        bazlı olarak saklanır.</p>
+                    <div class="visual-guide"
+                        style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0;">
+                        <strong>NASIL KULLANILIR?</strong><br>
+                        - **Üst Menü → Takım** sekmesinden "Kodlayıcı Yönetimi"ni açın.<br>
+                        - Kendi isminizi ekleyin ve aktif kodlayıcı olarak seçin.<br>
+                        - Kodlama yaptığınızda, her segmentin altında sizin isminiz ve renginiz görünecektir.
+                    </div>
+                </div>
+
+                <div class="feature-item" id="irr-analysis">
+                    <h2>2. Analist Uyumu (Inter-Coder Reliability - IRR)</h2>
+                    <p>İki farklı araştırmacının aynı belgeleri ne kadar tutarlı (konsensüs) şekilde kodladığını sayısal
+                        olarak ölçer. Bu analiz, çalışmanızın bilimsel geçerliliği için kritik öneme sahiptir.</p>
+                    <ul>
+                        <li><strong>Genel Yüzde Uyum:</strong> İki kodlayıcının toplamda yüzde kaç oranında aynı kararı
+                            verdiğini söyler.</li>
+                        <li><strong>Cohen's Kappa:</strong> Uyumun "şans eseri" olma ihtimalini dışlayarak daha bilimsel
+                            bir katsayı sunar.</li>
+                    </ul>
+                    <div class="scenario-box"
+                        style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0;">
+                        <span class="scenario-title" style="color: #10b981;">BİLİMSEL KRİTERLER</span>
+                        Hangi değer başarılı kabul edilir?<br>
+                        - **%80+ Uyum:** Güçlü tutarlılık.<br>
+                        - **0.70+ Kappa:** Makalelerde kabul gören bilimsel alt sınır.
+                    </div>
+                </div>
+
+                <div class="feature-item" id="teamwork-philosophy">
+                    <h2>3. LexiScholar'ın "Basit ve Etkili" Yaklaşımı</h2>
+                    <p>Pahalı yazılımların (MAXQDA vb.) aksine LexiScholar, "TeamCloud" gibi ücretli abonelikler veya
+                        karmaşık "Proje Birleştirme" (Merge) işlemleriyle uğraşmanıza gerek bırakmaz.</p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div
+                            style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                            <h4 style="color: #f87171; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                                <i data-lucide="x-circle" style="width: 18px;"></i> Geleneksel Yazılımlar
+                            </h4>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary);">Araştırmacılar ayrı dosyalarda
+                                çalışır. Lider, bu dosyaları manuel olarak birleştirir. Süreç yavaş, hataya açık ve
+                                karmaşıktır.</p>
+                        </div>
+                        <div
+                            style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <h4 style="color: #34d399; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                                <i data-lucide="check-circle" style="width: 18px;"></i> LexiScholar Yaklaşımı
+                            </h4>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary);">Tek bir proje dosyası
+                                kullanılır. Ekibinizle ortak bir <strong>Google Drive</strong> veya
+                                <strong>OneDrive</strong> klasöründe çalışmanız yeterlidir.</p>
+                        </div>
+                    </div>
+
+                    <div class="visual-guide" style="margin-top: 20px;">
+                        <strong>💡 Senkronize Çalışma Modeli:</strong><br>
+                        Bulut depolama alanı üzerinden dosyayı açtığınızda, bir arkadaşınızın yaptığı kodlama saniyeler
+                        içinde sizin ekranınıza (dosya güncellendiğinde) yansır. Ekstra bir dosya parçalama angaryasına
+                        gerek kalmadan senkronize bir şekilde ilerlersiniz.
+                    </div>
+                </div>
+
+                <div class="feature-item" id="best-practices">
+                    <h2>⚠️ Grup Çalışması İçin Notlar</h2>
+                    <ul>
+                        <li><strong>Dosya Çakışması:</strong> Aynı saniyede iki kişinin aynı dosyayı kaydetmeye
+                            çalışması bulut sistemlerinde nadiren "kopya dosya" oluşturabilir. Bunu önlemek için kodlama
+                            saatlerini koordine etmek veya dosya açıkken diğerinin bitmesini beklemek sağlıklıdır.</li>
+                        <li><strong>Yedekleme:</strong> Proje lideri düzenli aralıklarla **Snapshots (Yedekler)**
+                            almalıdır.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <footer>
+                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.2.0 Beta</p>
+            </footer>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+    <script src="search.js"></script>
+</body>
+
+</html>

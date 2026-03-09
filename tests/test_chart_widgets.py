@@ -5,9 +5,14 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+import os
+import pytest
 from ui.visualizations.charts.chart_widgets import LexiBarChart
 
+# QWebEngineView is unstable in headless/offscreen mode on CI.
+IS_OFFSCREEN = os.environ.get("QT_QPA_PLATFORM") == "offscreen"
 
+@pytest.mark.skipif(IS_OFFSCREEN, reason="QWebEngineView crashes in offscreen mode on CI")
 def test_bar_chart_respects_vertical_for_long_labels(qapp):
     chart = LexiBarChart(title="Kod Frekansı")
     labels = [
@@ -23,6 +28,7 @@ def test_bar_chart_respects_vertical_for_long_labels(qapp):
     chart.deleteLater()
 
 
+@pytest.mark.skipif(IS_OFFSCREEN, reason="QWebEngineView crashes in offscreen mode on CI")
 def test_bar_chart_horizontal_does_not_force_truncation_legend(qapp):
     chart = LexiBarChart(title="Kod Frekansı")
     labels = [
@@ -37,6 +43,7 @@ def test_bar_chart_horizontal_does_not_force_truncation_legend(qapp):
     chart.deleteLater()
 
 
+@pytest.mark.skipif(IS_OFFSCREEN, reason="QWebEngineView crashes in offscreen mode on CI")
 def test_bar_chart_does_not_crash_on_update(qapp):
     chart = LexiBarChart(title="Kod Frekansı")
     labels = [f"Uzun etiket {i} için örnek metin" for i in range(10)]
@@ -47,6 +54,7 @@ def test_bar_chart_does_not_crash_on_update(qapp):
     chart.deleteLater()
 
 
+@pytest.mark.skipif(IS_OFFSCREEN, reason="QWebEngineView crashes in offscreen mode on CI")
 def test_bar_chart_full_label_mode_smoke_test(qapp):
     chart = LexiBarChart(title="Kod Frekansı")
     labels = [

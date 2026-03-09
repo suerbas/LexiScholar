@@ -10,9 +10,9 @@ Tüm testlerde kullanılacak ortak fixture'lar:
 import os
 import sys
 
-# Set offscreen platform BEFORE any Qt imports if possible,
-# and certainly before QApplication instantiation.
-os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+# Force offscreen platform ONLY on CI to allow local GUI testing.
+if os.environ.get("GITHUB_ACTIONS"):
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 # WebEngine/Chromium flags for headless/CI environments
 os.environ["QTWEBENGINE_DISABLE_GPU"] = "1"

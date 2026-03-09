@@ -7,14 +7,29 @@ Tüm testlerde kullanılacak ortak fixture'lar:
   - dao_*:         hazır DAO örnekleri
 """
 
-import sys
 import os
+import sys
+
+# Set offscreen platform BEFORE any Qt imports if possible,
+# and certainly before QApplication instantiation.
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+# WebEngine/Chromium flags for headless/CI environments
+os.environ["QTWEBENGINE_DISABLE_GPU"] = "1"
+os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox --disable-gpu --disable-software-rasterizer"
+
 import pytest
 from pathlib import Path
 
 # Proje kökünü Python path'e ekle (tests/ dışından import için)
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+# Ensure WebEngine is imported early to avoid "Contexts must be set" errors
+try:
+    from PyQt6.QtWebEngineWidgets import QWebEngineView
+except ImportError:
+    pass # Handle cases where WebEngine is not installed
 
 from database.connection import init_db, get_db_connection
 from database.document_dao import DocumentDAO
@@ -84,8 +99,11 @@ def sample_code(dao_code) -> int:
 
 @pytest.fixture(scope="session")
 def qapp():
-    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PyQt6.QtCore import Qt
     app = QApplication.instance()
     if app is None:
-        app = QApplication([])
+        # Essential for QWebEngine in many environments
+        QApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
+        # Pass a dummy name as sys.argv[0] to avoid "Argument list is empty" error
+        app = QApplication(["LexiScholarTest"])
     return app

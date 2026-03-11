@@ -85,16 +85,23 @@ class DocumentTreeModelPopulatorMixin:
             icon = IconProvider.get_icon(icon_char, color=icon_color, size=32)
             item.setIcon(icon)
             
-            if text:
-                doc = QTextDocument()
-                doc.setHtml(text)
-                clean_text = doc.toPlainText()
-                char_count = len(clean_text)
+            if text and len(text) > 0:
+                # Optimized tooltip: Simple HTML stripper + snippet
+                import html
+                clean_text = text[:1000] # Limit initial text for processing
+                # Remove common tags
+                for tag in ['<p>', '</p>', '<br>', '<br/>', '<div>', '</div>', '<b>', '</b>', '<i>', '</i>', '<span>', '</span>']:
+                    clean_text = clean_text.replace(tag, ' ')
+                # Remove any other tags using basic regex for safety
+                import re
+                clean_text = re.sub(r'<[^>]+>', '', clean_text)
+                clean_text = html.unescape(clean_text)
+                
                 preview = " ".join(clean_text[:200].split())
                 if len(clean_text) > 200:
                     preview += "..."
                 
-                tooltip = f"<b>{title}</b><br/>Tip: {file_type.upper()}<br/>Karakter: {char_count}<br/><br/><i>{preview}</i>"
+                tooltip = f"<b>{title}</b><br/>Tip: {file_type.upper()}<br/><br/><i>{preview}</i>"
                 item.setToolTip(tooltip)
             else:
                 item.setToolTip(f"<b>{title}</b><br/>Tip: {file_type.upper()}")

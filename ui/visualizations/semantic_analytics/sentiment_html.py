@@ -51,23 +51,23 @@ def generate_sentiment_html(results: List[Dict], model_name: str = "BERT") -> st
 
     stats_html = f"""
     <div class="stat-box">
-        <div class="stat-value">{{len(results)}}</div>
+        <div class="stat-value">{len(results)}</div>
         <div class="stat-label">BELGE</div>
     </div>
     <div class="stat-box">
-        <div class="stat-value" style="color:#10B981">{{pos_total}}</div>
+        <div class="stat-value" style="color:#10B981">{pos_total}</div>
         <div class="stat-label">POZİTİF</div>
     </div>
     <div class="stat-box">
-        <div class="stat-value" style="color:#EF4444">{{neg_total}}</div>
+        <div class="stat-value" style="color:#EF4444">{neg_total}</div>
         <div class="stat-label">NEGATİF</div>
     </div>
     <div class="stat-box">
-        <div class="stat-value" style="color:#64748B">{{label_counts.get("neutral", 0)}}</div>
+        <div class="stat-value" style="color:#64748B">{label_counts.get("neutral", 0)}</div>
         <div class="stat-label">NÖTR</div>
     </div>
-    <div class="stat-box tip" data-tip="{{avg_tip}}" style="cursor:help">
-        <div class="stat-value" style="color:#F59E0B">{{avg_score:.0%}}</div>
+    <div class="stat-box tip" data-tip="{avg_tip}" style="cursor:help">
+        <div class="stat-value" style="color:#F59E0B">{avg_score:.0%}</div>
         <div class="stat-label">ORT. SKOR ℹ</div>
     </div>"""
 
@@ -83,19 +83,19 @@ def generate_sentiment_html(results: List[Dict], model_name: str = "BERT") -> st
 
         rows_html += f"""
         <tr>
-            <td style="font-weight:600">{{r.get("title", "Belge")}}</td>
+            <td style="font-weight:600">{r.get("title", "Belge")}</td>
             <td>
-                <span class="badge tip" data-tip="{{tip}}" style="background:{{color}}22;color:{{color}};cursor:help">
-                    {{label_tr}}
+                <span class="badge tip" data-tip="{tip}" style="background:{color}22;color:{color};cursor:help">
+                    {label_tr}
                 </span>
             </td>
             <td style="width:200px">
-                <div class="bar-bg tip" data-tip="{{bar_tip}}" style="cursor:help">
-                    <div class="bar-fill" style="width:{{pct}}%;background:{{color}}"></div>
+                <div class="bar-bg tip" data-tip="{bar_tip}" style="cursor:help">
+                    <div class="bar-fill" style="width:{pct}%;background:{color}"></div>
                 </div>
             </td>
-            <td style="width:60px;text-align:right;color:{{color}};font-weight:bold">{{pct}}%</td>
-            <td style="color:#64748B;font-size:12px">{{summary}}</td>
+            <td style="width:60px;text-align:right;color:{color};font-weight:bold">{pct}%</td>
+            <td style="color:#64748B;font-size:12px">{summary}</td>
         </tr>"""
 
     tooltip_js = """
@@ -129,17 +129,17 @@ def generate_sentiment_html(results: List[Dict], model_name: str = "BERT") -> st
 
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Duygu Analizi</title>
-<style>{{COMMON_STYLES}}</style></head><body>
+<style>{COMMON_STYLES}</style></head><body>
 <div class="container">
-    <div class="card"><div class="stat-row">{{stats_html}}</div></div>
+    <div class="card"><div class="stat-row">{stats_html}</div></div>
         <h2>Belge Bazlı Sonuçlar</h2>
         <table>
             <thead><tr><th>Belge</th><th>Duygu</th><th>Skor</th><th></th><th>Özet</th></tr></thead>
-            <tbody>{{rows_html}}</tbody>
+            <tbody>{rows_html}</tbody>
         </table>
     </div>
 </div>
-{{tooltip_js}}
+{tooltip_js}
 </body></html>"""
     
     return save_html(html, "sentiment")
@@ -186,31 +186,31 @@ def generate_hybrid_sentiment_html(results: List[Dict], model_name: str = "Yapay
 
         rows_html += f"""
         <tr style="border-bottom: 1px solid #E2E8F0">
-            <td style="font-weight:600; vertical-align:middle">{{r.get("title", "Belge")}}</td>
+            <td style="font-weight:600; vertical-align:middle">{r.get("title", "Belge")}</td>
             
             <!-- Local BERT -->
             <td style="background: #F8FAFC; padding: 12px">
-                <span class="badge" style="background:{{l_color}}22;color:{{l_color}}">{{label_map.get(l_label, l_label)}}</span>
-                <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:{{l_pct}}%;background:{{l_color}}"></div></div>
-                <div style="font-size:11px; color:#64748B; margin-top:4px">{{l_summary}}</div>
+                <span class="badge" style="background:{l_color}22;color:{l_color}">{label_map.get(l_label, l_label)}</span>
+                <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:{l_pct}%;background:{l_color}"></div></div>
+                <div style="font-size:11px; color:#64748B; margin-top:4px">{l_summary}</div>
             </td>
             
             <!-- Online AI -->
             <td style="background: #FFFFFF; padding: 12px">
-                <span class="badge" style="background:{{o_color}}22;color:{{o_color}}">{{label_map.get(o_label, o_label)}}</span>
-                <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:{{o_pct}}%;background:{{o_color}}"></div></div>
-                <div style="font-size:11px; color:#64748B; margin-top:4px"><b>Güven: %{{o_conf}}</b> | {{o_summary}}</div>
+                <span class="badge" style="background:{o_color}22;color:{o_color}">{label_map.get(o_label, o_label)}</span>
+                <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:{o_pct}%;background:{o_color}"></div></div>
+                <div style="font-size:11px; color:#64748B; margin-top:4px"><b>Güven: %{o_conf}</b> | {o_summary}</div>
             </td>
             
             <td style="text-align:center; vertical-align:middle">
-                <span class="badge" style="{{match_style}}">{{match_text}}</span>
+                <span class="badge" style="{match_style}">{match_text}</span>
             </td>
         </tr>"""
 
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Hibrit Duygu Analizi</title>
 <style>
-    {{COMMON_STYLES}}
+    {COMMON_STYLES}
     table {{ border-collapse: separate; border-spacing: 0; }}
     th {{ background: #F1F5F9; position: sticky; top: 0; }}
     .bar-bg {{ height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; }}
@@ -232,7 +232,7 @@ def generate_hybrid_sentiment_html(results: List[Dict], model_name: str = "Yapay
                     <th style="width:10%">Durum</th>
                 </tr>
             </thead>
-            <tbody>{{rows_html}}</tbody>
+            <tbody>{rows_html}</tbody>
         </table>
     </div>
 </div>

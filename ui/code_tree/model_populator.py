@@ -28,7 +28,6 @@ class CodeTreeModelPopulatorMixin:
             self.model.appendRow(item)
         
         self._code_items[code_id] = item
-        self.tree.expandAll()
 
     def populate_codes(self, codes: list):
         """Full rebuild of the tree model."""
@@ -62,6 +61,7 @@ class CodeTreeModelPopulatorMixin:
             self.add_code(c['id'], c['name'], c['color'], None, c.get('is_active', False), c.get('description', ""))
             
         self.loading = False
+        self.tree.expandAll()
 
     def clear_codes(self):
         """Clear the model."""

@@ -68,14 +68,23 @@ class DocumentDAO:
             return None
     
     def get_all(self, folder_id: Optional[int] = None) -> List[dict]:
-        """Get all documents, optionally filtered by folder."""
+        """
+        Get all documents, optionally filtered by folder.
+        Optimized to return only metadata and a small snippet for performance.
+        """
         try:
             with get_db_connection(self.db_path) as conn:
                 cursor = conn.cursor()
+                # We only fetch a snippet (first 1000 chars) instead of the whole text to speed up the tree loading
+                query = """
+                    SELECT id, title, file_path, file_type, folder_id, is_active, order_index,
+                           SUBSTR(extracted_text, 1, 1000) as extracted_text
+                    FROM documents
+                """
                 if folder_id is not None:
-                    cursor.execute("SELECT * FROM documents WHERE folder_id = ? ORDER BY order_index, title", (folder_id,))
+                    cursor.execute(f"{query} WHERE folder_id = ? ORDER BY order_index, title", (folder_id,))
                 else:
-                    cursor.execute("SELECT * FROM documents ORDER BY order_index, title")
+                    cursor.execute(f"{query} ORDER BY order_index, title")
                 rows = cursor.fetchall()
                 return [dict(row) for row in rows]
         except Exception as e:

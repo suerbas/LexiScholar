@@ -537,3 +537,40 @@ class SurveyImportWorker(QThread):
             self.error.emit(str(e))
 
 
+
+# ============================================================================
+# DataLoaderWorker — Background Loading of Initial Project Data
+# ============================================================================
+
+class DataLoaderWorker(QThread):
+    """
+    Background worker for loading initial project data (documents, folders, codes).
+    Prevents UI freeze on startup for large projects.
+    """
+    finished = pyqtSignal(dict)
+    error = pyqtSignal(str)
+
+    def __init__(self, doc_dao, folder_dao, code_dao):
+        super().__init__()
+        self.doc_dao = doc_dao
+        self.folder_dao = folder_dao
+        self.code_dao = code_dao
+
+    def run(self):
+        try:
+            # 1. Load Documents & Folders
+            documents = self.doc_dao.get_all()
+            folders = self.folder_dao.get_all()
+            
+            # 2. Load Codes
+            codes = self.code_dao.get_all()
+            
+            results = {
+                'documents': documents,
+                'folders': folders,
+                'codes': codes
+            }
+            self.finished.emit(results)
+        except Exception as e:
+            logger.error(f"DataLoaderWorker Error: {e}", exc_info=True)
+            self.error.emit(str(e))

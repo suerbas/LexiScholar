@@ -92,8 +92,13 @@ class TopicActionsMixin:
             
             topic_count = len(topic_data.get("topics", [])) if mode != 'hybrid' else len(topic_data.get("local", {}).get("topics", []))
             doc_count = len(topic_data.get("doc_topics", [])) if mode != 'hybrid' else len(topic_data.get("local", {}).get("doc_topics", []))
+            
             from datetime import datetime
-            subtitle = f"{topic_count} konu • {doc_count} belge ({mode}) • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+            time_str = datetime.now().strftime('%d.%m.%Y %H:%M')
+            subtitle = f"{topic_count} konu • {doc_count} belge ({mode})"
+            if mode != 'local':
+                 subtitle += f" • {model_info}"
+            subtitle += f" • {time_str}"
             
             widget = self._open_visualization(
                 title,

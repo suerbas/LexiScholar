@@ -18,19 +18,34 @@ class MainWindowActions:
         self._load_initial_data()
         
     def _load_initial_data(self):
-        """Load existing documents and codes from database."""
+        """Load existing documents and codes from database asynchronously."""
         if not self.db_path or not os.path.exists(self.db_path):
             self.statusbar.showMessage("Veritabanı bulunamadı")
             return
+            
+        self.statusbar.showMessage("Veriler yükleniyor...")
         
-        documents = self.doc_dao.get_all()
-        folders = self.folder_dao.get_all()
+        # Use background worker to avoid freezing the UI on startup
+        from .worker_threads import DataLoaderWorker
+        self.loader_worker = DataLoaderWorker(self.doc_dao, self.folder_dao, self.code_dao)
+        self.loader_worker.finished.connect(self._on_initial_data_loaded)
+        self.loader_worker.error.connect(lambda err: self.statusbar.showMessage(f"Yükleme hatası: {err}"))
+        self.loader_worker.start()
+
+    def _on_initial_data_loaded(self, data: dict):
+        """Callback when background data loading is complete."""
+        documents = data['documents']
+        folders = data['folders']
+        codes = data['codes']
+        
         self.document_tree.populate_tree(documents, folders)
-        
-        codes = self.code_dao.get_all()
         self.code_tree.populate_codes(codes)
         
-        self.statusbar.showMessage(f"Yüklendi: {len(documents)} belge, {len(codes)} kod")
+        self.statusbar.showMessage(f"Veriler hazır: {len(documents)} belge, {len(codes)} kod")
+        # Cleanup
+        if hasattr(self, 'loader_worker'):
+            self.loader_worker.deleteLater()
+            del self.loader_worker
 
     def _refresh_current_document(self):
         """Helper to refresh the currently viewed document."""

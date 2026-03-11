@@ -60,6 +60,9 @@ def get_connection(db_path: str = "lexischolar.db") -> sqlite3.Connection:
         conn.execute("PRAGMA journal_mode = WAL")  # Enable WAL for better concurrency
         conn.execute("PRAGMA synchronous = NORMAL")
         conn.execute("PRAGMA foreign_keys = ON")
+        conn.execute("PRAGMA cache_size = -4000")  # 4MB cache
+        conn.execute("PRAGMA temp_store = MEMORY") # Keep temp tables in RAM
+        conn.execute("PRAGMA mmap_size = 30000000") # 30MB memory mapping
         
         # Store in thread-local pool
         _connection_pool[key] = conn

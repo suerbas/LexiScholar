@@ -6,7 +6,7 @@ from typing import List, Dict, Tuple
 import os
 from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QComboBox, QPushButton, QToolButton,
-    QFrame, QGraphicsDropShadowEffect
+    QFrame, QGraphicsDropShadowEffect, QWidget
 )
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtGui import QDesktopServices, QColor
@@ -23,33 +23,22 @@ class ActivateByVariablesDialog(ModernBaseDialog):
     def _setup_ui(self):
         self._setup_base_ui()
         
-        # Header Area
-        header_layout = QHBoxLayout()
-        icon = QLabel("🔍")
-        icon.setStyleSheet("font-size: 24px;")
-        header_layout.addWidget(icon)
-
-        title = QLabel("Belge Filtreleme Sihirbazı")
-        title.setStyleSheet("font-size: 16px; font-weight: 800; color: #0F172A;")
-        header_layout.addWidget(title)
-        header_layout.addStretch()
+        # Apply Ribbon Header
+        header = self.build_ribbon_header("🔍", "Belge Filtreleme Sihirbazı")
+        self.layout.setContentsMargins(0, 0, 0, 16) # No horizontal margins for header
+        self.layout.setSpacing(0)
+        self.layout.addWidget(header)
         
-        # Red X Close Button
-        close_btn_top = QPushButton("✕")
-        close_btn_top.setFixedSize(32, 32)
-        close_btn_top.setCursor(Qt.CursorShape.PointingHandCursor)
-        close_btn_top.clicked.connect(self.reject)
-        close_btn_top.setStyleSheet("""
-            QPushButton { background: transparent; color: #64748B; font-size: 18px; font-weight: bold; border: none; border-radius: 16px; }
-            QPushButton:hover { background: #FEE2E2; color: #EF4444; }
-        """)
-        header_layout.addWidget(close_btn_top)
-        self.layout.addLayout(header_layout)
+        # Create inner layout for content with proper padding
+        content_layout = QVBoxLayout()
+        content_layout.setContentsMargins(24, 20, 24, 8)
+        content_layout.setSpacing(16)
+        self.layout.addLayout(content_layout)
 
         desc = QLabel("Belirlediğiniz kurala uyan belgeleri otomatik olarak etkinleştirin.")
-        desc.setStyleSheet("color: #64748B; font-size: 13px; line-height: 1.4;")
+        desc.setStyleSheet("color: #64748B; font-size: 13px; line-height: 1.4; font-weight: 500;")
         desc.setWordWrap(True)
-        self.layout.addWidget(desc)
+        content_layout.addWidget(desc)
 
         form_group = QGroupBox("Kural Tanımla")
         form_group.setStyleSheet("""
@@ -111,16 +100,16 @@ class ActivateByVariablesDialog(ModernBaseDialog):
         h_ctrl.addWidget(self.var_combo, 3)
         h_ctrl.addWidget(self.op_combo, 2)
         h_ctrl.addWidget(self.val_combo, 3)
-        form_layout.addLayout(h_ctrl)
+        content_layout.addLayout(h_ctrl)
         
-        self.layout.addWidget(form_group)
+        content_layout.addWidget(form_group)
 
         status = QLabel("ℹ️ Kurala uyan belgeler otomatik olarak etkinleştirilecek, diğerleri deaktif edilecektir.")
         status.setStyleSheet("color: #64748B; font-size: 12px; font-style: italic;")
         status.setWordWrap(True)
-        self.layout.addWidget(status)
+        content_layout.addWidget(status)
         
-        self.layout.addSpacing(10)
+        content_layout.addSpacing(10)
 
         btns = QHBoxLayout()
         btns.addStretch()
@@ -131,11 +120,11 @@ class ActivateByVariablesDialog(ModernBaseDialog):
         self.btn_run.clicked.connect(self.accept)
         self.btn_run.setStyleSheet("""
             QPushButton {
-                background: #4F46E5;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #4F46E5, stop:1 #6366F1);
                 color: white;
                 border: none;
-                border-radius: 10px;
-                padding: 10px 32px;
+                border-radius: 12px;
+                padding: 12px 40px;
                 font-weight: 800;
                 font-size: 14px;
             }
@@ -144,7 +133,7 @@ class ActivateByVariablesDialog(ModernBaseDialog):
         btns.addWidget(self.btn_run)
         
         btns.addStretch()
-        self.layout.addLayout(btns)
+        content_layout.addLayout(btns)
         
         if self.variables:
             self._on_var_changed(0)

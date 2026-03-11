@@ -74,7 +74,8 @@ class BrowserWidget(QWidget, BrowserExportMixin, BrowserToolbarMixin):
         # Browser ─ Isolated profile per widget to prevent download-handler accumulation
         if WEBENGINE_AVAILABLE:
             from PyQt6.QtWebEngineCore import QWebEngineProfile, QWebEnginePage
-            self._profile = QWebEngineProfile(f"browser_widget_{id(self)}", self)
+            # We explicitly manage the profile and page to avoid lifecycle warnings
+            self._profile = QWebEngineProfile(f"p_{id(self)}", self)
             self._page = QWebEnginePage(self._profile, self)
             self._is_handling_download = False
             self._profile.downloadRequested.connect(self._handle_download)
@@ -89,13 +90,26 @@ class BrowserWidget(QWidget, BrowserExportMixin, BrowserToolbarMixin):
             self.main_layout.addWidget(err)
 
     def closeEvent(self, event):
-        """Explicitly clear webengine objects on close to avoid profile lifecycle warnings."""
-        if hasattr(self, 'browser') and self.browser:
-            self.browser.setParent(None)
-            self.browser.deleteLater()
-        if hasattr(self, '_page') and self._page:
-            self._page.deleteLater()
+        self.cleanup()
         super().closeEvent(event)
+
+    def cleanup(self):
+        """Explicitly clear webengine objects to avoid profile lifecycle warnings."""
+        if WEBENGINE_AVAILABLE:
+            if hasattr(self, 'browser') and self.browser:
+                # Crucial: Unset the page before the view or page is destroyed
+                self.browser.setPage(None)
+            if hasattr(self, '_page') and self._page:
+                self._page.deleteLater()
+                self._page = None
+            if hasattr(self, 'browser') and self.browser:
+                self.browser.deleteLater()
+                self.browser = None
+            # Profile will be cleaned up by QObject parent-child (self) system
+
+    def deleteLater(self):
+        self.cleanup()
+        super().deleteLater()
             
     def _handle_download(self, download):
         """Handle download requests triggered via JS data URLs (e.g. exportAsImage)."""

@@ -14,34 +14,34 @@ def generate_entities_html(ner_data: Dict) -> str:
         return _generate_empty_html("Varlık Tanıma", "Adlandırılmış varlık bulunamadı.")
     
     total = sum(summary.values())
-    stats_html = f'<div class="stat-box"><div class="stat-value" style="color:#1E293B">{{total}}</div><div class="stat-label">Toplam Varlık</div></div>'
+    stats_html = f'<div class="stat-box"><div class="stat-value" style="color:#1E293B">{total}</div><div class="stat-label">Toplam Varlık</div></div>'
     for label, count in sorted(summary.items(), key=lambda x: -x[1]):
         if count == 0: continue
         color = ENTITY_COLORS.get(label, "#64748B")
-        stats_html += f'<div class="stat-box"><div class="stat-value" style="color:{{color}}">{{count}}</div><div class="stat-label">{{ENTITY_LABELS.get(label, label)}}</div></div>'
+        stats_html += f'<div class="stat-box"><div class="stat-value" style="color:{color}">{count}</div><div class="stat-label">{ENTITY_LABELS.get(label, label)}</div></div>'
     
     category_html = ""
     for label in ["PER", "LOC", "ORG", "DATE", "MISC"]:
         entities = all_entities.get(label, [])
         if not entities: continue
         color = ENTITY_COLORS.get(label, "#64748B")
-        tags = "".join(f'<span class="tag" style="background:{{color}}22;color:{{color}}">{{e}}</span>' for e in sorted(set(entities)))
-        category_html += f'<div style="margin-bottom:16px"><h3 style="font-size:16px;color:{{color}};margin-bottom:8px">{{ENTITY_LABELS.get(label, label)}}</h3><div style="line-height:2">{{tags}}</div></div>'
+        tags = "".join(f'<span class="tag" style="background:{color}22;color:{color}">{e}</span>' for e in sorted(set(entities)))
+        category_html += f'<div style="margin-bottom:16px"><h3 style="font-size:16px;color:{color};margin-bottom:8px">{ENTITY_LABELS.get(label, label)}</h3><div style="line-height:2">{tags}</div></div>'
     
     doc_rows = ""
     for doc in documents:
         entities = doc.get("entities", [])
         if not entities: continue
-        tags = "".join(f'<span class="badge" style="background:{{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}}22;color:{{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}};margin:2px">{{ent.get("text","")}}</span>' for ent in entities)
-        doc_rows += f"<tr><td style='font-weight:600;white-space:nowrap'>{{doc.get('title', 'Belge')}}</td><td style='font-size:13px'>{{len(entities)}}</td><td>{{tags}}</td></tr>"
+        tags = "".join(f'<span class="badge" style="background:{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}22;color:{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")};margin:2px">{ent.get("text","")}</span>' for ent in entities)
+        doc_rows += f"<tr><td style='font-weight:600;white-space:nowrap'>{doc.get('title', 'Belge')}</td><td style='font-size:13px'>{len(entities)}</td><td>{tags}</td></tr>"
     
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Varlık Tanıma (NER)</title>
-<style>{{COMMON_STYLES}}</style></head><body>
+<style>{COMMON_STYLES}</style></head><body>
 <div class="container">
-    <div class="card"><div class="stat-row">{{stats_html}}</div></div>
-    <div class="card"><h2>Varlık Kategorileri</h2>{{category_html}}</div>
-    <div class="card"><h2>Belge Bazlı Dağılım</h2><table><thead><tr><th>Belge</th><th>Sayı</th><th>Varlıklar</th></tr></thead><tbody>{{doc_rows}}</tbody></table></div>
+    <div class="card"><div class="stat-row">{stats_html}</div></div>
+    <div class="card"><h2>Varlık Kategorileri</h2>{category_html}</div>
+    <div class="card"><h2>Belge Bazlı Dağılım</h2><table><thead><tr><th>Belge</th><th>Sayı</th><th>Varlıklar</th></tr></thead><tbody>{doc_rows}</tbody></table></div>
 </div></body></html>"""
     return save_html(html, "entities")
 
@@ -85,11 +85,11 @@ def generate_hybrid_entities_html(ner_data: Dict, model_name: str = "AI") -> str
         online_items = online_categories.get(label, [])
         color = ENTITY_COLORS.get(label, "#64748B")
         if local_items:
-            local_tags = "".join(f'<span class="tag" style="background:{{color}}22;color:{{color}}">{{e}}</span>' for e in sorted(set(local_items)))
-            local_category_html += f'<div style="margin-bottom:16px"><h3 style="font-size:16px;color:{{color}};margin-bottom:8px">{{ENTITY_LABELS.get(label, label)}}</h3><div style="line-height:2">{{local_tags}}</div></div>'
+            local_tags = "".join(f'<span class="tag" style="background:{color}22;color:{color}">{e}</span>' for e in sorted(set(local_items)))
+            local_category_html += f'<div style="margin-bottom:16px"><h3 style="font-size:16px;color:{color};margin-bottom:8px">{ENTITY_LABELS.get(label, label)}</h3><div style="line-height:2">{local_tags}</div></div>'
         if online_items:
-            online_tags = "".join(f'<span class="tag" style="background:{{color}}22;color:{{color}}">{{e}}</span>' for e in sorted(set(online_items)))
-            online_category_html += f'<div style="margin-bottom:16px"><h3 style="font-size:16px;color:{{color}};margin-bottom:8px">{{ENTITY_LABELS.get(label, label)}}</h3><div style="line-height:2">{{online_tags}}</div></div>'
+            online_tags = "".join(f'<span class="tag" style="background:{color}22;color:{color}">{e}</span>' for e in sorted(set(online_items)))
+            online_category_html += f'<div style="margin-bottom:16px"><h3 style="font-size:16px;color:{color};margin-bottom:8px">{ENTITY_LABELS.get(label, label)}</h3><div style="line-height:2">{online_tags}</div></div>'
 
     for doc in documents:
         comparison = doc.get("comparison", {})
@@ -99,8 +99,8 @@ def generate_hybrid_entities_html(ner_data: Dict, model_name: str = "AI") -> str
 
         local_entities = doc.get("local_entities", [])
         online_entities = doc.get("online_entities", [])
-        local_tags = "".join(f'<span class="badge" style="background:{{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}}22;color:{{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}};margin:2px">{{ent.get("text","")}}</span>' for ent in local_entities)
-        online_tags = "".join(f'<span class="badge" style="background:{{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}}22;color:{{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}};margin:2px">{{ent.get("text","")}}</span>' for ent in online_entities)
+        local_tags = "".join(f'<span class="badge" style="background:{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}22;color:{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")};margin:2px">{ent.get("text","")}</span>' for ent in local_entities)
+        online_tags = "".join(f'<span class="badge" style="background:{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")}22;color:{ENTITY_COLORS.get(ent.get("label","MISC"), "#64748B")};margin:2px">{ent.get("text","")}</span>' for ent in online_entities)
         entity_details = ""
         for item in comparison.get("entities", []):
             label = item.get("label", "MISC")
@@ -114,36 +114,36 @@ def generate_hybrid_entities_html(ner_data: Dict, model_name: str = "AI") -> str
                 status_badge = '<span class="badge" style="background:#0369A122;color:#0369A1;margin:2px">Sadece Lokal</span>'
             confidence = item.get("confidence_level", "Düşük")
             entity_text = item.get("text", "")
-            entity_details += f'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0"><span class="badge" style="background:{{color}}22;color:{{color}};margin:0">{{entity_text}}</span>{{status_badge}}<span class="badge" style="background:#0F172A12;color:#334155;margin:0">Güven: {{confidence}}</span></div>'
-        comp_rows += f"<tr><td style='font-weight:600'>{{doc.get('title', 'Belge')}}</td><td>{{local_tags or '-'}}</td><td>{{online_tags or '-'}}</td><td>{{comparison.get('shared_count', 0)}}</td></tr><tr><td></td><td colspan='3' style='background:#F8FAFC'>{{entity_details or '-'}}</td></tr>"
+            entity_details += f'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0"><span class="badge" style="background:{color}22;color:{color};margin:0">{entity_text}</span>{status_badge}<span class="badge" style="background:#0F172A12;color:#334155;margin:0">Güven: {confidence}</span></div>'
+        comp_rows += f"<tr><td style='font-weight:600'>{doc.get('title', 'Belge')}</td><td>{local_tags or '-'}</td><td>{online_tags or '-'}</td><td>{comparison.get('shared_count', 0)}</td></tr><tr><td></td><td colspan='3' style='background:#F8FAFC'>{entity_details or '-'}</td></tr>"
 
-    stat_row += f'<div class="stat-box"><div class="stat-value" style="color:#10B981">{{shared_total}}</div><div class="stat-label">Ortak</div></div>'
-    stat_row += f'<div class="stat-box"><div class="stat-value" style="color:#0369A1">{{local_only_total}}</div><div class="stat-label">Sadece Lokal</div></div>'
-    stat_row += f'<div class="stat-box"><div class="stat-value" style="color:#7C3AED">{{online_only_total}}</div><div class="stat-label">Sadece AI</div></div>'
+    stat_row += f'<div class="stat-box"><div class="stat-value" style="color:#10B981">{shared_total}</div><div class="stat-label">Ortak</div></div>'
+    stat_row += f'<div class="stat-box"><div class="stat-value" style="color:#0369A1">{local_only_total}</div><div class="stat-label">Sadece Lokal</div></div>'
+    stat_row += f'<div class="stat-box"><div class="stat-value" style="color:#7C3AED">{online_only_total}</div><div class="stat-label">Sadece AI</div></div>'
 
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Hibrit Varlık Tanıma (NER)</title>
-<style>{{COMMON_STYLES}}</style></head><body>
+<style>{COMMON_STYLES}</style></head><body>
 <div class="container">
     <div class="card" style="background: linear-gradient(135deg, #1e293b, #334155); color: white;">
         <h2 style="color: white;">🔄 Hibrit Varlık Tanıma (NER + Yapay Zeka)</h2>
-        <div class="stat-row">{{stat_row}}</div>
+        <div class="stat-row">{stat_row}</div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
         <div class="card" style="background:#f0f9ff">
             <h2>🧮 Lokal Varlık Kategorileri</h2>
-            {{local_category_html or '<p>Kategori bulunamadı.</p>'}}
+            {local_category_html if local_category_html else '<p>Kategori bulunamadı.</p>'}
         </div>
         <div class="card" style="background:#faf5ff">
             <h2>🤖 Yapay Zeka Varlık Kategorileri</h2>
-            {{online_category_html or '<p>Kategori bulunamadı.</p>'}}
+            {online_category_html if online_category_html else '<p>Kategori bulunamadı.</p>'}
         </div>
     </div>
     <div class="card">
         <h2>Belge Bazlı Karşılaştırma</h2>
         <table>
             <thead><tr><th>Belge</th><th>Lokal</th><th>Yapay Zeka</th><th>Ortak</th></tr></thead>
-            <tbody>{{comp_rows}}</tbody>
+            <tbody>{comp_rows}</tbody>
         </table>
     </div>
 </div></body></html>"""

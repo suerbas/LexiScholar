@@ -148,8 +148,13 @@ class ModernProgressDialog(QDialog):
     def setValue(self, value):
         """Update progress value."""
         self.progress_bar.setValue(value)
-        if value >= self.max:
+        # Update title only if we have a real range (not indeterminate 0-0)
+        # and we actually hit the max.
+        if self.max > 0 and value >= self.max:
             self.title_label.setText("Tamamlandı!")
+        elif self.max == 0:
+            # For indeterminate mode, keep it generic
+            self.title_label.setText("Analiz Devam Ediyor...")
         
     def setLabelText(self, text):
         """Update status text."""

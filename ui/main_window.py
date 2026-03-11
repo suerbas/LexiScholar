@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
     QSplitter, QStatusBar, QTabWidget, QTabBar,
     QLabel, QStackedWidget, QToolButton, QFrame,
-    QPushButton, QDialog
+    QPushButton, QDialog, QMenu
 )
 from PyQt6.QtCore import Qt, QSize, QTimer
 from PyQt6.QtGui import QShortcut, QKeySequence
@@ -78,6 +78,69 @@ class AnalysisTabBar(QTabBar):
         super().mouseReleaseEvent(event)
         self.setMovable(self._prev_movable)
 
+    def contextMenuEvent(self, event):
+        """Right-click menu for tab management."""
+        idx = self.tabAt(event.pos())
+        if idx < 0:
+            return
+
+        menu = QMenu(self)
+        menu.setStyleSheet("""
+            QMenu { background: white; border: 1px solid #CBD5E1; border-radius: 8px; padding: 4px; }
+            QMenu::item { padding: 6px 20px; border-radius: 4px; color: #1E293B; font-size: 13px; }
+            QMenu::item:selected { background-color: #F1F5F9; color: #4F46E5; }
+            QMenu::item:disabled { color: #94A3B8; }
+        """)
+
+        # Close
+        act_close = menu.addAction("Kapat")
+        act_close.setEnabled(idx > 0) # Can't close Document Browser
+        
+        # Close Others
+        act_close_others = menu.addAction("Diğer sekmeleri kapat")
+        
+        # Close to the Right
+        act_close_right = menu.addAction("Sağdaki sekmeleri kapat")
+        act_close_right.setEnabled(idx < self.count() - 1)
+
+        action = menu.exec(event.globalPos())
+        
+        if not action or not self.parent():
+             return
+
+        tab_widget = self.parent()
+        if not hasattr(tab_widget, "removeTab"):
+            return
+
+        if action == act_close:
+            # We call the handler in MainWindow if possible for proper cleanup
+            # Assuming MainWindow is the grand-parent or connected.
+            # But directly removeTab(idx) is a fallback.
+            mw = tab_widget.window()
+            if hasattr(mw, "_on_tab_close_requested"):
+                mw._on_tab_close_requested(idx)
+            else:
+                tab_widget.removeTab(idx)
+
+        elif action == act_close_others:
+            # Close everything except current AND index 0 (which is fixed)
+            # We iterate backwards to avoid index shifting
+            for i in range(tab_widget.count() - 1, 0, -1):
+                if i != idx:
+                    mw = tab_widget.window()
+                    if hasattr(mw, "_on_tab_close_requested"):
+                        mw._on_tab_close_requested(i)
+                    else:
+                        tab_widget.removeTab(i)
+
+        elif action == act_close_right:
+            for i in range(tab_widget.count() - 1, idx, -1):
+                mw = tab_widget.window()
+                if hasattr(mw, "_on_tab_close_requested"):
+                    mw._on_tab_close_requested(i)
+                else:
+                    tab_widget.removeTab(i)
+
 class MainWindow(QMainWindow, EventHandlers, MenuActions, AnalysisActions, 
                  NLPActions, VisualizationActions, RibbonMixin, PanelMixin, 
                  MainWindowActions):
@@ -104,7 +167,8 @@ class MainWindow(QMainWindow, EventHandlers, MenuActions, AnalysisActions,
         # 3. Project Management
         self.project_manager = ProjectManager(db_path)
         self.command_stack = CommandStack()
-        self._auto_backup()
+        # Delay backup to keep startup fast
+        QTimer.singleShot(5000, self._auto_backup)
         
         # 4. Component Builders
         self.ui_builder = UIBuilder(self)

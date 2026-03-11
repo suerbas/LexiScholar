@@ -23,11 +23,11 @@ def generate_topics_html(topic_data: Dict) -> str:
             norm = weight / max_w if max_w > 0 else 0.5
             size = int(13 + norm * 12)
             opacity = 0.5 + norm * 0.5
-            word_tags += f'<span class="tag" style="font-size:{{size}}px;background:{{color}}22;color:{{color}};opacity:{{opacity}}">{{word}}</span>'
+            word_tags += f'<span class="tag" style="font-size:{size}px;background:{color}22;color:{color};opacity:{opacity}">{word}</span>'
         topic_cards += f"""
-        <div class="card" style="border-left:4px solid {{color}}">
-            <h2 style="color:{{color}}">{{topic.get('label', f'Konu {{i+1}}')}}</h2>
-            <div style="line-height:2.2">{{word_tags}}</div>
+        <div class="card" style="border-left:4px solid {color}">
+            <h2 style="color:{color}">{topic.get('label', f'Konu {i+1}')}</h2>
+            <div style="line-height:2.2">{word_tags}</div>
         </div>"""
     
     doc_rows = ""
@@ -35,24 +35,24 @@ def generate_topics_html(topic_data: Dict) -> str:
         weights = doc.get("topic_weights", [])
         dominant = doc.get("dominant_topic", 0)
         dom_color = TOPIC_COLORS[dominant % len(TOPIC_COLORS)]
-        bars = "".join(f'<div style="display:inline-block;width:{{max(int(w*100), 2)}}%;height:20px;background:{{TOPIC_COLORS[j % len(TOPIC_COLORS)]}};border-radius:3px;margin-right:1px" title="Konu {{j+1}}: {{int(w*100)}}%"></div>' for j, w in enumerate(weights))
+        bars = "".join(f'<div style="display:inline-block;width:{max(int(w*100), 2)}%;height:20px;background:{TOPIC_COLORS[j % len(TOPIC_COLORS)]};border-radius:3px;margin-right:1px" title="Konu {j+1}: {int(w*100)}%"></div>' for j, w in enumerate(weights))
         doc_rows += f"""
         <tr>
-            <td style="font-weight:600">{{doc.get('title', 'Belge')}}</td>
-            <td><span class="badge" style="background:{{dom_color}}22;color:{{dom_color}}">Konu {{dominant + 1}}</span></td>
-            <td><div style="display:flex;border-radius:6px;overflow:hidden">{{bars}}</div></td>
+            <td style="font-weight:600">{doc.get('title', 'Belge')}</td>
+            <td><span class="badge" style="background:{dom_color}22;color:{dom_color}">Konu {dominant + 1}</span></td>
+            <td><div style="display:flex;border-radius:6px;overflow:hidden">{bars}</div></td>
         </tr>"""
     
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Konu Modelleme</title>
-<style>{{COMMON_STYLES}}</style></head><body>
+<style>{COMMON_STYLES}</style></head><body>
 <div class="container">
-    {{topic_cards}}
+    {topic_cards}
     <div class="card">
         <h2>Belge-Konu Dağılımı</h2>
         <table>
             <thead><tr><th>Belge</th><th>Baskın Konu</th><th>Konu Dağılımı</th></tr></thead>
-            <tbody>{{doc_rows}}</tbody>
+            <tbody>{doc_rows}</tbody>
         </table>
     </div>
 </div></body></html>"""
@@ -77,11 +77,11 @@ def generate_online_topics_html(topic_data: Dict, model_name: str = "AI") -> str
             norm = weight / max_w if max_w > 0 else 0.5
             size = int(13 + norm * 12)
             opacity = 0.5 + norm * 0.5
-            word_tags += f'<span class="tag" style="font-size:{{size}}px;background:{{color}}22;color:{{color}};opacity:{{opacity}}">{{word}}</span>'
+            word_tags += f'<span class="tag" style="font-size:{size}px;background:{color}22;color:{color};opacity:{opacity}">{word}</span>'
         topic_cards += f"""
-        <div class="card" style="border-left:4px solid {{color}}">
-            <h2 style="color:{{color}}">{{topic.get('label', f'Konu {{i+1}}')}}</h2>
-            <div style="line-height:2.2">{{word_tags}}</div>
+        <div class="card" style="border-left:4px solid {color}">
+            <h2 style="color:{color}">{topic.get('label', f'Konu {i+1}')}</h2>
+            <div style="line-height:2.2">{word_tags}</div>
         </div>"""
     
     doc_rows = ""
@@ -93,29 +93,29 @@ def generate_online_topics_html(topic_data: Dict, model_name: str = "AI") -> str
         
         bars = ""
         if weights:
-            bars = "".join(f'<div style="display:inline-block;width:{{max(int(w*100), 2)}}%;height:20px;background:{{TOPIC_COLORS[j % len(TOPIC_COLORS)]}};border-radius:3px;margin-right:1px" title="Konu {{j+1}}: {{int(w*100)}}%"></div>' for j, w in enumerate(weights))
+            bars = "".join(f'<div style="display:inline-block;width:{max(int(w*100), 2)}%;height:20px;background:{TOPIC_COLORS[j % len(TOPIC_COLORS)]};border-radius:3px;margin-right:1px" title="Konu {j+1}: {int(w*100)}%"></div>' for j, w in enumerate(weights))
             
         doc_rows += f"""
         <tr>
-            <td style="font-weight:600">{{doc.get('title', 'Belge')}}</td>
-            <td><span class="badge" style="background:{{dom_color}}22;color:{{dom_color}}">Konu {{dominant + 1}}</span></td>
-            <td><div style="display:flex;border-radius:6px;overflow:hidden">{{bars}}</div></td>
+            <td style="font-weight:600">{doc.get('title', 'Belge')}</td>
+            <td><span class="badge" style="background:{dom_color}22;color:{dom_color}">Konu {dominant + 1}</span></td>
+            <td><div style="display:flex;border-radius:6px;overflow:hidden">{bars}</div></td>
         </tr>"""
     
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Online Konu Modelleme</title>
-<style>{{COMMON_STYLES}}</style></head><body>
+<style>{COMMON_STYLES}</style></head><body>
 <div class="container">
     <div class="card" style="background: linear-gradient(135deg, #4F46E5, #7C3AED); color: white;">
         <h2 style="color: white;">🤖 Yapay Zeka Konu Modelleme Sonuçları</h2>
         <p>Bu analiz Yapay Zeka modeli tarafından gerçekleştirilmiştir.</p>
     </div>
-    {{topic_cards}}
+    {topic_cards}
     <div class="card">
         <h2>Belge-Konu Dağılımı</h2>
         <table>
             <thead><tr><th>Belge</th><th>Baskın Konu</th><th>Konu Dağılımı</th></tr></thead>
-            <tbody>{{doc_rows}}</tbody>
+            <tbody>{doc_rows}</tbody>
         </table>
     </div>
 </div></body></html>"""
@@ -144,11 +144,11 @@ def generate_hybrid_topics_html(topic_data: Dict, model_name: str = "AI") -> str
             norm = weight / max_w if max_w > 0 else 0.5
             size = int(13 + norm * 12)
             opacity = 0.5 + norm * 0.5
-            word_tags += f'<span class="tag" style="font-size:{{size}}px;background:{{color}}22;color:{{color}};opacity:{{opacity}}">{{word}}</span>'
+            word_tags += f'<span class="tag" style="font-size:{size}px;background:{color}22;color:{color};opacity:{opacity}">{word}</span>'
         local_topic_cards += f"""
-        <div class="card" style="border-left:4px solid {{color}}; margin-bottom:10px;">
-            <h3 style="color:{{color}};margin:0">{{topic.get('label', f'Konu {{i+1}}')}}</h3>
-            <div style="line-height:2">{{word_tags}}</div>
+        <div class="card" style="border-left:4px solid {color}; margin-bottom:10px;">
+            <h3 style="color:{color};margin:0">{topic.get('label', f'Konu {i+1}')}</h3>
+            <div style="line-height:2">{word_tags}</div>
         </div>"""
     
     # Online topics section
@@ -162,11 +162,11 @@ def generate_hybrid_topics_html(topic_data: Dict, model_name: str = "AI") -> str
             norm = weight / max_w if max_w > 0 else 0.5
             size = int(13 + norm * 12)
             opacity = 0.5 + norm * 0.5
-            word_tags += f'<span class="tag" style="font-size:{{size}}px;background:{{color}}22;color:{{color}};opacity:{{opacity}}">{{word}}</span>'
+            word_tags += f'<span class="tag" style="font-size:{size}px;background:{color}22;color:{color};opacity:{opacity}">{word}</span>'
         online_topic_cards += f"""
-        <div class="card" style="border-left:4px solid {{color}}; margin-bottom:10px;">
-            <h3 style="color:{{color}};margin:0">{{topic.get('label', f'Konu {{i+1}}')}}</h3>
-            <div style="line-height:2">{{word_tags}}</div>
+        <div class="card" style="border-left:4px solid {color}; margin-bottom:10px;">
+            <h3 style="color:{color};margin:0">{topic.get('label', f'Konu {i+1}')}</h3>
+            <div style="line-height:2">{word_tags}</div>
         </div>"""
     
     # Document comparison rows
@@ -191,10 +191,10 @@ def generate_hybrid_topics_html(topic_data: Dict, model_name: str = "AI") -> str
         
         comp_rows += f"""
         <tr>
-            <td style="font-weight:600">{{diff.get('title', 'Belge')}}</td>
-            <td><span class="badge" style="background:{{local_color}}22;color:{{local_color}}">Konu {{local_dom + 1}}</span></td>
-            <td><span class="badge" style="background:{{online_color}}22;color:{{online_color}}">Konu {{online_dom + 1}}</span></td>
-            <td><span class="badge" style="background:{{status_color}}22;color:{{status_color}};font-weight:bold">{{status_text}}</span></td>
+            <td style="font-weight:600">{diff.get('title', 'Belge')}</td>
+            <td><span class="badge" style="background:{local_color}22;color:{local_color}">Konu {local_dom + 1}</span></td>
+            <td><span class="badge" style="background:{online_color}22;color:{online_color}">Konu {online_dom + 1}</span></td>
+            <td><span class="badge" style="background:{status_color}22;color:{status_color};font-weight:bold">{status_text}</span></td>
         </tr>"""
     
     # Summary stats
@@ -206,15 +206,15 @@ def generate_hybrid_topics_html(topic_data: Dict, model_name: str = "AI") -> str
     
     html = f"""<!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8"><title>Hibrit Konu Modelleme</title>
-<style>{{COMMON_STYLES}}</style></head><body>
+<style>{COMMON_STYLES}</style></head><body>
 <div class="container">
     <div class="card" style="background: linear-gradient(135deg, #1e293b, #334155); color: white;">
         <h2 style="color: white;">🔄 Hibrit Konu Modelleme (LDA + Yapay Zeka)</h2>
         <div style="display:flex;gap:20px;margin-top:15px;">
-            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#10B981">{{uyumlu}}</div><div style="font-size:12px">Uyumlu</div></div>
-            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#F59E0B">{{yakin}}</div><div style="font-size:12px">Yakın</div></div>
-            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#EF4444">{{farkli}}</div><div style="font-size:12px">Farklı</div></div>
-            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#64748B">{{total}}</div><div style="font-size:12px">Toplam</div></div>
+            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#10B981">{uyumlu}</div><div style="font-size:12px">Uyumlu</div></div>
+            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#F59E0B">{yakin}</div><div style="font-size:12px">Yakın</div></div>
+            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#EF4444">{farkli}</div><div style="font-size:12px">Farklı</div></div>
+            <div style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#64748B">{total}</div><div style="font-size:12px">Toplam</div></div>
         </div>
     </div>
     
@@ -243,11 +243,11 @@ def generate_hybrid_topics_html(topic_data: Dict, model_name: str = "AI") -> str
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
         <div class="card" style="background:#f0f9ff">
             <h3 style="color:#0369a1">🧮 LDA (Lokal Model)</h3>
-            {{local_topic_cards}}
+            {local_topic_cards}
         </div>
         <div class="card" style="background:#faf5ff">
             <h3 style="color:#7c3aed">🤖 Yapay Zeka (Online AI)</h3>
-            {{online_topic_cards}}
+            {online_topic_cards}
         </div>
     </div>
     
@@ -255,7 +255,7 @@ def generate_hybrid_topics_html(topic_data: Dict, model_name: str = "AI") -> str
         <h2>Belge Bazlı Karşılaştırma</h2>
         <table>
             <thead><tr><th>Belge</th><th>LDA Baskın</th><th>AI Baskın</th><th>Durum</th></tr></thead>
-            <tbody>{{comp_rows}}</tbody>
+            <tbody>{comp_rows}</tbody>
         </table>
     </div>
 </div></body></html>"""

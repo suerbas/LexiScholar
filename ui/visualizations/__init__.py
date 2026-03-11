@@ -23,6 +23,8 @@ from .project_analytics import (
     generate_search_results_html
 )
 
+from .semantic_map import generate_semantic_map_html
+
 # Re-export from root visualizations package
 from visualizations import (
     generate_crosstab_html,

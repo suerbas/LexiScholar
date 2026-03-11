@@ -4,31 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiScholar Bilgi Ansiklopedisi - Veri Yönetimi</title>
+    <title>Veri Stratejisi ve Yönetimi - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside>
             <a href="index.html" style="text-decoration: none;">
                 <div class="logo">
-                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
-                        <i data-lucide="graduation-cap"></i>
-                    </div>
-                    <span class="logo-text">LexiScholar</span>
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
+                            data-lucide="graduation-cap"></i></div>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -42,11 +37,6 @@
                         Yöntemler</a></li>
                 <li class="nav-item">
                     <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
-                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
-                    </ul>
                 </li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
                         Görselleştirme</a></li>
@@ -57,79 +47,63 @@
             </ul>
         </aside>
 
-        <!-- Main Content -->
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <h1>Veri Yönetimi ve İçe Aktarma</h1>
-                <p>Başarılı bir nitel araştırma, verinin sisteme doğru ve hiyerarşik bir yapıda aktarılmasıyla başlar.
-                    LexiScholar, farklı veri tipleri için özelleşmiş sihirbazlar sunar.</p>
+            <section class="content-section">
+                <h1>Veri Stratejisi ve Belge Yönetimi</h1>
+                <p>Nitel araştırmada veri yönetimi, sadece dosyaları saklamak değil; verinin bağlamını (context),
+                    kaynağını ve analiz sürecindeki evrimini dökümante etmektir.</p>
+
+                <div class="callout callout-definition" id="data-corpus">
+                    <h5><i data-lucide="files"></i> Veri Külliyatı (Corpus)</h5>
+                    <p>Araştırmanın sınırları dahilinde toplanan tüm metinsel, görsel ve işitsel materyallerin
+                        toplamıdır. LexiScholar, bu külliyatı hiyerarşik "Belge Grupları" (Folders) ve "Setler"
+                        (Collections) aracılığıyla organize eder.</p>
+                </div>
 
                 <div class="feature-item" id="survey-import">
-                    <h2>Anket İçe Aktarma Sihirbazı (Survey Import)</h2>
-                    <p>Excel formatındaki anket verilerini belge bazlı transkriptlere dönüştürmenin en hızlı yoludur.
-                    </p>
-                    <ol>
-                        <li><strong>Excel Dosyasını Seçin:</strong> Dosya menüsünden "Anket İçe Aktar"ı seçin.</li>
-                        <li><strong>Belge Başlığını Belirleyin:</strong> Katılımcı ID'sinin olduğu sütunu seçin (Örn:
-                            "Katılımcı No").</li>
-                        <li><strong>Değişkenleri ve İçeriği Ayırın:</strong> Yaş, Cinsiyet gibi verileri "Değişken",
-                            açık uçlu cevapları ise "İçerik" olarak işaretleyin.</li>
-                    </ol>
+                    <h2>Akademik Anket Dönüştürücü (Survey to Qualitative)</h2>
+                    <p>Karma yöntem araştırmalarında (Mixed Methods) nicel anket verilerini nitel birer vakaya (case)
+                        dönüştürür. Her bir katılımcı satırı, ayrı bir zengin metin belgesi haline gelir.</p>
+                    <div class="callout callout-tip">
+                        <h5>Metodolojik Not</h5>
+                        <p>Açık uçlu cevapları "İçerik", demografik verileri ise "Değişken" olarak atayarak; analiz
+                            aşamasında <strong>Değişken Odaklı Karşılaştırmalı Analiz</strong> yapabilirsiniz.</p>
+                    </div>
                 </div>
 
                 <div class="feature-item" id="variable-editor">
-                    <h2>Değişken Veri Editörü (Variable Data Editor)</h2>
-                    <p>Projenizdeki tüm belgelerin değişken değerlerini (Yaş, Cinsiyet, Puan gibi) bir tablo (matris)
-                        üzerinde topluca görmenizi ve anında düzenlemenizi sağlar.</p>
+                    <h2>Değişken Matrisi ve Vaka Seçimi (Cases)</h2>
+                    <p>Vakalarınızı demografik veya kategorik özelliklerine göre sınıflandırmanızı sağlar. Bu matris,
+                        <strong>Amaçlı Örnekleme</strong> (Purposive Sampling) stratejinizin teknik kanıtıdır.</p>
                     <ul>
-                        <li><strong>Excel Benzeri Deneyim:</strong> Sütunlarda değişkenler, satırlarda ise belgeler
-                            listelenir.</li>
-                        <li><strong>Dinamik Düzenleme:</strong> Herhangi bir hücreye çift tıklayarak değeri doğrudan
-                            güncelleyebilirsiniz. Değişiklikler anında veritabanına kaydedilir.</li>
-                        <li><strong>Büyük Veri Yönetimi:</strong> Yüzlerce belge ve onlarca değişkene sahip projelerde,
-                            değişkenleri tek tek belge özelliklerine girmeden yönetmenin en hızlı yoludur.</li>
+                        <li><strong>Dinamik Filtreleme:</strong> "Kadın", "30-40 yaş arası" ve "Üst Düzey Yönetici"
+                            kriterlerine uyan belgeleri anında süzerek spesifik alt gruplarda derinleşebilirsiniz.</li>
                     </ul>
                 </div>
 
                 <div class="feature-item" id="audio-visual">
-                    <h2>Ses ve Video Yönetimi</h2>
-                    <p>LexiScholar sadece metin değil, multimedya dosyalarını da destekler.</p>
-                    <ul>
-                        <li><strong>Entegre Oynatıcı:</strong> Sol alt paneldeki oynatıcı ile analiz sırasında dosyanızı
-                            dinleyebilir veya izleyebilirsiniz.</li>
-                        <li><strong>Global Hız Kontrolü:</strong> Oynatma hızını transkript yazım hızınıza göre
-                            ayarlayabilirsiniz.</li>
-                    </ul>
+                    <h2>Multimedya Veri Entegrasyonu</h2>
+                    <p>Sadece metin değil, ses ve video üzerinden doğrudan analiz yapma imkanı sağlar. <strong>Doğrudan
+                            Transkripsiyon</strong> süreci, araştırmacının veriye olan aşinalığını (immersion) artırır.
+                    </p>
                 </div>
 
                 <div class="feature-item" id="export">
-                    <h2>Dışa Aktarma Seçenekleri</h2>
-                    <p>Analizlerinizi akademik makalelere aktarmak için farklı formatlarda raporlar alabilirsiniz:</p>
-                    <ul>
-                        <li><strong>Word Raporu (.docx):</strong> Seçili kodların alıntılarını referanslı olarak Word'e
-                            aktarır.</li>
-                        <li><strong>Excel Veri Seti (.xlsx):</strong> Değişkenler ve kod frekanslarını istatistik
-                            yazılımlarına uygun hale getirir.</li>
-                    </ul>
+                    <h2>Denetim İzi ve Raporlama (Audit Trail)</h2>
+                    <p>Nitel araştırmanın güvenilirliği (dependability), analiz adımlarının dış bir denetçi tarafından
+                        izlenebilir olmasına bağlıdır.</p>
+                    <div class="callout callout-warning">
+                        <h5>Raporlama Etiği</h5>
+                        <p>Dışa aktarma (Export) araçlarını kullanırken sadece ham veriyi değil, aldığınız metodolojik
+                            notları (Memos) ve kod tanımlarını da içeren "Proje Raporu" oluşturarak şeffaflığı sağlayın.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="feature-item" id="memos">
-                    <h2>Memo Yönetimi (Notlar)</h2>
-                    <p>Memolar, araştırmacının analiz sürecine dair aldığı teorik, metodolojik veya kişisel notlardır.
-                        LexiScholar'da her şey kodlandığı gibi her şeye memo da eklenebilir.</p>
-                    <ul>
-                        <li><strong>Memo Yöneticisi:</strong> Projedeki tüm serbest memoları, belge memolarını ve kod
-                            memolarını tek bir tablo dabilistelemenizi sağlar.</li>
-                        <li><strong>Filtreleme ve Arama:</strong> Yüzlerce not arasından anahtar kelimeye veya tarihe
-                            göre arama yapabilirsiniz.</li>
-                        <li><strong>Türler:</strong> Serbest Memolar (Genel düşünceler), Belge Memoları (Vaka notları)
-                            ve Kod Memoları (Kategori tanımları).</li>
-                    </ul>
-                </div>
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

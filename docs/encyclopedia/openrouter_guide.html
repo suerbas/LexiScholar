@@ -4,31 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiScholar Bilgi Ansiklopedisi - OpenRouter Rehberi</title>
+    <title>OpenRouter API Entegrasyonu - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside>
             <a href="index.html" style="text-decoration: none;">
                 <div class="logo">
-                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
-                        <i data-lucide="graduation-cap"></i>
-                    </div>
-                    <span class="logo-text">LexiScholar</span>
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
+                            data-lucide="graduation-cap"></i></div>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -43,9 +38,8 @@
                 <li class="nav-item">
                     <a href="ai_features.html" class="nav-link active"><i data-lucide="sparkles"></i> Yapay Zeka</a>
                     <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--accent-amber); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0; font-weight: 700;">➔
-                                OpenRouter Rehberi</a></li>
+                        <li><a href="openrouter_guide.html" class="sub-nav-link active"
+                                style="color: var(--accent-amber); font-weight: 700;">➔ OpenRouter Rehberi</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
@@ -58,81 +52,63 @@
         </aside>
 
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <div class="info-badge">API ENTEGRASYONU</div>
-                <h1>OpenRouter API Anahtarı Nasıl Alınır?</h1>
-                <p>LexiScholar, yapay zeka özelliklerini (Sohbet, Özetleme, Kod Önerisi vb.) çalıştırmak için
-                    <strong>OpenRouter</strong> altyapısını kullanır. OpenRouter, tek bir anahtarla dünyanın en güçlü
-                    yapay zeka modellerine (Gemini, Claude, GPT, Llama) erişmenizi sağlayan bir köprüdür.
-                </p>
+            <section class="content-section">
+                <h1>OpenRouter API Entegrasyonu</h1>
+                <p>LexiScholar, hibrit yapay zeka özelliklerini (RAG Sohbeti, Semantik Sentez vb.) çalıştırmak için
+                    <strong>OpenRouter</strong> altyapısını kullanır. Bu rehber, akademik analizleriniz için gerekli API
+                    anahtarını edinme sürecini açıklar.</p>
 
-                <div style="margin-top: 30px;">
-                    <div class="step-card"
-                        style="background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start;">
-                        <div class="step-number"
-                            style="background: var(--accent-amber); color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">
-                            1</div>
-                        <div class="step-content">
-                            <h3 style="margin-bottom: 0.5rem;">Hesap Oluşturun</h3>
-                            <p style="color: var(--text-secondary); margin-bottom: 1.25rem;">OpenRouter.ai adresine
-                                gidin ve Google hesabınızla veya e-posta adresinizle hızlıca bir hesap oluşturun.</p>
-                            <a href="https://openrouter.ai/" target="_blank"
-                                style="background: #4f46e5; color: white; padding: 0.6rem 1.2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;">OpenRouter'a
-                                Git <i data-lucide="external-link" style="width: 16px; height: 16px;"></i></a>
-                        </div>
+                <div class="callout callout-definition">
+                    <h5>Neden OpenRouter?</h5>
+                    <p>OpenRouter; Anthropic (Claude), Google (Gemini), OpenAI (GPT) ve Meta (Llama) gibi devlerin
+                        modellerine <strong>tek bir bakiye ve anahtar</strong> ile erişmenizi sağlayan yüksek
+                        performanslı bir ağ geçididir. Akademik araştırmalarda model çeşitliliği (Diversity of Opinion)
+                        için en ideal çözümdür.</p>
+                </div>
+
+                <div class="step-card-wrapper" style="margin-top: 2rem;">
+                    <!-- Step 1 -->
+                    <div class="feature-item" style="padding-left: 3rem;">
+                        <span
+                            style="position: absolute; left: 0; top: 1.5rem; background: var(--accent-amber); color: #000; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">1</span>
+                        <h3>Hesap Oluşturma</h3>
+                        <p>OpenRouter.ai üzerinden kurumsal veya kişisel e-posta adresinizle bir hesap oluşturun.</p>
+                        <a href="https://openrouter.ai/" target="_blank" class="callout-link"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-amber); text-decoration: none; font-weight: 600; margin-top: 0.5rem;">
+                            OpenRouter Portalı <i data-lucide="external-link" style="width: 16px;"></i>
+                        </a>
                     </div>
 
-                    <div class="step-card"
-                        style="background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start;">
-                        <div class="step-number"
-                            style="background: var(--accent-amber); color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">
-                            2</div>
-                        <div class="step-content">
-                            <h3 style="margin-bottom: 0.5rem;">Bakiye Yükleyin (Credits)</h3>
-                            <p style="color: var(--text-secondary);">OpenRouter "Kullandığın Kadar Öde" mantığıyla
-                                çalışır. Menüden <b>Credits</b> sayfasına giderek 5$ veya 10$ gibi küçük bir miktar
-                                bakiye yükleyin. Bu bakiye, seçtiğiniz modele göre binlerce sayfa analiz yapmanıza
-                                yetecektir.</p>
-                        </div>
+                    <!-- Step 2 -->
+                    <div class="feature-item" style="padding-left: 3rem;">
+                        <span
+                            style="position: absolute; left: 0; top: 1.5rem; background: var(--accent-amber); color: #000; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">2</span>
+                        <h3>Kredi Yükleme</h3>
+                        <p>OpenRouter "Kullandığın Kadar Öde" (Pay-as-you-go) modelini kullanır. 5$ veya 10$ gibi mikro
+                            yüklemeler, binlerce sayfalık nitel veri analizi için yeterli olacaktır.</p>
                     </div>
 
-                    <div class="step-card"
-                        style="background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start;">
-                        <div class="step-number"
-                            style="background: var(--accent-amber); color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">
-                            3</div>
-                        <div class="step-content">
-                            <h3 style="margin-bottom: 0.5rem;">API Anahtarı (API Key) Üretin</h3>
-                            <p style="color: var(--text-secondary);">Sol menüdeki <b>Keys</b> bölümüne girin. "Create
-                                Key" butonuna tıklayın. Anahtarınıza "LexiScholar" gibi bir isim verin ve oluşturun.</p>
-                        </div>
-                    </div>
-
-                    <div class="step-card"
-                        style="background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start;">
-                        <div class="step-number"
-                            style="background: var(--accent-amber); color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">
-                            4</div>
-                        <div class="step-content">
-                            <h3 style="margin-bottom: 0.5rem;">Anahtarı Kopyalayın ve Sisteme Girin</h3>
-                            <p style="color: var(--text-secondary);">Oluşturulan API anahtarı (sk-or-v1-... ile başlar)
-                                sadece bir kez gösterilir. Onu kopyalayın ve LexiScholar içerisindeki <b>🤖 Yapay Zeka
-                                    Ayarları</b> menüsüne yapıştırın.</p>
-                        </div>
+                    <!-- Step 3 -->
+                    <div class="feature-item" style="padding-left: 3rem;">
+                        <span
+                            style="position: absolute; left: 0; top: 1.5rem; background: var(--accent-amber); color: #000; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">3</span>
+                        <h3>API Key Üretimi</h3>
+                        <p><strong>Keys</strong> menüsünden LexiScholar için özel bir anahtar oluşturun. Anahtar
+                            <code>sk-or-v1-...</code> formatında olacaktır.</p>
                     </div>
                 </div>
 
-                <div class="feature-item"
-                    style="background: rgba(248, 250, 252, 0.05); border: 1px dashed var(--border-color); border-left: 4px solid var(--accent-amber); margin-top: 40px; color: var(--text-primary); padding: 1.5rem; border-radius: 0.5rem;">
-                    <h3 style="color: var(--accent-amber); margin-bottom: 0.5rem;">💡 Neden OpenRouter?</h3>
-                    <p style="color: var(--text-secondary);">OpenRouter sayesinde her model için ayrı ayrı üyelik açıp
-                        kart bilgisi tanımlamanıza gerek kalmaz. Tek bir bakiye ile sistemdeki 100'den fazla farklı
-                        modeli (bazıları tamamen ücretsizdir) anında kullanmaya başlayabilirsiniz.</p>
+                <div class="callout callout-warning" style="margin-top: 2rem;">
+                    <h5><i data-lucide="lock"></i> Güvenlik Uyarısı</h5>
+                    <p>API anahtarınız dijital cüzdanınız hükmündedir. Asla başkalarıyla paylaşmayın. LexiScholar, bu
+                        anahtarı yerel cihazınızda <strong>şifrelenmiş</strong> olarak saklar; sunucularımıza asla
+                        iletilmez.</p>
                 </div>
+
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

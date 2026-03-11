@@ -56,14 +56,21 @@ class NLPWorker(QThread):
             self.error.emit(str(e))
 
     def _run_topic_modeling(self):
-        from nlp_engine import extract_topics
+        from nlp_engine import extract_topics, extract_topics_online, extract_topics_hybrid
         
         n_topics = self.options.get('n_topics', 5)
-        self.progress.emit(0, "Konular modelleniyor (bu işlem biraz zaman alabilir)...")
+        mode = self.options.get('mode', 'local')  # 'local', 'online', 'hybrid'
+        model = self.options.get('model', None)
         
-        # This function takes a list of dicts with 'text' key
-        # self.texts fits this structure
-        topic_data = extract_topics(self.texts, n_topics=n_topics)
+        if mode == 'local':
+            self.progress.emit(0, "Konular modelleniyor (LDA - bu işlem biraz zaman alabilir)...")
+            topic_data = extract_topics(self.texts, n_topics=n_topics)
+        elif mode == 'online':
+            self.progress.emit(0, f"Konular online AI ile analiz ediliyor ({model or 'varsayılan'})...")
+            topic_data = extract_topics_online(self.texts, n_topics=n_topics, model=model)
+        else:  # hybrid
+            self.progress.emit(0, "Hibrit konu modelleme başlatılıyor (LDA + Online AI)...")
+            topic_data = extract_topics_hybrid(self.texts, n_topics=n_topics, model=model)
         
         if topic_data.get("error"):
             self.error.emit(topic_data["error"])
@@ -72,63 +79,85 @@ class NLPWorker(QThread):
             self.finished.emit([topic_data])
 
     def _run_sentiment(self):
-        from nlp_engine import analyze_sentiment
+        from nlp_engine import analyze_sentiment, analyze_sentiment_online
         results = []
         total = len(self.texts)
+        mode = self.options.get('mode', 'local') # 'local', 'online', 'hybrid'
+        model = self.options.get('model', None)
         
         for i, doc in enumerate(self.texts):
             if self._is_canceled:
                 return
             
-            self.progress.emit(i, f"Analiz ediliyor: {doc['title']} ({i+1}/{total})")
+            status = f"Analiz ediliyor ({mode}): {doc['title']} ({i+1}/{total})"
+            self.progress.emit(i, status)
             
-            sentiment = analyze_sentiment(doc["text"])
-            results.append({
+            res = {
                 "doc_id": doc["doc_id"],
                 "title": doc.get("title", "Belge"),
-                "label": sentiment.get("label", "neutral"),
-                "score": sentiment.get("score", 0.5),
-                "summary": sentiment.get("summary", "")
-            })
+                "mode": mode
+            }
+            
+            if mode in ['local', 'hybrid']:
+                sentiment = analyze_sentiment(doc["text"])
+                res["local"] = sentiment
+                # Compatibility defaults
+                res["label"] = sentiment.get("label")
+                res["score"] = sentiment.get("score")
+                res["summary"] = sentiment.get("summary")
+                
+            if mode in ['online', 'hybrid']:
+                online_sentiment = analyze_sentiment_online(doc["text"], model=model)
+                res["online"] = online_sentiment
+                if mode == 'online':
+                    res["label"] = online_sentiment.get("label")
+                    res["score"] = online_sentiment.get("score")
+                    res["summary"] = online_sentiment.get("summary")
+            
+            results.append(res)
             
         self.finished.emit(results)
 
     def _run_ner(self):
-        from nlp_engine import extract_entities
-        results = []
+        from nlp_engine import extract_entities, extract_entities_online, compare_entity_results, _aggregate_entity_documents
         total = len(self.texts)
+        mode = self.options.get('mode', 'local')
+        model = self.options.get('model', None)
         
-        # Structure for NER reporting
         documents = []
-        all_by_label = {}
         
         for i, doc in enumerate(self.texts):
             if self._is_canceled:
                 return
             
-            self.progress.emit(i, f"Varlıklar aranıyor: {doc['title']} ({i+1}/{total})")
-            
-            entities = extract_entities(doc["text"])
-            documents.append({
-                "doc_id": doc["doc_id"],
-                "title": doc.get("title", "Belge"),
-                "entities": entities
-            })
-            
-            for ent in entities:
-                label = ent.get("label", "MISC")
-                if label not in all_by_label:
-                    all_by_label[label] = []
-                all_by_label[label].append(ent.get("text", ""))
-        
-        # Prepare final package
-        summary = {k: len(set(v)) for k, v in all_by_label.items()}
-        final_data = [ { # Wrapped in a list to match finished signal signature
-            "documents": documents,
-            "all_entities": {k: list(set(v)) for k, v in all_by_label.items()},
-            "summary": summary
-        } ]
-        
+            self.progress.emit(i, f"Varlıklar aranıyor ({mode}): {doc['title']} ({i+1}/{total})")
+
+            if mode == 'local':
+                entities = extract_entities(doc["text"])
+                documents.append({
+                    "doc_id": doc["doc_id"],
+                    "title": doc.get("title", "Belge"),
+                    "entities": entities
+                })
+            elif mode == 'online':
+                entities = extract_entities_online(doc["text"], model=model)
+                documents.append({
+                    "doc_id": doc["doc_id"],
+                    "title": doc.get("title", "Belge"),
+                    "entities": entities
+                })
+            else:
+                local_entities = extract_entities(doc["text"])
+                online_entities = extract_entities_online(doc["text"], model=model)
+                documents.append({
+                    "doc_id": doc["doc_id"],
+                    "title": doc.get("title", "Belge"),
+                    "local_entities": local_entities,
+                    "online_entities": online_entities,
+                    "comparison": compare_entity_results(local_entities, online_entities)
+                })
+
+        final_data = [_aggregate_entity_documents(documents, mode=mode)]
         self.finished.emit(final_data)
 
     def _run_keywords(self):
@@ -191,6 +220,100 @@ class NLPWorker(QThread):
             "segments_count": len(segments),
             "grid_colors": grid_colors
         }])
+
+
+class SemanticWorker(QThread):
+    """Background worker for Semantic Mapping with BGE-M3."""
+    progress = pyqtSignal(int, str)
+    finished = pyqtSignal(dict)
+    error = pyqtSignal(str)
+
+    def __init__(self, segments: list):
+        super().__init__()
+        self.segments = segments
+
+    def run(self):
+        try:
+            from nlp.tasks.semantic import build_cluster_map_data
+            self.progress.emit(0, "BERT/BGE-M3 Modeli yükleniyor...")
+            
+            # This is where the heavy work happens
+            # Note: build_cluster_map_data can take significant time
+            cluster_data = build_cluster_map_data(self.segments)
+            
+            self.progress.emit(100, "Analiz tamamlandı.")
+            self.finished.emit(cluster_data)
+        except Exception as e:
+            logger.error(f"SemanticWorker Error: {e}", exc_info=True)
+            self.error.emit(str(e))
+
+
+# ============================================================================
+# SynthesisWorker — Hibrit NER Sonuçlarını AI Hakem ile Sentezleme
+# ============================================================================
+
+class SynthesisWorker(QThread):
+    """
+    Runs AI-judge synthesis of hybrid NLP results in a background thread.
+    Supports NER, Sentiment, and Topic Modeling.
+
+    Signals:
+        finished(object): The synthesized data (dict or list).
+        error(str): Error message if synthesis fails.
+        progress(int, str): Progress updates.
+    """
+    finished = pyqtSignal(object)
+    error = pyqtSignal(str)
+    progress = pyqtSignal(int, str)
+
+    def __init__(self, data: object, task_type: str = "ner", judge_model: str = None, original_model: str = None):
+        super().__init__()
+        self.data = data
+        self.task_type = task_type
+        self.judge_model = judge_model
+        self.original_model = original_model
+        self._is_canceled = False
+
+    def cancel(self):
+        self._is_canceled = True
+
+    def run(self):
+        try:
+            self.progress.emit(0, f"Hakem AI {self.task_type} sonuçlarını sentezliyor...")
+            
+            if self.task_type == "ner":
+                from nlp.tasks.consensus import synthesize_entity_results_online
+                result = synthesize_entity_results_online(
+                    self.data, 
+                    model=self.original_model, 
+                    judge_model=self.judge_model
+                )
+            elif self.task_type == "sentiment":
+                from nlp.tasks.consensus import synthesize_sentiment_results_online
+                result = synthesize_sentiment_results_online(
+                    self.data, 
+                    judge_model=self.judge_model
+                )
+            elif self.task_type == "topics":
+                from nlp.tasks.consensus import synthesize_topic_results_online
+                result = synthesize_topic_results_online(
+                    self.data, 
+                    judge_model=self.judge_model
+                )
+            else:
+                self.error.emit(f"Bilinmeyen görev türü: {self.task_type}")
+                return
+
+            if self._is_canceled:
+                return
+
+            if isinstance(result, dict) and result.get("error"):
+                self.error.emit(result["error"])
+            else:
+                self.finished.emit(result)
+        except Exception as e:
+            logger.error(f"SynthesisWorker error: {e}", exc_info=True)
+            self.error.emit(str(e))
 
 
 # ============================================================================

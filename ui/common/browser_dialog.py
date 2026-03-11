@@ -35,6 +35,12 @@ class BrowserWidget(QWidget):
         # Fix: browser_dialog.py is in ui/common, so we need 3 dirnames to reach project root
         self._base_for_docs = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         self._title = title
+        
+        # Initialize sentiment analysis attributes
+        self._sentiment_results = None
+        self._sentiment_model = "BERT"
+        self._is_sentiment_analysis = False
+        
         self._setup_ui()
         self.load_url(html_path)
 
@@ -71,6 +77,7 @@ class BrowserWidget(QWidget):
             from PyQt6.QtWebEngineCore import QWebEngineProfile, QWebEnginePage
             # Each BrowserWidget gets its own profile so downloadRequested signals don't pile up
             self._profile = QWebEngineProfile(f"browser_widget_{id(self)}", self)
+            # Each BrowserWidget gets its own profile so downloadRequested signals don't pile up
             self._page = QWebEnginePage(self._profile, self)
             self._is_handling_download = False
             self._profile.downloadRequested.connect(self._handle_download)
@@ -83,6 +90,380 @@ class BrowserWidget(QWidget):
             err.setStyleSheet("padding: 50px; color: #DC2626; font-weight: bold;")
             err.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.main_layout.addWidget(err)
+
+    def setup_header_controls(self, layout, sentiment_results=None, topic_results=None, ner_results=None, model_type="BERT"):
+        """Setup header controls for browser widget."""
+        # Add export controls for sentiment analysis
+        if sentiment_results:
+            self._sentiment_results = sentiment_results
+            self._sentiment_model = model_type
+            self._is_sentiment_analysis = True
+            self._setup_sentiment_export_controls(layout)
+        # Add export controls for topic modeling
+        elif topic_results:
+            self._topic_results = topic_results
+            self._topic_model = model_type
+            self._is_topic_modeling = True
+            self._setup_topic_export_controls(layout)
+        elif ner_results:
+            self._ner_results = ner_results
+            self._ner_model = model_type
+            self._is_ner_analysis = True
+            self._setup_ner_export_controls(layout)
+        else:
+            self._is_sentiment_analysis = False
+            self._is_topic_modeling = False
+
+    def _setup_ner_export_controls(self, layout):
+        """Add export buttons for NER results."""
+        from PyQt6.QtWidgets import QPushButton, QMenu
+
+        export_btn = QPushButton("📊 Dışa Aktar")
+        export_btn.setToolTip("NER sonuçlarını farklı formatlarda kaydet")
+        export_btn.setFixedHeight(32)
+        export_btn.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 4px;
+                font-size: 13px;
+                font-weight: bold;
+                padding: 0 12px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+        """)
+
+        menu = QMenu(self)
+        word_action = menu.addAction("📝 Word (.docx)")
+        word_action.triggered.connect(lambda: self._export_ner_word(self._ner_results, self._ner_model))
+        html_action = menu.addAction("🌐 HTML (.html)")
+        html_action.triggered.connect(lambda: self._export_ner_html(self._ner_results, self._ner_model))
+        export_btn.setMenu(menu)
+        layout.addWidget(export_btn)
+
+    def _setup_sentiment_export_controls(self, layout):
+        """Add export buttons for sentiment analysis results."""
+        from PyQt6.QtWidgets import QPushButton, QMenu
+        
+        # Export button with dropdown
+        export_btn = QPushButton("📊 Dışa Aktar")
+        export_btn.setToolTip("Analiz sonuçlarını farklı formatlarda kaydet")
+        export_btn.setFixedHeight(32)
+        export_btn.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 4px;
+                font-size: 13px;
+                font-weight: bold;
+                padding: 0 12px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+        """)
+        
+        # Create menu
+        menu = QMenu(self)
+        
+        # Excel action
+        excel_action = menu.addAction("📊 Excel (.xlsx)")
+        excel_action.triggered.connect(lambda: self._export_sentiment_excel(self._sentiment_results, self._sentiment_model))
+        
+        # Word action
+        word_action = menu.addAction("📝 Word (.docx)")
+        word_action.triggered.connect(lambda: self._export_sentiment_word(self._sentiment_results, self._sentiment_model))
+        
+        # HTML action
+        html_action = menu.addAction("🌐 HTML (.html)")
+        html_action.triggered.connect(lambda: self._export_sentiment_html(self._sentiment_results, self._sentiment_model))
+        
+        export_btn.setMenu(menu)
+        layout.addWidget(export_btn)
+
+    def _setup_topic_export_controls(self, layout):
+        """Add export buttons for topic modeling results."""
+        from PyQt6.QtWidgets import QPushButton, QMenu
+        
+        # Export button with dropdown
+        export_btn = QPushButton("📊 Dışa Aktar")
+        export_btn.setToolTip("Analiz sonuçlarını farklı formatlarda kaydet")
+        export_btn.setFixedHeight(32)
+        export_btn.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 4px;
+                font-size: 13px;
+                font-weight: bold;
+                padding: 0 12px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+        """)
+        
+        # Create menu
+        menu = QMenu(self)
+        
+        # Check if this is hybrid mode
+        is_hybrid = self._topic_results and self._topic_results.get("mode") == "hybrid"
+        
+        # Excel action
+        excel_action = menu.addAction("📊 Excel (.xlsx)")
+        if is_hybrid:
+            excel_action.triggered.connect(lambda: self._export_topics_excel(self._topic_results, hybrid=True))
+        else:
+            excel_action.triggered.connect(lambda: self._export_topics_excel(self._topic_results, hybrid=False))
+        
+        # Word action
+        word_action = menu.addAction("📝 Word (.docx)")
+        if is_hybrid:
+            word_action.triggered.connect(lambda: self._export_topics_word(self._topic_results, hybrid=True))
+        else:
+            word_action.triggered.connect(lambda: self._export_topics_word(self._topic_results, hybrid=False))
+        
+        # HTML action
+        html_action = menu.addAction("🌐 HTML (.html)")
+        if is_hybrid:
+            html_action.triggered.connect(lambda: self._export_topics_html(self._topic_results, hybrid=True))
+        else:
+            html_action.triggered.connect(lambda: self._export_topics_html(self._topic_results, hybrid=False))
+        
+        export_btn.setMenu(menu)
+        layout.addWidget(export_btn)
+
+    def _export_topics_excel(self, topic_data, hybrid=False):
+        """Export topic modeling results to Excel."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            if hybrid:
+                from export.topic_exporters import export_hybrid_topics_to_excel
+                default_name = "hibrit_konu_modelleme.xlsx"
+            else:
+                from export.topic_exporters import export_topics_to_excel
+                default_name = "konu_modelleme.xlsx"
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Excel olarak kaydet",
+                default_name,
+                "Excel Dosyaları (*.xlsx)"
+            )
+            
+            if file_path:
+                if hybrid:
+                    success = export_hybrid_topics_to_excel(file_path, topic_data)
+                else:
+                    model_type = topic_data.get("model_name", "LDA")
+                    success = export_topics_to_excel(file_path, topic_data, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Excel export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Excel export için openpyxl kütüphanesi gerekli:\n{e}")
+
+    def _export_topics_html(self, topic_data, hybrid=False):
+        """Export topic modeling results to HTML."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            if hybrid:
+                from ..visualizations.semantic_analytics import generate_hybrid_topics_html
+                model_name = topic_data.get("online", {}).get("model_name", "AI")
+                generated_html_path = generate_hybrid_topics_html(topic_data, model_name=model_name)
+                default_name = "hibrit_konu_modelleme.html"
+            else:
+                mode = topic_data.get("mode", "local")
+                if mode == "online":
+                    from ..visualizations.semantic_analytics import generate_online_topics_html
+                    generated_html_path = generate_online_topics_html(topic_data, model_name=topic_data.get("model_name", "AI"))
+                else:
+                    from ..visualizations.semantic_analytics import generate_topics_html
+                    generated_html_path = generate_topics_html(topic_data)
+                default_name = "konu_modelleme.html"
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "HTML olarak kaydet",
+                default_name,
+                "HTML Dosyaları (*.html)"
+            )
+            
+            if file_path:
+                with open(generated_html_path, 'r', encoding='utf-8') as src:
+                    html_content = src.read()
+                with open(file_path, 'w', encoding='utf-8') as dst:
+                    dst.write(html_content)
+                from ..common_ui import show_info
+                show_info(self, "Başarılı", f"HTML kaydedildi:\n{file_path}")
+        except Exception as e:
+            from ..common_ui import show_error
+            show_error(self, "Hata", f"HTML export sırasında hata oluştu:\n{str(e)}")
+
+    def _export_topics_word(self, topic_data, hybrid=False):
+        """Export topic modeling results to Word."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            if hybrid:
+                from export.topic_exporters import export_hybrid_topics_to_word
+                default_name = "hibrit_konu_modelleme.docx"
+            else:
+                from export.topic_exporters import export_topics_to_word
+                default_name = "konu_modelleme.docx"
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Word olarak kaydet",
+                default_name,
+                "Word Belgeleri (*.docx)"
+            )
+            
+            if file_path:
+                if hybrid:
+                    model_type = topic_data.get("online", {}).get("model_name", "AI")
+                    success = export_hybrid_topics_to_word(file_path, topic_data, model_type)
+                else:
+                    model_type = topic_data.get("model_name", "LDA")
+                    success = export_topics_to_word(file_path, topic_data, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Word export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
+
+    def _export_sentiment_excel(self, results, model_type):
+        """Export sentiment results to Excel."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            from export.sentiment_exporters import export_sentiment_to_excel
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Excel olarak kaydet",
+                "duygu_analizi.xlsx",
+                "Excel Dosyaları (*.xlsx)"
+            )
+            
+            if file_path:
+                success = export_sentiment_to_excel(file_path, results, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Excel export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Excel export için openpyxl kütüphanesi gerekli:\n{e}")
+
+    def _export_sentiment_word(self, results, model_type):
+        """Export sentiment results to Word."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            from export.sentiment_exporters import export_sentiment_to_word
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Word olarak kaydet",
+                "duygu_analizi.docx",
+                "Word Belgeleri (*.docx)"
+            )
+            
+            if file_path:
+                success = export_sentiment_to_word(file_path, results, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Word export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
+
+    def _export_sentiment_html(self, results, model_type):
+        """Export sentiment results to HTML."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            from export.sentiment_exporters import export_sentiment_to_html
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "HTML olarak kaydet",
+                "duygu_analizi.html",
+                "HTML Dosyaları (*.html)"
+            )
+            
+            if file_path:
+                success = export_sentiment_to_html(file_path, results, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "HTML export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"HTML export sırasında hata oluştu:\n{e}")
+
+    def _export_ner_word(self, ner_data, model_type):
+        """Export NER results to Word."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            from export.ner_exporters import export_ner_to_word
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Word olarak kaydet",
+                "varlik_tanima.docx",
+                "Word Belgeleri (*.docx)"
+            )
+            if file_path:
+                success = export_ner_to_word(file_path, ner_data, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Word export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
+
+    def _export_ner_html(self, ner_data, model_type):
+        """Export NER results to HTML."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            from export.ner_exporters import export_ner_to_html
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "HTML olarak kaydet",
+                "varlik_tanima.html",
+                "HTML Dosyaları (*.html)"
+            )
+            if file_path:
+                success = export_ner_to_html(file_path, ner_data, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "HTML export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"HTML export sırasında hata oluştu:\n{e}")
 
     def closeEvent(self, event):
         """Explicitly clear webengine objects on close to avoid profile lifecycle warnings."""
@@ -266,9 +647,6 @@ class BrowserWidget(QWidget):
         # NOTE: export_btn intentionally removed from toolbar; lives on blue ribbon instead.
 
         # Right Spacer for Centering
-        spacer_r = QWidget()
-        spacer_r.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.toolbar.addWidget(spacer_r)
 
     # ── Crosstab Specific Toolbar ─────────────────────────────────────
     def add_crosstab_controls(self):
@@ -509,31 +887,6 @@ class BrowserWidget(QWidget):
             'dedup_lim': 0.9 # Default for now
         })
 
-    def setup_header_controls(self, layout):
-        """Add Save button to the main window's blue ribbon for all visualization types."""
-        from PyQt6.QtWidgets import QPushButton
-        layout.addSpacing(10)
-        save_btn = QPushButton("💾 Görseli Kaydet")
-        save_btn.setToolTip("Görseli PNG olarak kaydet")
-        save_btn.setFixedHeight(32)
-        save_btn.setStyleSheet("""
-            QPushButton {
-                background-color: rgba(255, 255, 255, 0.1);
-                color: white;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                border-radius: 4px;
-                font-size: 13px;
-                font-weight: bold;
-                padding: 0 12px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 255, 255, 0.2);
-            }
-        """)
-        save_btn.clicked.connect(self._save_visualization_screenshot)
-        layout.addWidget(save_btn)
-        layout.addSpacing(2)
-
     def _save_visualization_screenshot(self):
         """Capture the web view as a PNG using QWebEngineView.grab() — works for ALL HTML pages."""
         if not WEBENGINE_AVAILABLE:
@@ -585,6 +938,114 @@ class BrowserWidget(QWidget):
         if not pixmap.save(save_path):
             from ..common_ui import show_warning
             show_warning(self, "Hata", f"Dosya kaydedilemedi:\n{save_path}")
+
+    def _export_sentiment_excel(self, results, model_type):
+        """Export sentiment results to Excel."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            # Check if this is hybrid mode
+            is_hybrid = results and 'local' in results[0] and 'online' in results[0]
+            
+            if is_hybrid:
+                from export.sentiment_exporters import export_hybrid_sentiment_to_excel
+                default_name = "hibrit_duygu_analizi.xlsx"
+            else:
+                from export.sentiment_exporters import export_sentiment_to_excel
+                default_name = "duygu_analizi.xlsx"
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Excel olarak kaydet",
+                default_name,
+                "Excel Dosyaları (*.xlsx)"
+            )
+            
+            if file_path:
+                if is_hybrid:
+                    success = export_hybrid_sentiment_to_excel(file_path, results)
+                else:
+                    success = export_sentiment_to_excel(file_path, results, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Excel export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Excel export için openpyxl kütüphanesi gerekli:\n{e}")
+
+    def _export_sentiment_word(self, results, model_type):
+        """Export sentiment results to Word."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            # Check if this is hybrid mode
+            is_hybrid = results and 'local' in results[0] and 'online' in results[0]
+            
+            if is_hybrid:
+                from export.sentiment_exporters import export_hybrid_sentiment_to_word
+                default_name = "hibrit_duygu_analizi.docx"
+            else:
+                from export.sentiment_exporters import export_sentiment_to_word
+                default_name = "duygu_analizi.docx"
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Word olarak kaydet",
+                default_name,
+                "Word Belgeleri (*.docx)"
+            )
+            
+            if file_path:
+                if is_hybrid:
+                    success = export_hybrid_sentiment_to_word(file_path, results, model_type)
+                else:
+                    success = export_sentiment_to_word(file_path, results, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "Word export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
+
+    def _export_sentiment_html(self, results, model_type):
+        """Export sentiment results to HTML."""
+        from PyQt6.QtWidgets import QFileDialog
+        try:
+            # Check if this is hybrid mode
+            is_hybrid = results and 'local' in results[0] and 'online' in results[0]
+            
+            if is_hybrid:
+                from export.sentiment_exporters import export_hybrid_sentiment_to_html
+                default_name = "hibrit_duygu_analizi.html"
+            else:
+                from export.sentiment_exporters import export_sentiment_to_html
+                default_name = "duygu_analizi.html"
+            
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "HTML olarak kaydet",
+                default_name,
+                "HTML Dosyaları (*.html)"
+            )
+            
+            if file_path:
+                if is_hybrid:
+                    success = export_hybrid_sentiment_to_html(file_path, results, model_type)
+                else:
+                    success = export_sentiment_to_html(file_path, results, model_type)
+                if success:
+                    from ..common_ui import show_info
+                    show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
+                else:
+                    from ..common_ui import show_error
+                    show_error(self, "Hata", "HTML export sırasında hata oluştu.")
+        except ImportError as e:
+            from ..common_ui import show_error
+            show_error(self, "Eksik Kütüphane", f"HTML export sırasında hata oluştu:\n{e}")
 
 
 class BrowserDialog(ModernBaseDialog):

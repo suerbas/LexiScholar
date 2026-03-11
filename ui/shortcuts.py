@@ -3,7 +3,7 @@ LexiScholar Shortcut Manager
 Centralized management for application-wide keyboard shortcuts.
 """
 
-from PyQt6.QtGui import QShortcut, QKeySequence
+from PyQt6.QtGui import QShortcut, QKeySequence, QAction
 from PyQt6.QtCore import Qt, QObject
 from PyQt6.QtWidgets import QWidget, QApplication
 
@@ -57,9 +57,9 @@ class ShortcutManager(QObject):
         # Project
         self._add('project_save', self.window._save_project)
         self._add('project_journal', self.window._show_journal_dialog)
-        # self._add('app_quit', self.window.close) # Let standard close handle it
+        self._add('app_quit', self.window.close)
         
-        # Coding (Check existence of methods before connecting)
+        # Coding
         if hasattr(self.window, '_quick_code'):
              self._add('code_quick', self.window._quick_code)
              
@@ -81,9 +81,6 @@ class ShortcutManager(QObject):
             self._add('edit_delete', self.window._delete_active_item)
         if hasattr(self.window, '_rename_active_item'):
              self._add('edit_rename', self.window._rename_active_item)
-        elif hasattr(self.window, 'code_tree'): # Fallback logic
-             # We might need a smarter dispatcher for Rename like Delete has
-             pass 
 
         # Navigation
         self._add('nav_focus_browser', lambda: self._focus_panel(self.window.document_browser))
@@ -101,13 +98,15 @@ class ShortcutManager(QObject):
         self._add('help_shortcuts', self.show_cheat_sheet)
 
     def _add(self, action_id, callback):
-        """Helper to create QShortcut."""
+        """Helper to create QAction with shortcut."""
         if action_id in self.ACTIONS:
             data = self.ACTIONS[action_id]
-            seq = QKeySequence(data['key'])
-            shortcut = QShortcut(seq, self.window)
-            shortcut.activated.connect(callback)
-            self._shortcuts[action_id] = shortcut
+            action = QAction(data['desc'], self.window)
+            action.setShortcut(QKeySequence(data['key']))
+            action.setShortcutContext(Qt.ShortcutContext.ApplicationShortcut)
+            action.triggered.connect(callback)
+            self.window.addAction(action)
+            self._shortcuts[action_id] = action
             
     def _focus_panel(self, widget):
         """Focus specific panel widget."""

@@ -4,31 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiScholar Bilgi Ansiklopedisi - Karma Yöntemler</title>
+    <title>Karma Yöntemler ve Triangülasyon - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside>
             <a href="index.html" style="text-decoration: none;">
                 <div class="logo">
-                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
-                        <i data-lucide="graduation-cap"></i>
-                    </div>
-                    <span class="logo-text">LexiScholar</span>
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
+                            data-lucide="graduation-cap"></i></div>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -42,11 +37,6 @@
                         Karma Yöntemler</a></li>
                 <li class="nav-item">
                     <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
-                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
-                    </ul>
                 </li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
                         Görselleştirme</a></li>
@@ -57,50 +47,66 @@
             </ul>
         </aside>
 
-        <!-- Main Content -->
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <h1>Karma Yöntem Analizleri (Mixed Methods)</h1>
-                <p>Nitel bulguları niceliksel değişkenlerle birleştirerek araştırmanızda derinlik kazanın. LexiScholar,
-                    bu iki veri tipini entegre eden güçlü görselleştirme matrisleri sunar.</p>
+            <section class="content-section">
+                <h1>Karma Yöntemler ve Veri Entegrasyonu</h1>
+                <p>Karma yöntem araştırması (Mixed Methods Research), nitel derinlik ile nicel genellenebilirliği aynı
+                    potada eritir. LexiScholar, bu iki geleneğin "teknik entegrasyonu" için gelişmiş matrisler sunar.
+                </p>
+
+                <div class="callout callout-definition" id="triangulation">
+                    <h5><i data-lucide="intersect"></i> Triangülasyon (Çeşitleme)</h5>
+                    <p>Farklı veri toplama araçlarından veya analiz yöntemlerinden gelen bulguların birbiriyle
+                        kıyaslanmasıdır. Amaç; bulguların geçerliliğini doğrulamak ve fenomenin farklı boyutlarını
+                        yakalamaktır.</p>
+                </div>
 
                 <div class="feature-item" id="crosstabs">
-                    <h2>Çapraz Tablolar (Crosstabs)</h2>
-                    <p>Hangi kodların hangi değişken gruplarında (Örn: Erkekler vs. Kadınlar) daha sık kullanıldığını
-                        sayısal ve yüzde bazlı olarak görebilirsiniz.</p>
+                    <h2>Değişken Odaklı Çapraz Tablolar</h2>
+                    <p>Kodların/temaların frekansını, katılımcı değişkenlerine (Örn: Kıdem yılı, Eğitim düzeyi) göre
+                        matris formatında sunar. Bu, <strong>"Hangi grup, neyi, ne sıklıkla konuştu?"</strong> sorusunun
+                        yanıtıdır.</p>
                 </div>
 
                 <div class="feature-item" id="quote-matrix">
-                    <h2>Alıntı Matrisi (Quote Matrix)</h2>
-                    <p>Satırlarda kodlar, sütunlarda değişkenler olacak şekilde seçtiğiniz kriterlere uyan alıntıları
-                        yan yana veya alt alta listeler. Bu, karşılaştırmalı analiz (comparative analysis) için en temel
-                        araçtır.</p>
+                    <h2>Alıntı Matrisi (Qualitative Integration)</h2>
+                    <p>Nicel gruplandırmalar altındaki nitel söylemlerin doğrudan kıyaslanmasını sağlar. Satırlarda
+                        kodlar, sütunlarda değişken grupları yer alır.</p>
+                    <div class="callout callout-tip">
+                        <h5>Analiz İpucu</h5>
+                        <p>Alıntı matrisi, "Yönetici" ve "Çalışan" gruplarının aynı tema hakkındaki söylem
+                            farklılıklarını <strong>yan yana</strong> okumak için en güçlü araçtır.</p>
+                    </div>
                 </div>
 
                 <div class="feature-item" id="activation">
-                    <h2>Değişkenlere Göre Etkinleştirme</h2>
-                    <p>Sadece belirli kriterlere uyan (Örn: "Yaşı 30'dan büyük olanlar") belgeleri analiz için aktif
-                        hale getirip diğerlerini geçici olarak devredışı bırakabilirsiniz.</p>
-                </div>
-
-                <div class="feature-item" id="quotes-by-variables">
-                    <h2>Değişkenlere Göre Alıntılar</h2>
-                    <p>Belirli değişken gruplarına (ör. Cinsiyet: Kadın) ait katılımcıların, seçilen kodlar hakkındaki tüm söylemlerini alt alta listeleyerek nitel bir okuma raporu oluşturur.</p>
-                </div>
-
-                <div class="feature-item" id="side-by-side">
-                    <h2>Yan Yana Karşılaştırma</h2>
-                    <p>İki farklı belgeyi, analiz sonucunu veya değişken grubunu ekranı ikiye bölerek doğrudan kıyaslamanızı sağlar. Özellikle vaka analizlerinde farkları görmek için idealdir.</p>
+                    <h2>Karma Aktivasyon (Dinamik Setler)</h2>
+                    <p>Nicel değişken değerlerini (Örn: Memnuniyet Puanı < 5) kullanarak nitel belgeleri aktif hale
+                            getirme sürecidir. Bu, düşük puan verenlerin neden düşük puan verdiğine dair <strong>Nitel
+                            Derinleşme</strong> sağlar.</p>
                 </div>
 
                 <div class="feature-item" id="variance-analysis">
-                    <h2>Varyans Analizi (ANOVA)</h2>
-                    <p>Nitel kodların kullanım sıklığının (frekans), kategorik değişken grupları arasında (ör. Eğitim Düzeyi: Lise, Lisans, YL) istatistiksel olarak anlamlı bir fark gösterip göstermediğini test eder.</p>
+                    <h2>Karma Varyans Analizi (ANOVA Destekli)</h2>
+                    <p>Nitel kod frekansları arasındaki farkların rastlantısal olup olmadığını istatistiksel testlerle
+                        (ANOVA/t-test) doğrular. Bu, nitel veriyi nicelleştirerek doğrulamak demektir.</p>
                 </div>
+
+                <div class="feature-item" id="epistemology">
+                    <div class="callout callout-warning">
+                        <h5>Epistemolojik Uyarı</h5>
+                        <p>Karma yöntemlerde sayısal veriler (frekanslar) asıl bulgu değil, nitel anlamı destekleyen
+                            veya sorgulatan göstergelerdir. Daima bağlamın (context) önceliğini koruyun.</p>
+                    </div>
+                </div>
+
+                <div id="quotes-by-variables"></div>
+                <div id="side-by-side"></div>
+
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

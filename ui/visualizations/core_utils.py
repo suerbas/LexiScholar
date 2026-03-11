@@ -107,7 +107,22 @@ COMMON_STYLES = """
     .tag:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 """
 
-def _save_html(html: str, prefix: str = "nlp") -> str:
+def build_html_template(content: str, title: str = "LexiScholar", extra_head: str = "") -> str:
+    """Build a standard HTML wrapper with common styles."""
+    return f"""<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{title}</title>
+    <style>{COMMON_STYLES}</style>
+    {extra_head}
+</head>
+<body>
+    {content}
+</body>
+</html>"""
+
+def save_html(html: str, prefix: str = "nlp") -> str:
     """Save HTML content to a temp file and return the path."""
     temp_dir = tempfile.gettempdir()
     file_path = os.path.join(temp_dir, f"lexischolar_{prefix}_{datetime.now().strftime('%H%M%S')}.html")
@@ -132,4 +147,4 @@ def _generate_empty_html(title: str, message: str) -> str:
     <body><div class="container"><div class="card" style="text-align:center;padding:50px">
     <h3>{title}</h3><p>{message}</p>
     </div></div></body></html>"""
-    return _save_html(html, "empty")
+    return save_html(html, "empty")

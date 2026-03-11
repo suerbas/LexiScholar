@@ -14,11 +14,15 @@ class CodeTree(CodeTreeBase, CodeTreeActionsMixin, CodeTreeModelPopulatorMixin, 
     Hierarchical tree view for qualitative code management.
     Modularized implementation using composite pattern with mixins.
     """
-    
     def __init__(self, parent=None, code_dao=None):
         super().__init__(parent, code_dao)
         self._setup_ui()
         self._connect_signals()
+
+    def set_daos(self, code_dao):
+        """Update DAOs and refresh tree."""
+        self.code_dao = code_dao
+        self._refresh_codes()
 
     def _connect_signals(self):
         # UI Interactions

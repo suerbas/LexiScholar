@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kısayollar - LexiScholar Ansiklopedisi</title>
+    <title>Kısayollar ve Verimlilik - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,13 +17,13 @@
                 <div class="logo">
                     <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
                             data-lucide="graduation-cap"></i></div>
-                    <span class="logo-text">LexiScholar</span>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -37,11 +37,6 @@
                         Yöntemler</a></li>
                 <li class="nav-item">
                     <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
-                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
-                    </ul>
                 </li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
                         Görselleştirme</a></li>
@@ -53,56 +48,65 @@
         </aside>
 
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <h1>Klavye Kısayolları ve Verimli Kullanım</h1>
-                <p>Çalışma hızınızı artırmak için LexiScholar'daki en önemli kısayolların listesi.</p>
+            <section class="content-section">
+                <h1>Klavye Kısayolları ve Verimlilik</h1>
+                <p>Nitel analiz süreci yoğun konsantrasyon gerektirir. Fare kullanımını minimize ederek analitik
+                    akışınızı (flow) korumanızı sağlayacak kısayollar aşağıda listelenmiştir.</p>
 
                 <div class="feature-item">
-                    <h2>Genel Kısayollar</h2>
-                    <ul>
-                        <li><code>Ctrl + S</code>: Projeyi kaydet.</li>
-                        <li><code>Ctrl + Z</code>: Son işlemi geri al.</li>
-                        <li><code>Ctrl + Y</code>: Geri alınan işlemi yinele.</li>
-                        <li><code>F1</code>: Bu ansiklopediyi aç.</li>
-                        <li><code>Ctrl + L</code>: Arayüz düzenini (Dikey/Yatay) değiştir.</li>
+                    <h2>Proje ve Sistem Kısayolları</h2>
+                    <ul class="shortcut-list">
+                        <li><kbd>Ctrl</kbd> + <kbd>S</kbd> <span>Projeyi kaydet.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> <span>Son işlemi geri al.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> <span>Geri alınan işlemi yinele.</span></li>
+                        <li><kbd>F1</kbd> <span>Akademik Wiki'yi (Bu sayfa) aç.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>L</kbd> <span>Paneller arası dikey/yatay yerleşimi değiştir.</span>
+                        </li>
                     </ul>
                 </div>
 
                 <div class="feature-item">
-                    <h2>Belge ve Kod Ağacı</h2>
-                    <ul>
-                        <li><code>F2</code>: Seçili belgeyi veya kodu yeniden adlandır.</li>
-                        <li><code>Del</code>: Seçili öğeyi sil (Onay istenir).</li>
-                        <li><code>Space</code>: Seçili öğenin etkinliğini (Active/Inactive) değiştir.</li>
-                        <li><code>Ctrl + N</code>: Yeni Kod oluştur.</li>
-                        <li><code>Ctrl + Shift + N</code>: Seçili kodun altına Alt Kod oluştur.</li>
+                    <h2>Navigasyon ve Odaklanma</h2>
+                    <ul class="shortcut-list">
+                        <li><kbd>Alt</kbd> + <kbd>1</kbd> <span>Belge Ağacı paneline odaklan.</span></li>
+                        <li><kbd>Alt</kbd> + <kbd>2</kbd> <span>Kod Sistemi paneline odaklan.</span></li>
+                        <li><kbd>Alt</kbd> + <kbd>3</kbd> <span>Metin Editörü / Belge Tarayıcı'ya odaklan.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>F</kbd> <span>Aktif belge içerisinde metin araması yap.</span></li>
                     </ul>
                 </div>
 
                 <div class="feature-item">
-                    <h2>Metin Düzenleyici ve Kodlama</h2>
-                    <ul>
-                        <li><code>Ctrl + B</code>: Kalın yazı (Düzenleme modunda).</li>
-                        <li><code>Ctrl + I</code>: İtalik yazı.</li>
-                        <li><code>Ctrl + U</code>: Altı çizili yazı.</li>
-                        <li><code>Ctrl + Shift + C</code>: Seçili metne aktif kodu hızlıca ata.</li>
-                        <li><code>Ctrl + M</code>: Seçili metne yeni not (Memo) ekle.</li>
+                    <h2>Etkin Kodlama İşlemleri</h2>
+                    <ul class="shortcut-list">
+                        <li><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> <span>Seçili metne <strong>aktif
+                                    kodu</strong> anında ata.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>M</kbd> <span>Seçili metne analitik not (Memo) ekle.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>N</kbd> <span>Sisteme yeni bir üst kod ekle.</span></li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd> <span>Seçili kodun altına hiyerarşik alt
+                                kod ekle.</span></li>
+                        <li><kbd>Space</kbd> <span>Seçili belge veya kodun analizdeki etkinliğini değiştir.</span></li>
                     </ul>
                 </div>
 
                 <div class="feature-item">
-                    <h2>Gezinme</h2>
-                    <ul>
-                        <li><code>Alt + 1</code>: Belge Ağacı'na odaklan.</li>
-                        <li><code>Alt + 2</code>: Kod Ağacı'na odaklan.</li>
-                        <li><code>Alt + 3</code>: Metin Editörü'ne odaklan.</li>
-                        <li><code>Ctrl + F</code>: Metin içinde ara.</li>
+                    <h2>Düzenleme ve Yönetim</h2>
+                    <ul class="shortcut-list">
+                        <li><kbd>F2</kbd> <span>Seçili belge, grup veya kod ismini yeniden adlandır.</span></li>
+                        <li><kbd>Del</kbd> <span>Seçili öğeyi kalıcı olarak sil (Onay penceresi açılır).</span></li>
+                        <li><kbd>Esc</kbd> <span>Aktif pencereleri veya aramaları kapat.</span></li>
                     </ul>
                 </div>
+
+                <div class="callout callout-tip">
+                    <h5>İpucu: Hızlı Kodlama</h5>
+                    <p>En çok kullandığınız anahtar kodları <strong>"Hızlı Erişim"</strong> grubuna ekleyerek tek tuşla
+                        kodlama verimliliğinizi %50 artırabilirsiniz.</p>
+                </div>
+
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

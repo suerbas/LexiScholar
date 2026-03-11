@@ -42,6 +42,7 @@ from .visualization_actions import VisualizationActions
 from .ribbon_setup import RibbonMixin
 from .panel_manager import PanelMixin
 from .action_handlers import MainWindowActions
+from . import common_ui
 
 @dataclass
 class MainWindowConfig:
@@ -511,7 +512,22 @@ class MainWindow(QMainWindow, EventHandlers, MenuActions, AnalysisActions,
 
         # Delegate custom header controls (like Export or Save buttons) to the widget itself
         if hasattr(widget, "setup_header_controls"):
-            widget.setup_header_controls(header.custom_layout)
+            # Check if this is a sentiment analysis widget with results
+            if hasattr(widget, '_sentiment_results') and widget._sentiment_results:
+                widget.setup_header_controls(header.custom_layout, 
+                                           sentiment_results=widget._sentiment_results, 
+                                           model_type=getattr(widget, '_sentiment_model', 'BERT'))
+            # Check if this is a topic modeling widget with results
+            elif hasattr(widget, '_topic_results') and widget._topic_results:
+                widget.setup_header_controls(header.custom_layout,
+                                           topic_results=widget._topic_results,
+                                           model_type=getattr(widget, '_topic_model', 'LDA'))
+            elif hasattr(widget, '_ner_results') and widget._ner_results:
+                widget.setup_header_controls(header.custom_layout,
+                                           ner_results=widget._ner_results,
+                                           model_type=getattr(widget, '_ner_model', 'NER'))
+            else:
+                widget.setup_header_controls(header.custom_layout)
             # Auto-register all added widgets as persistent (survive detach/dock rebuilds)
             for i in range(header.custom_layout.count()):
                 item = header.custom_layout.itemAt(i)
@@ -708,17 +724,86 @@ class MainWindow(QMainWindow, EventHandlers, MenuActions, AnalysisActions,
         else: event.ignore()
 
     def _check_updates(self):
-        """Check for application updates."""
-        from __version__ import APP_VERSION
-        from PyQt6.QtWidgets import QMessageBox
-        
-        # In a real app, this would fetch from a remote URL.
-        # For now, we simulate a check.
-        QMessageBox.information(
-            self, 
-            "Güncelleme Kontrolü", 
-            f"Mevcut sürümünüz: {APP_VERSION}\n\nUygulamanız günceldir. Yeni bir güncelleme bulunduğunda size bildirilecektir."
-        )
+        """Check for local NLP model updates and optionally download them."""
+        try:
+            from nlp_engine import check_local_model_updates
+
+            report = check_local_model_updates(download_updates=False)
+            if report.get("errors") and not report.get("checked"):
+                common_ui.show_error(
+                    self,
+                    "Dil Modelleri Kontrolü",
+                    "Lokal dil modelleri kontrol edilirken hata oluştu:\n\n" + "\n".join(report.get("errors", []))
+                )
+                return
+
+            missing_or_outdated = [
+                item for item in report.get("checked", [])
+                if item.get("status") in {"missing", "outdated"}
+            ]
+
+            lines = []
+            if report.get("current"):
+                lines.append("Güncel modeller:")
+                lines.extend([f"- {item['label']}" for item in report["current"]])
+                lines.append("")
+
+            if missing_or_outdated:
+                lines.append("İndirilebilir / güncellenebilir modeller:")
+                lines.extend([f"- {item['label']}" for item in missing_or_outdated])
+                lines.append("")
+
+            if report.get("errors"):
+                lines.append("Uyarılar:")
+                lines.extend([f"- {err}" for err in report["errors"]])
+
+            if not missing_or_outdated:
+                message = "Lokal dil modelleriniz güncel görünüyor.\n\n"
+                message += "Program şu anda en güncel indirilen yerel model sürümlerini kullanıyor."
+                if lines:
+                    message += "\n\n" + "\n".join(lines)
+                common_ui.show_scrollable_info(self, "Dil Modelleri Kontrolü", message)
+                return
+
+            # MODERN DIALOG INSTEAD OF SIMPLE CONFIRMATION
+            from .model_maintenance_dialog import ModelMaintenanceDialog
+            dlg = ModelMaintenanceDialog(self, report)
+            if not dlg.exec():
+                return
+                
+            selected_models = dlg.get_selected_models()
+            if not selected_models:
+                return
+
+            # Selective download
+            updated_report = check_local_model_updates(download_updates=True, models_to_download=selected_models)
+            updated_lines = []
+            if updated_report.get("updated"):
+                updated_lines.append("İndirilen / güncellenen modeller:")
+                updated_lines.extend([
+                    f"- {item['label']} ({item.get('remote_sha', 'bilinmiyor')[:12]})"
+                    for item in updated_report["updated"]
+                ])
+                updated_lines.append("")
+            current_items = [
+                item for item in updated_report.get("checked", [])
+                if item.get("status") in {"current", "updated"}
+            ]
+            if current_items:
+                updated_lines.append("Aktif güncel model durumu:")
+                updated_lines.extend([f"- {item['label']}" for item in current_items])
+            if updated_report.get("errors"):
+                updated_lines.append("")
+                updated_lines.append("Uyarılar:")
+                updated_lines.extend([f"- {err}" for err in updated_report["errors"]])
+
+            common_ui.show_scrollable_info(
+                self,
+                "Dil Modelleri Güncellemesi",
+                "Lokal dil modeli kontrolü tamamlandı.\n\n" + "\n".join(updated_lines)
+            )
+        except Exception as e:
+            common_ui.show_error(self, "Dil Modelleri Kontrolü", f"Dil modelleri güncellenemedi:\n\n{e}")
 
     def _show_about(self):
         """Show about dialog."""

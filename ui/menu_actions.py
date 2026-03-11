@@ -190,6 +190,7 @@ class MenuActions:
                     self._reinitialize_daos(self.db_path)
                     
                     project_display_name = project_name
+                    self.set_dirty(False)
                     self._update_project_label(project_display_name)
                     self._reload_all_data()
                     
@@ -209,6 +210,7 @@ class MenuActions:
         pm = ProjectManager(self.db_path)
         success, result = pm.save_project(self._active_project_name)
         if success:
+            self.set_dirty(False)
             self.statusbar.showMessage(f"✅ Proje kaydedildi: {self._active_project_name}")
             return True
         else:
@@ -227,6 +229,7 @@ class MenuActions:
                 pm = ProjectManager(self.db_path)
                 success, result = pm.save_project(project_name)
                 if success:
+                    self.set_dirty(False)
                     self.statusbar.showMessage(f"✅ Proje kaydedildi: {project_name}")
                     self._update_project_label(project_name)
                     common_ui.show_info(self, "Proje Kaydedildi", f"'{project_name}' kaydedildi.\n\nKonum: {result}")
@@ -321,5 +324,10 @@ class MenuActions:
         self.folder_dao = FolderDAO(db_path)
         self.journal_dao = ProjectJournalDAO(db_path)
         self.summary_dao = CodeSummaryDAO(db_path)
-        from database import CoderDAO
-        self.coder_dao = CoderDAO(db_path)
+        # Sync DAOs to main UI panels
+        if hasattr(self, 'document_tree'):
+            self.document_tree.set_daos(self.doc_dao, self.folder_dao)
+        if hasattr(self, 'code_tree'):
+            self.code_tree.set_daos(self.code_dao)
+        if hasattr(self, 'document_browser'):
+            self.document_browser.set_db_path(db_path)

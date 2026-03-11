@@ -45,7 +45,7 @@ class AIAssistantMixin:
         target_lang_str = "İNGİLİZCE (English)" if lang == "en" else "TÜRKÇE (Turkish)"
 
         system_prompt = (
-            "You are an expert Qualitative Data Analysis (QDA) assistant. "
+            "You are a Senior Academic Research Assistant specializing in descriptive and analytical summarization for qualitative studies. "
             f"YOUR TASK: Summarize the provided text STRICTLY in {target_lang_str}. "
             "Output in Markdown format using exactly this structure:\n\n"
             "**📌 Main Idea (veya Ana Fikir):**\n(1-2 sentence core summary)\n\n"
@@ -86,7 +86,7 @@ class AIAssistantMixin:
             f"Metin:\n{text}\n\nÖneriler:"
         )
         system_prompt = (
-            "You are an expert Qualitative Data Analysis (QDA) bot for LexiScholar. "
+            "You are an Expert QDA Methodology Consultant providing thematic coding suggestions based on Grounded Theory principles for LexiScholar. "
             "Your task is qualitative data coding/labeling. Cevabın SADECE virgülle "
             "ayrılmış kelimelerden oluşmalıdır. Asla sohbet etme, asla açıklama yapma."
         )
@@ -181,7 +181,7 @@ class AIAssistantMixin:
                 "tamamen akademik ve kusursuz bir İngilizceye (English)"
             )
             sys_lang = (
-                "Sen profesyonel bir yeminli akademik tercümansın. "
+                "You are an expert in cross-cultural academic terminology and qualitative research vocabulary, serving as a professional academic translator. "
                 "Sadece çeviriyi Markdown formatını bozmadan ver. Kendi yorumunu ekleme."
             )
 

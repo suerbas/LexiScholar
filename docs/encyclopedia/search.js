@@ -3,24 +3,21 @@
  */
 
 const searchIndex = [
-    { title: "Veri Yönetimi", desc: "Belge ağacı, içe aktarma ve dosya yönetimi.", url: "data_management.html", keywords: "import excel anket klasör tree" },
-    { title: "Veri Editörü", desc: "Değişkenleri Excel gibi tablo üzerinden düzenleyin.", url: "data_management.html#variable-editor", keywords: "spreadsheet tablo değişken editör matris" },
-    { title: "Anket İçe Aktarma", desc: "Excel dosyalarını 3 adımda projeye dahil edin.", url: "data_management.html#survey-import", keywords: "wizard sihirbaz excel anket" },
-    { title: "Kodlama Rehberi", desc: "İn-Vivo kodlama ve hiyerarşik kod ağacı mantığı.", url: "coding_guide.html", keywords: "tag hiyerarşi invivo renklendirme" },
-    { title: "Analiz Araçları", desc: "Timeline, Heatmap ve Sankey diyagramları.", url: "analysis_tools.html", keywords: "zaman çizelgesi ısı haritası grafik hiyerarşi" },
-    { title: "Karma Yöntemler", desc: "Nitel ve nicel veriyi birleştiren analizler.", url: "mixed_methods.html", keywords: "crosstab çapraz tablo matris karışık" },
-    { title: "Yapay Zeka (AI)", desc: "OpenRouter entegrasyonu ve AI asistanı.", url: "ai_features.html", keywords: "gemini deepseek claude openrouter bot asistan" },
-    { title: "OpenRouter Rehberi", desc: "API anahtarı alma ve para yükleme kılavuzu.", url: "openrouter_guide.html", keywords: "key anahtar bakiye kredi nasıl alınır" },
-    { title: "Görselleştirme", desc: "Diyagramlar, portreler ve ağ grafikleri.", url: "visualizations.html", keywords: "chart grafik portrait sankey ağ" },
-    { title: "Belge Portresi", desc: "Belgenin kod yoğunluğunu bir desen olarak görün.", url: "visualizations.html#portrait", keywords: "portrait desen motif piksel" },
-    { title: "Sankey Diyagramı", desc: "Kodlar arası akış ve geçişleri inceleyin.", url: "visualizations.html#sankey", keywords: "akış sankey geçiş transfer" },
-    { title: "Kod İlişki Grafiği", desc: "Kodların birbirine yakınlığını ağ haritasında görün.", url: "visualizations.html#network", keywords: "graph network ağ ilişkisel co-occurrence" },
-    { title: "Takım Çalışması", desc: "Grup çalışması, kodlayıcı yönetimi ve güvenilirlik.", url: "teamwork_reliability.html", keywords: "teamwork ekip grup takımı işbirliği senkronize" },
-    { title: "Analist Uyumu (IRR)", desc: "Kodlayıcılar arası tutarlılık ve Kappa analizi.", url: "teamwork_reliability.html#irr-analysis", keywords: "kappa irr uyum tutarlılık güvenilirlik" },
-    { title: "Kodlayıcı Yönetimi", desc: "Projeye yeni araştırmacılar ekleyin ve yönetin.", url: "teamwork_reliability.html#coder-management", keywords: "coder kodlayıcı araştırmacı user kullanıcı" },
-    { title: "Kısayollar", desc: "Hızlı kodlama ve navigasyon kısayolları.", url: "keyboard_shortcuts.html", keywords: "klavye tuş shortcut" },
-    { title: "Dışa Aktarma", desc: "Word ve Excel raporları oluşturma.", url: "data_management.html#export", keywords: "xlsx docx rapor çıktı" },
-    { title: "Memos (Notlar)", desc: "Analitik ve teorik notların yönetimi.", url: "data_management.html#memos", keywords: "not memo günlük günlükler" }
+    { title: "Veri Yönetimi", desc: "Corpus yönetimi, anket dönüşümü ve veri stratejisi.", url: "data_management.html", keywords: "import excel anket klasör tree corpus denetim izi audit trail" },
+    { title: "Veri Editörü", desc: "Değişkenleri ve katılımcı matrisini tablo üzerinden düzenleyin.", url: "data_management.html#variable-editor", keywords: "spreadsheet tablo değişken editör matris purposive sampling" },
+    { title: "Kodlama Rehberi", desc: "Taksonomi oluşturma, Aksiyel ve In-Vivo kodlama mantığı.", url: "coding_guide.html", keywords: "tag hiyerarşi invivo renklendirme taksonomi aksiyel axial memo" },
+    { title: "Analiz Araçları", desc: "Timeline, Görsel Kod Dağılımı ve metodolojik derinleşme.", url: "analysis_tools.html", keywords: "zaman çizelgesi ısı haritası grafik hiyerarşi timeline heatmap coverage" },
+    { title: "Karma Yöntemler", desc: "Triangülasyon ve nitel-nicel veri entegrasyonu.", url: "mixed_methods.html", keywords: "crosstab çapraz tablo matris karışık triangulation triangülasyon çeşitleme entegrasyon" },
+    { title: "Yapay Zeka (AI)", desc: "Akademik Persona ve Kıdemli Hakem Sistemi.", url: "ai_features.html", keywords: "gemini deepseek claude openrouter bot asistan rag sentez sentezleme referee hakem model bakım boyut size mb gb indir download" },
+    { title: "OpenRouter Rehberi", desc: "API entegrasyonu ve model çeşitliliği yönetimi.", url: "openrouter_guide.html", keywords: "key anahtar bakiye kredi api entegrasyon model diversity" },
+    { title: "Görselleştirme", desc: "Semantik haritalama, akış diyagramları ve semanti yakınlık.", url: "visualizations.html", keywords: "chart grafik portrait sankey ağ semantik harita haritalama co-occurrence" },
+    { title: "Belge Portresi", desc: "Belgenin kod yoğunluğunu lineer akış üzerinde analiz edin.", url: "visualizations.html#portrait", keywords: "portrait desen motif piksel syntagmatic" },
+    { title: "Sankey Diyagramı", desc: "Kavramsal akış ve nedensellik ilişkilerini inceleyin.", url: "visualizations.html#sankey", keywords: "akış sankey geçiş transfer causality nedensellik" },
+    { title: "Kod İlişki Grafiği", desc: "Semantik yakınlık ve çekirdek kategori analizi.", url: "visualizations.html#network", keywords: "graph network ağ ilişkisel co-occurrence semantic semantik centrality" },
+    { title: "Takım Çalışması", desc: "Akademik işbirliği, güvenilirlik ve etik standartlar.", url: "teamwork_reliability.html", keywords: "teamwork ekip grup takımı işbirliği senkronize güvenilirlik dependability reflexivity" },
+    { title: "Analist Uyumu (IRR)", desc: "Cohen's Kappa analizi ve uzlaşma paneli.", url: "teamwork_reliability.html#irr-analysis", keywords: "kappa irr uyum tutarlılık güvenilirlik cohen consensus uzlaşma" },
+    { title: "Kodlayıcı Yönetimi", desc: "Analiz izlenebilirliği (traceability) ve araştırmacı rolleri.", url: "teamwork_reliability.html#coder-management", keywords: "coder kodlayıcı araştırmacı user kullanıcı traceability izlenebilirlik" },
+    { title: "Kısayollar", desc: "Analitik akış (flow) için klavye verimliliği.", url: "keyboard_shortcuts.html", keywords: "klavye tuş shortcut flow verimlilik" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {

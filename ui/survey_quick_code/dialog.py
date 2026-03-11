@@ -698,7 +698,7 @@ class SurveyQuickCodeDialog(ModernBaseDialog):
 
         try:
             engine = OpenRouterEngine()
-            sys_prompt = "You are an expert qualitative data analyst. Summarize the following participant responses comprehensively, in the SAME LANGUAGE as the responses."
+            sys_prompt = "You are a Senior QDA expert specializing in transforming raw survey responses into analytically meaningful qualitative codes and summaries. Summarize the following participant responses comprehensively, in the SAME LANGUAGE as the responses."
             prompt = f"Responses for code '{self._code_name}':\\n\\n{combined}"
             response = engine.generate_completion(prompt, system_prompt=sys_prompt, model="google/gemini-2.5-flash")
             prog.close()

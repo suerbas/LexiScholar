@@ -108,9 +108,51 @@ class RetrievedSegments(QWidget):
         self.btn_export.clicked.connect(self._export_segments)
         self.toolbar.addWidget(self.btn_export)
 
+        self.btn_export.clicked.connect(self._export_segments)
+        self.toolbar.addWidget(self.btn_export)
+
         self.toolbar.addSeparator()
 
-        # Sort toggle? (Maybe later)
+        # Semantic Mode Toggle
+        self.btn_semantic_mode = QPushButton("Anlamsal Mod")
+        self.btn_semantic_mode.setCheckable(True)
+        self.btn_semantic_mode.setToolTip("Yapay Zeka destekli Anlamsal Arama (Semantic Search) modunu aç/kapat")
+        self.btn_semantic_mode.setAccessibleName("Anlamsal Mod Geçişi")
+        self.btn_semantic_mode.setIcon(IconProvider.get_action_icon("analytics", "#475569"))
+        self.btn_semantic_mode.toggled.connect(self._toggle_semantic_mode)
+        self.toolbar.addWidget(self.btn_semantic_mode)
+
+        # Semantic Search Bar (Hidden by default)
+        from PyQt6.QtWidgets import QLineEdit
+        self.semantic_bar = QWidget()
+        self.semantic_bar.setStyleSheet("background: #F8FAFC; border-bottom: 1px solid #E2E8F0;")
+        sem_layout = QHBoxLayout(self.semantic_bar)
+        sem_layout.setContentsMargins(8, 6, 8, 6)
+        
+        self.semantic_input = QLineEdit()
+        self.semantic_input.setPlaceholderText("Anlamsal arama için bir kavram veya cümle girin (Örn: Ekonomik kaygı)...")
+        self.semantic_input.setStyleSheet("""
+            QLineEdit {
+                border: 1px solid #CBD5E1; border-radius: 4px; padding: 4px 8px;
+                background: white; font-size: 13px;
+            }
+            QLineEdit:focus { border-color: #3B82F6; }
+        """)
+        self.semantic_input.returnPressed.connect(self._trigger_semantic_search)
+        
+        self.btn_do_semantic_search = QPushButton("Ara ✨")
+        self.btn_do_semantic_search.setStyleSheet("""
+            QPushButton {
+                background-color: #3B82F6; color: white; border-radius: 4px; padding: 4px 12px; font-weight: bold;
+            }
+            QPushButton:hover { background-color: #2563EB; }
+        """)
+        self.btn_do_semantic_search.clicked.connect(self._trigger_semantic_search)
+        
+        sem_layout.addWidget(self.semantic_input)
+        sem_layout.addWidget(self.btn_do_semantic_search)
+        self.semantic_bar.hide()
+        layout.addWidget(self.semantic_bar)
         
         # Segments list container
         self.segments_container = QWidget()
@@ -386,3 +428,81 @@ class RetrievedSegments(QWidget):
                 
         except Exception as e:
             show_error(self, "Hata", f"Dışa aktarma başarısız oldu:\n{str(e)}")
+
+    def _toggle_semantic_mode(self, checked: bool):
+        """Show or hide the semantic search bar."""
+        self.semantic_bar.setVisible(checked)
+        if checked:
+            self.semantic_input.setFocus()
+            
+            # Show info message if no segments loaded
+            if not self._all_segments:
+                self.statusbar_msg("Anlamsal arama için önce sonuçları listeleyen bir kod veya düğüme tıklayın.")
+        else:
+            self.semantic_input.clear()
+
+    def _trigger_semantic_search(self):
+        """Execute semantic search on currently loaded segments."""
+        query = self.semantic_input.text().strip()
+        if not query:
+            return
+            
+        if not self._all_segments:
+            show_info(self, "Bilgi", "Anlamsal arama yapılacak segment bulunamadı. Lütfen önce belgelerden bölümler listeleyin.")
+            return
+            
+        try:
+            from nlp.tasks.semantic import semantic_search
+            from ui.common_ui import ModernProgressDialog
+            
+            progress = ModernProgressDialog(
+                title="Yapay Zeka Anlamsal Çözümleme",
+                message=f"'{query}' kavramı mevcut {len(self._all_segments)} segment içinde aranıyor...\nBu işlem ilk çalıştırmada model indirileceğinden uzun sürebilir.",
+                max_val=0,
+                parent=self
+            )
+            progress.show()
+            
+            # Using QTimer to allow UI update before blocking NLP task
+            # In a real heavy app, this should be a QThread
+            from PyQt6.QtCore import QTimer
+            
+            def do_search():
+                try:
+                    # Perform search (this will download model if missing and block, or use cache)
+                    results = semantic_search(query, self._all_segments, top_k=50)
+                    
+                    if progress.isVisible():
+                        progress.close()
+                        
+                    if results:
+                        self.set_segments(results)
+                        self.header.set_title(f"Arama Sonuçları: '{query}' ({len(results)} eşleşme)")
+                    else:
+                        show_info(self, "Bilgi", "Anlam eşleşmesi bulunamadı.")
+                        
+                except Exception as e:
+                    if progress.isVisible():
+                        progress.close()
+                    error_msg = str(e)
+                    if "Kütüphane_Eksik" in error_msg:
+                        show_error(self, "Gerekli Kütüphaneler Eksik", "Anlamsal arama için gerekli Python kütüphaneleri eksik:\n\npip install sentence-transformers")
+                    elif "Model_Missing" in error_msg:
+                        show_info(self, "Dil Modeli Gerekli", "Bu özellik dünyaca ünlü BAAI/bge-m3 dil modelini (2.2 GB) gerektirir.\n\nLütfen üst menüden 'Dil Modellerini Kontrol Et' seçeneğine tıklayarak modeli indirin.")
+                    else:
+                        show_error(self, "Arama Hatası", f"Anlamsal arama sırasında bir hata oluştu:\n{error_msg}")
+                        
+            QTimer.singleShot(100, do_search)
+            
+        except ImportError:
+            show_error(self, "Sistem Hatası", "Anlamsal arama modülü yüklenemedi.")
+
+    def statusbar_msg(self, msg: str):
+        """Helper to show a message if main window statusbar exists."""
+        from PyQt6.QtWidgets import QApplication
+        for widget in QApplication.topLevelWidgets():
+            if widget.objectName() == "MainWindow":
+                if hasattr(widget, "statusbar"):
+                    widget.statusbar.showMessage(msg, 5000)
+                break
+

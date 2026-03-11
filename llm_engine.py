@@ -22,6 +22,17 @@ class OpenRouterEngine:
     A wrapper around standard OpenAI client customized for OpenRouter.
     Reads configuration from secure keyring storage with legacy migration support.
     """
+    
+    SENTIMENT_SYSTEM_PROMPT = """Sen bir nitel araştırma uzmanısın. Sana verilen metnin duygu tonunu akademik bir ciddiyetle analiz et.
+Metin içerisinde gizlilik için maskelenmiş ifadeler (Örn: [KİŞİ], [E-POSTA], [TELEFON]) olabilir; bunları bağlamın bir parçası olarak kabul et.
+Yanıtını sadece şu JSON formatında ver:
+{
+  "label": "very positive" | "positive" | "neutral" | "negative" | "very negative",
+  "score": 0.0 ile 1.0 arasında bir güven skoru,
+  "summary": "Analizin kısa, tek cümlelik gerekçesi (Türkçe)"
+}
+Önemli: Başka hiçbir metin veya açıklama ekleme, sadece JSON döndür."""
+
     def __init__(self):
         # Load environment variables (if not already loaded)
         load_dotenv()
@@ -105,12 +116,22 @@ class OpenRouterEngine:
         logger.error("API key güvenli olarak saklanamadı: keyring kullanılamıyor.")
         return False
 
-    def get_configured_model(self) -> str:
-        """Returns the user-selected model from QSettings or a default."""
-        settings = QSettings("LexiScholar", "Config")
-        return settings.value("AI/MODEL_ID", "google/gemini-2.0-flash-001")
+    DEFAULT_MODEL = "qwen/qwen-2.5-72b-instruct"
+    JUDGE_MODEL = "deepseek/deepseek-r1"
 
-    def generate_completion(self, prompt: str, system_prompt: str = "", model: str = None, temperature: float = 0.7) -> str:
+    def get_configured_model(self) -> str:
+        """Returns the fixed main model for all NLP tasks."""
+        return self.DEFAULT_MODEL
+
+    def get_model_display_name(self) -> str:
+        """Returns the display name of the main model."""
+        return "Qwen 2.5 72B"
+
+    def get_judge_model(self) -> str:
+        """Returns the fixed model for AI Judge & Synthesis tasks."""
+        return self.JUDGE_MODEL
+
+    def generate_completion(self, prompt: str, system_prompt: str = "", model: str = None, temperature: float = 0.7, max_tokens: int = 1024, response_format: Optional[Dict[str, str]] = None) -> str:
         """
         Generates a chat completion.
         Uses configured model if none is provided.
@@ -128,15 +149,27 @@ class OpenRouterEngine:
         messages.append({"role": "user", "content": prompt})
 
         try:
+            # Prepare arguments for completion
+            kwargs = {
+                "model": model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            }
+            
+            # If response_format is provided or inferred, add it
+            if response_format:
+                kwargs["response_format"] = response_format
+            elif "json" in system_prompt.lower() or "json" in prompt.lower():
+                kwargs["response_format"] = {"type": "json_object"}
+
             response = self.client.chat.completions.create(
                 # Extra headers (OpenRouter recommendation)
                 extra_headers={
                     "HTTP-Referer": "https://lexischolar.app", 
                     "X-Title": "LexiScholar QDA",
                 },
-                model=model,
-                messages=messages,
-                temperature=temperature
+                **kwargs
             )
             
             return response.choices[0].message.content.strip()
@@ -145,7 +178,7 @@ class OpenRouterEngine:
             logger.error(f"OpenRouter API Error: {e}")
             raise RuntimeError(f"API Hatası: {str(e)}")
 
-    def chat_completion(self, messages: list, model: str = None, temperature: float = 0.7) -> str:
+    def chat_completion(self, messages: list, model: str = None, temperature: float = 0.7, max_tokens: int = 1024, response_format: Optional[Dict[str, str]] = None) -> str:
         """
         Send a full OpenAI-style messages list and return the assistant reply.
         Use this for multi-turn conversations where you need to preserve history.
@@ -157,14 +190,22 @@ class OpenRouterEngine:
             model = self.get_configured_model()
 
         try:
+            kwargs = {
+                "model": model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            }
+            
+            if response_format:
+                kwargs["response_format"] = response_format
+
             response = self.client.chat.completions.create(
                 extra_headers={
                     "HTTP-Referer": "https://lexischolar.app",
                     "X-Title": "LexiScholar QDA",
                 },
-                model=model,
-                messages=messages,
-                temperature=temperature,
+                **kwargs
             )
             if not response.choices:
                 logger.warning("Empty response from LLM API")

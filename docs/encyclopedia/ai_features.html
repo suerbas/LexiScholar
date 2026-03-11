@@ -4,31 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiScholar Bilgi Ansiklopedisi - Yapay Zeka Özellikleri</title>
+    <title>Yapay Zeka Metodolojisi - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside>
             <a href="index.html" style="text-decoration: none;">
                 <div class="logo">
-                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
-                        <i data-lucide="graduation-cap"></i>
-                    </div>
-                    <span class="logo-text">LexiScholar</span>
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
+                            data-lucide="graduation-cap"></i></div>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -40,14 +35,8 @@
                         Analiz Araçları</a></li>
                 <li class="nav-item"><a href="mixed_methods.html" class="nav-link"><i data-lucide="layers"></i> Karma
                         Yöntemler</a></li>
-                <li class="nav-item">
-                    <a href="ai_features.html" class="nav-link active"><i data-lucide="sparkles"></i> Yapay Zeka</a>
-                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
-                    </ul>
-                </li>
+                <li class="nav-item"><a href="ai_features.html" class="nav-link active"><i data-lucide="sparkles"></i>
+                        Yapay Zeka</a></li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
                         Görselleştirme</a></li>
                 <li class="nav-item"><a href="teamwork_reliability.html" class="nav-link"><i data-lucide="users"></i>
@@ -58,50 +47,88 @@
         </aside>
 
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <h1>Yapay Zeka (AI) Destekli Analiz</h1>
-                <p>LexiScholar, nitel araştırmalarınızın hızını ve derinliğini artırmak için gelişmiş dil modellerini
-                    kullanır. Bu özellikler hem yerel (bilgisayarınızda) hem de bulut tabanlı (API) olarak çalışabilir.
-                </p>
+            <section class="content-section">
+                <h1>Yapay Zeka (AI) ve Akademik Etik</h1>
+                <p>LexiScholar, nitel araştırmacının yerini almak için değil, araştırmacının bilişsel yükünü hafifletmek
+                    ve "Yapay Zeka Destekli Nitel Analiz" (Computer-Assisted Qualitative Data Analysis with AI)
+                    süreçlerini standardize etmek için tasarlanmıştır.</p>
+
+                <div class="callout callout-definition" id="ai-persona">
+                    <h5><i data-lucide="user-check"></i> Senior Academic Persona</h5>
+                    <p>LexiScholar'daki AI asistanları, jenerik birer sohbet robotu değildir. Tüm sistem, bir
+                        <strong>"Kıdemli Akademik Hakem ve CAQDAS Uzmanı"</strong> personası üzerine inşa edilmiştir. Bu
+                        kimlik, veriyi analiz ederken bilimsel tarafsızlığı, metodolojik tutarlılığı ve akademik
+                        terminolojiyi önceler.
+                    </p>
+                </div>
 
                 <div class="feature-item" id="ai-chat">
-                    <h3>Akademik Sohbet ve RAG (Mevcut Belge ile Sohbet)</h3>
-                    <p>Herhangi bir belge açıkken AI panelini kullanarak o belgeye sorular sorabilirsiniz. Sistemin
-                        <strong>RAG (Retrieval-Augmented Generation)</strong> mimarisi sayesinde AI sadece genel
-                        bilgisiyle değil, o belgenin içeriğine hakim olarak cevap verir.
-                    </p>
+                    <h2>Akademik Metin Analisti (RAG Sohbet)</h2>
+                    <p>Mevcut belgeniz üzerinden soru-cevap yapmanızı sağlayan araçtır. RAG (Retrieval-Augmented
+                        Generation) altyapısı sayesinde sadece açık olan dökümanın içindeki verileri kullanarak yanıt
+                        üretir.</p>
+                    <div class="callout callout-tip">
+                        <h5>Sorgu Önerisi</h5>
+                        <p>"Bu katılımcının eğitim politikalarına dair temel argümanlarını, metodolojik bir rapor
+                            formatında özetle."</p>
+                    </div>
+                </div>
+
+                <div class="feature-item" id="ai-referee">
+                    <h2>AI Hakem Sistemi (Consensus & Synthesis)</h2>
+                    <p>Farklı AI modellerinin (ör. Qwen ve DeepSeek) analiz sonuçlarını birbiriyle kıyaslayan ve
+                        aralarında "Uzlaşma" (Consensus) sağlayan mekanizmadır. </p>
+                    <ul>
+                        <li><strong>AI Judge:</strong> Bir model analiz yaparken, diğeri (Hakem) bu analizi akademik
+                            kriterlere göre denetler ve sentezler.</li>
+                        <li><strong>Sentezle (🪄):</strong> Birden fazla bulguyu tek bir rafine sonuca dönüştürür.</li>
+                    </ul>
                 </div>
 
                 <div class="feature-item" id="sentiment">
-                    <h3>Duygu Analizi (Sentiment Analysis)</h3>
-                    <p>Kodlama ağacındaki bir koda bağlı tüm segmentlerin duygu tonunu (Olumlu, Olumsuz, Nötr) BERT
-                        modelleriyle tespit edebilir, bu veriyi nicel değişken olarak raporlarınıza ekleyebilirsiniz.
-                    </p>
+                    <h2>Derin Duygu Analizi (BERT & LLM Hybrid)</h2>
+                    <p>Metnin alt metnindeki (latent) duyguyu saptar. Sadece kelime eşleşmesi yapmaz, cümlenin semantik
+                        yapısını inceler.</p>
+                    <div class="visual-guide">
+                        LOKAL ANALİZ: Veri gizliliği için tamamen cihazınızda çalışan BERT modelleri.<br>
+                        ONLINE ANALİZ: Daha kompleks (ironi, metafor) durumlar için gelişmiş LLM desteği.
+                    </div>
+                </div>
+
+                <div class="feature-item" id="privacy">
+                    <h2>Veri Gizliliği ve Güvenlik</h2>
+                    <div class="callout callout-warning">
+                        <h5><i data-lucide="shield-check"></i> Akademik Gizlilik</h5>
+                        <p>LexiScholar'daki yerel modeller (Duygu Analizi, Konu Modelleme vb.) verinizi asla internete
+                            göndermez. Online modellerde ise (Sohbet, Sentez) verileriniz şifreli tüneller üzerinden
+                            iletilir ve modele eğitim verisi olarak kaydedilmez.</p>
+                    </div>
                 </div>
 
                 <div class="feature-item" id="ai-suggestions">
-                    <h3>Otomatik Kod Önerileri</h3>
-                    <p>Bir metni seçtiğinizde AI, metnin içeriğine en uygun mevcut kodları veya yeni kodlama önerilerini
-                        sağ taraftaki panelde listeler.</p>
+                    <h2>Tahminleyici Kodlama (Predictive Coding)</h2>
+                    <p>Araştırmacının geçmiş kodlama örüntülerinden yola çıkarak, yeni metin segmentleri için potansiyel
+                        kod önerilerinde bulunur. Bu özellik, "Kodlayıcı Yorgunluğunu" azaltır.</p>
                 </div>
 
-                <div class="feature-item" id="privacy"
-                    style="background-color: #f1f5f9; border-left: 4px solid #4f46e5; padding: 1rem; border-radius: 0.5rem; color: #1e293b;">
-                    <h3 style="color: #4f46e5;">Güvenlik ve Gizlilik</h3>
-                    <p>Veri gizliliği akademik araştırmalar için en kritik konudur:</p>
+                <div class="feature-item" id="ai-settings">
+                    <h2>Yapay Zeka Yapılandırması (API & Modeller)</h2>
+                    <p>Sistemin hibrit analiz yeteneklerini kullanabilmek için gerekli olan OpenRouter API anahtarı ve
+                        model seçim süreçlerini içerir.</p>
                     <ul>
-                        <li><strong>LLM Sohbet:</strong> API üzerinden çalışır (OpenRouter/OpenAI). Veriler şifreli
-                            olarak modele iletilir. <br><a href="openrouter_guide.html"
-                                style="color: #4f46e5; font-weight: 600;">➔ Nasıl API Anahtarı Alırım? (Adım Adım
-                                Rehber)</a></li>
-                        <li><strong>Duygu/Konu Analizi:</strong> Tamamen yereldir. Veri bilgisayarınızdan asla ayrılmaz.
-                            İlk çalıştırmada ~500MB'lık modeller otomatik olarak indirilir.</li>
+                        <li><strong>Model Bakımı:</strong> Lokal modellerin (BERT, BGE vb.) güncelliği sistem tarafından otomatik kontrol edilir.</li>
+                        <li><strong>Seçici Güncelleme:</strong> Yeni eklenen model bakım arayüzü sayesinde, yaklaşık 10 GB tutan model setinden sadece ihtiyacınız olanları (boyutlarını görerek) indirebilirsiniz.</li>
                     </ul>
+                    <a href="openrouter_guide.html" class="callout-link"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-amber); text-decoration: none; font-weight: 600; margin-top: 0.5rem;">
+                        <i data-lucide="settings"></i> API Kurulum Rehberine Git
+                    </a>
                 </div>
+
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

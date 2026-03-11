@@ -6,7 +6,7 @@ Defines DraggableTreeView and DocumentTree Base.
 from PyQt6.QtWidgets import (
     QTreeView, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QModelIndex
+from PyQt6.QtCore import Qt, pyqtSignal, QModelIndex, QTimer
 from PyQt6.QtGui import QStandardItemModel, QColor
 from ..panel_header import PanelHeader
 from ..styles import TREE_VIEW_STYLE
@@ -28,44 +28,38 @@ class DraggableTreeView(QTreeView):
         
     def dropEvent(self, event):
         """Handle drop event to update Database hierarchy and ordering."""
-        # 1. capture destination and indicators before move
-        target_idx = self.indexAt(event.position().toPoint())
-        drop_pos = self.dropIndicatorPosition()
-        
-        # 2. Perform the UI move
+        # Perform the UI move
         super().dropEvent(event)
         
-        # 3. Synchronize with Database
-        model = self.model()
-        selected_indexes = [idx for idx in self.selectedIndexes() if idx.column() == 0]
-        if not selected_indexes:
-            return
+        # Synchronize EVERYTHING safely after Model updates natively
+        QTimer.singleShot(100, self._delayed_sync)
 
-        first_item = model.itemFromIndex(selected_indexes[0])
-        if not first_item: return
+    def _delayed_sync(self):
+        self._sync_tree_to_db()
+        self.parent_widget.project_modified.emit()
+
+    def _sync_tree_to_db(self, parent_item=None):
+        """Recursively synchronize the tree model state with the database."""
+        model = self.model()
+        parent_idx = parent_item.index() if parent_item else QModelIndex()
         
-        parent_item = first_item.parent()
-        
-        # Set new folder_id
+        # Determine current folder_id
         folder_id = None
         if parent_item:
-            stored_id = parent_item.data(Qt.ItemDataRole.UserRole + 1)
             try:
+                stored_id = parent_item.data(Qt.ItemDataRole.UserRole + 1)
                 folder_id = int(stored_id) if stored_id is not None else None
             except (ValueError, TypeError):
                 folder_id = None
         
-        # 4. Update Database for EVERY sibling in the destination container
-        parent_idx = parent_item.index() if parent_item else QModelIndex()
-        count = model.rowCount(parent_idx)
-        
-        for row in range(count):
+        # Iterate over all children at this level
+        for row in range(model.rowCount(parent_idx)):
             child_idx = model.index(row, 0, parent_idx)
-            child_item = model.itemFromIndex(child_idx)
-            if not child_item: continue
+            item = model.itemFromIndex(child_idx)
+            if not item: continue
             
-            item_type = child_item.data(Qt.ItemDataRole.UserRole)
-            item_id = child_item.data(Qt.ItemDataRole.UserRole + 1)
+            item_type = item.data(Qt.ItemDataRole.UserRole)
+            item_id = item.data(Qt.ItemDataRole.UserRole + 1)
             
             if item_type == "document" and self.parent_widget.doc_dao:
                 self.parent_widget.doc_dao.move_to_folder(item_id, folder_id)
@@ -73,6 +67,8 @@ class DraggableTreeView(QTreeView):
             elif item_type == "folder" and self.parent_widget.folder_dao:
                 self.parent_widget.folder_dao.move_to_folder(item_id, folder_id)
                 self.parent_widget.folder_dao.update_order(item_id, row)
+                # Recurse into the folder
+                self._sync_tree_to_db(item)
 
 class DocumentTreeBase(QWidget):
     """Base DocumentTree widget with signals and UI setup."""

@@ -36,6 +36,10 @@ class DocumentBrowserBase(AIAssistantMixin, QWidget):
         self._active_segment_range = None
         self._last_tooltip_memo_id = None
 
+    def set_db_path(self, db_path: str):
+        """Update the database path."""
+        self._db_path = db_path
+
     def _chat_with_document(self):
         """Request AI chat as a tab via signal."""
         if not self._current_doc_id:

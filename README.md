@@ -1,4 +1,4 @@
-# 🏛️ LexiScholar v3.5.0 Beta
+# 🏛️ LexiScholar v3.7.0
 
 > *Özel, Yapay Zeka Destekli Nitel Veri Analizi Platformu.*
 
@@ -26,6 +26,7 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 | 💬 **Belgeyle AI Sohbet** | Seçilen bir belgeyle doğrudan sohbet edebilme (RAG benzeri akış) |
 | 🎓 **Bilgi Ansiklopedisi** | Programın her özelliğini detaylıca açıklayan premium, web tabanlı rehber sistemi |
 | ✍️ **Parafraze** | Kodlanmış segmentleri araştırmacının kendi sözcükleriyle özetleme |
+| 🌌 **Anlamsal Haritalama** | BGE-M3 modeli ile metinleri çok boyutlu uzayda kümeleme ve haritalama |
 | 📊 **Dinamik Görselleştirmeler** | Sankey diyagramı, belge portresi, kelime bulutu, kod bulutu |
 | 👥 **Çoklu Kodlayıcı / IRR** | Cohen's Kappa ile kodlayıcı güvenilirliği ölçümü |
 | ↩️ **Undo/Redo Sistemi** | Command Pattern — kodlama ve parafraze işlemleri geri alınabilir |
@@ -35,33 +36,32 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 
 ---
 
-## 🚀 v3.5.0 Beta — Yenilikler
+## 🚀 v3.7.0 — Yenilikler
 
-### 📊 Gelişmiş Görselleştirme Galerisi (v3.5)
-- **Yeni İki Panelli Tasarım:** Grafik ayarları ve ana ekran modern bir iş akışı için birbirinden ayrıldı.
-- **ApexCharts Entegrasyonu:** Daha yumuşak animasyonlar, yüksek çözünürlüklü dışa aktarma ve etkileşimli tooltipler.
-- **Dinamik Filtreleme:** Gösterge (legend) ve veri etiketi (data labels) kontrolleri eklendi.
-- **Mükemmel Uyum:** Tüm grafiklerin pencereye tam sığması ve yüksek DPI desteği optimize edildi.
+### 🌌 Anlamsal Haritalama (Semantic Mapping)
+- **BGE-M3 Entegrasyonu:** Tamamen yerel, çok dilli BAAI/bge-m3 modeli ile gömülü anlamsal temsil. (Internet gerektirmez)
+- **Kümeleme Haritası:** Sınıfları ve segmentleri dinamik "Cluster Map" üzerinde çok boyutlu uzayda grafikleme. UMAP ve HDBSCAN algoritmaları ile akıllı gruplama.
+- **Hızlı Anlamsal Arama:** Kodlu segmentlerde kelime (string) yerine "anlam" tabanlı semantik arama modu.
 
-### 👥 Takım Çalışması & Güvenirlik (Teamwork)
-- **Kodlayıcı Yönetimi:** Her araştırmacı kendi adına ve rengine göre kodlama yapar.
-- **Analist Uyumu (IRR):** İki farklı kodlayıcının uyumu için **Cohen's Kappa** ve yüzdelik uyum oranları.
-- **Esnek Senkronizasyon:** Ortak bulut klasörleri (OneDrive/Drive) üzerinden eş zamanlı çalışma imkanı.
+### 🎓 Akademik Araştırma Wiki Dönüşümü (v3.6)
+- **Metodolojik Derinlik:** Yardım ansiklopedisi; Gömülü Kuram (Grounded Theory), Aksiyel Kodlama ve Triangülasyon gibi akademik kavramları içeren derin bir rehbere dönüştürüldü.
+- **Akademik Dil:** Tüm içerikler akademik bir tonda yeniden yazıldı ve metodolojik uyarılar eklendi.
+- **Akıllı Arama:** Bilgi bankası dizini; *Epistemoloji*, *Cohen's Kappa*, *Saturasyon* gibi 50+ akademik terimle zenginleştirildi.
+- **Kesintisiz Geçiş:** Program içindeki yardım simgeleri, doğrudan ilgili metodolojik bölüme odaklanan derin bağlantılarla güncellendi.
 
-### 🎓 Akıllı Bilgi Ansiklopedisi
-- **Dinamik Arama:** Ansiklopedi içinde 2 harfle her şeye erişim (search dropdown).
-- **Kapsamlı Rehberler:** OpenRouter API rehberi, Veri Editörü ve Memo Yönetimi sayfaları eklendi.
+### 🤖 Gelişmiş AI Analiz Katmanı
+- **Senior Academic Persona:** Yapay zeka asistanları, "Kıdemli Akademik Hakem" kimliğiyle analiz yapacak şekilde optimize edildi.
+- **AI Hakem Sistemi:** Farklı modellerin çıktılarını sentezleyen ve akademik tutarlılığı denetleyen yeni bir iş akışı eklendi.
+- **Gelişmiş RAG:** Belge sohbetlerinde halüsinasyon riskini minimize eden geliştirilmiş bağlam yönetimi.
 
-### 🤖 Merkezi AI Yönetimi
-- **Yapay Zeka Ayarları:** API anahtarı, model seçimi ve bakiye takibi için merkezi panel.
-- **Kapsamlı LLM Desteği:** OpenRouter üzerinden 100+ farklı AI modeline erişim.
-- **Kalıcı Sohbet Veritabanı:** Araştırmacının belge sohbeti geçmişi proje veritabanına otomatik kaydedilir.
-- **QDA ve Dil Çerçevesi:** Modellere katı dil ve "Nitel Analiz" bağlamı komutları uygulanarak dil karmaşası engellendi.
+### 📊 Görselleştirme ve Raporlama
+- **Sankey ve Semantik Haritalama:** Kod ilişkilerini görselleştiren modellerin grafik kütüphanesi v3.6 standartlarına yükseltildi.
+- **Dinamik Filtreleme:** Gösterge (legend) ve veri etiketi (data labels) kontrolleri optimize edildi.
 
-### 🔍 Arama & Düzenleme
-- **FTS5 Tam Metin Arama:** Belge içeriklerinde anlık ve mantıksal sorgu desteği.
-- **Veri Editörü:** Değişkenleri Excel benzeri bir tablo üzerinde hızlıca güncelleme.
-- **Parafraze:** Kodlanmış bölümlere araştırmacı yorumu ekleme ve dışa aktarma.
+### 🧠 Akıllı Model Yönetimi (Smart Model Management)
+- **Model Boyutu Raporlama:** İndirilecek yerel modellerin boyutları artık Hugging Face üzerinden anlık olarak çekilip kullanıcıya gösterilir.
+- **Seçici Güncelleme:** Yaklaşık 10 GB tutan model kütüphanesinden sadece ihtiyaç duyulan modellerin (Duygu Analizi, NER veya BGE-M3) tekil olarak seçilip indirilmesine olanak tanıyan yeni "Model Bakım" arayüzü eklendi.
+- **Verimli Depolama:** Kullanıcılar disk alanını yönetmek için istemedikleri modelleri pasif bırakabilir.
 
 ---
 
@@ -83,10 +83,10 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 ## 🏗️ Mimari Genel Bakış
 
 ```
-LexiScholar v3.2.0 Beta
+LexiScholar v3.7.0
 │
 ├── main.py                  # Giriş noktası, ortam kurulumu
-├── __version__.py           # Merkezi versiyon bilgisi (v3.5.0)
+├── __version__.py           # Merkezi versiyon bilgisi (v3.7.0)
 ├── nlp_engine.py            # NLP işlevleri (duygu, NER, KWIC, konu modeli)
 ├── llm_engine.py            # OpenRouter API wrapper
 │
@@ -169,11 +169,12 @@ proje_adi/
 
 ## 🆚 QDA Araç Karşılaştırması
 
-| Özellik | MAXQDA | NVivo | LexiScholar |
+| 🆚 QDA Araç Karşılaştırması | MAXQDA | NVivo | LexiScholar |
 |---|:---:|:---:|:---:|
 | Fiyat | ~600 €/yıl | ~700 €/yıl | **Ücretsiz** |
 | Parafraze | ✅ | ✅ | ✅ |
 | Belgeyle AI Sohbet | ✅ | ❌ | ✅ |
+| Anlamsal Kümeleme Haritası | ❌ | ❌ | ✅ |
 | Takım Çalışması / Coder Management | ✅ | ✅ | **✅ (Bulut Dostu)** |
 | Analist Uyumu (IRR) | ✅ | ✅ | **✅ (Cohen's Kappa)** |
 | Veri Editörü (Spreadsheet) | ✅ | ✅ | ✅ |

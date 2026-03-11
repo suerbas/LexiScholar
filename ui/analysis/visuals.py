@@ -9,7 +9,7 @@ from ..common_ui import show_info, show_warning, show_error, ask_confirmation
 class VisualsActionsMixin:
     """Methods for generating and viewing visualizations."""
 
-    def _open_visualization(self, title, file_path, subtitle=None):
+    def _open_visualization(self, title, file_path, subtitle=None, sentiment_results=None, topic_results=None, ner_results=None, model_type="BERT"):
         """Open visualization in a central tab."""
         from ..common.browser_dialog import BrowserWidget
         
@@ -21,6 +21,20 @@ class VisualsActionsMixin:
                 
         widget = BrowserWidget(title, file_path, self)
         
+        # Store sentiment results if provided (for export functionality)
+        if sentiment_results is not None:
+            widget._sentiment_results = sentiment_results
+            widget._sentiment_model = model_type
+        
+        # Store topic results if provided (for export functionality)
+        if topic_results is not None:
+            widget._topic_results = topic_results
+            widget._topic_model = model_type
+
+        if ner_results is not None:
+            widget._ner_results = ner_results
+            widget._ner_model = model_type
+        
         # Determine contextual help
         t = title.lower()
         help_page = "analysis_tools.html"
@@ -31,7 +45,18 @@ class VisualsActionsMixin:
         # if "Anahtar Kelime Analizi" in title:
         #    widget.set_toolbar_visible(False)
         
-        if any(x in t for x in ["kelime", "bulut", "cloud"]) and "anahtar" not in t:
+        if "hibrit" in t and ("konu" in t or "topic" in t):
+            widget.add_simple_controls()
+            help_page = "analysis_tools.html"
+            help_anchor = "ai-topic-modeling"
+            help_tooltip = "Hibrit Konu Modelleme: Lokal LDA ile online AI modelinin belge başına baskın konu atamalarını, konu etiketlerini ve anahtar kelimelerini karşılaştırır. Uyumlu, yakın ve farklı sonuçları birlikte yorumlamanızı sağlar."
+        elif "hibrit" in t and ("duygu" in t or "sentiment" in t):
+            widget.add_simple_controls()
+            help_page = "analysis_tools.html"
+            help_anchor = "ai-sentiment"
+            help_tooltip = "Hibrit Duygu Analizi: Lokal BERT ile online AI modelinin aynı belge için ürettiği duygu etiketlerini ve kısa gerekçelerini karşılaştırır; farklılıklar nüans, bağlam ve ironi yorumlarını görmenizi sağlar."
+            widget._is_sentiment_analysis = True
+        elif any(x in t for x in ["kelime", "bulut", "cloud"]) and "anahtar" not in t:
             widget.add_word_cloud_controls()
             help_anchor = "word-cloud" if "kelime" in t else "code-cloud"
             help_tooltip = "Kelime Bulutu: Metindeki sık tekrarlanan kavramları vurgulayarak ön plana çıkarır. Boyut kontrolleriyle özelleştirilebilir."
@@ -70,11 +95,31 @@ class VisualsActionsMixin:
             help_page = "visualizations.html"
             help_anchor = "network"
             help_tooltip = "Kod İlişki Grafiği: Kodların birbiriyle olan bağlantılarını ve birlikte kullanılma (co-occurrence) yoğunluklarını interaktif bir ağ haritası üzerinde analiz edin."
-        elif any(x in t for x in ["portre", "resmi", "portrait"]):
+        elif "portre" in t or "resmi" in t or "portrait" in t:
             widget.add_simple_controls()
             help_page = "visualizations.html"
             help_anchor = "portrait"
             help_tooltip = "Belge Portresi: Belge yapısını ve kodlama yoğunluklarını bir desen (Portrait) olarak görselleştirerek genel bir bakış sağlar."
+        elif "duygu" in t or "sentiment" in t:
+            # Sentiment analysis - add export controls
+            widget.add_simple_controls()
+            help_page = "visualizations.html"
+            help_anchor = "sentiment-analysis"
+            help_tooltip = "Duygu Analizi: Metinlerin duygusal tonunu (pozitif, negatif, nötr) yapay zeka ile analiz eder."
+            
+            # Add sentiment export controls to the widget's header
+            # This will be called by nlp_actions.py after the tab is created
+            widget._is_sentiment_analysis = True
+        elif any(x in t for x in ["varlık", "ner", "entity"]):
+            widget.add_simple_controls()
+            help_page = "analysis_tools.html"
+            help_anchor = "ai-ner"
+            help_tooltip = "Varlık Tanıma (NER): Metindeki kişi, kurum, yer ve tarih gibi özel adları otomatik olarak tespit eder. Kategoriler bölümünde bulunan varlık türleri, tablo bölümünde ise belge bazlı dağılım gösterilir."
+        elif "anlamsal harita" in t or "semantic map" in t:
+            widget.add_simple_controls()
+            help_page = "analysis_tools.html"
+            help_anchor = "semantic-mapping"
+            help_tooltip = "Anlamsal Haritalama: Seçilen sınıf/kod ya da tüm proje verisi içindeki örtüşen anlamları yapay zeka (BGE-M3) yardımıyla çok boyutlu bir uzay üzerinden analiz eder ve kümelemeleri gösterir."
         else:
             widget.add_simple_controls()
             help_page = "visualizations.html"
@@ -84,6 +129,83 @@ class VisualsActionsMixin:
         if hasattr(self, 'statusbar'):
             self.statusbar.showMessage(f"📈 {title} hazır.")
         return widget
+
+    def _show_semantic_map(self):
+        """Show interactive Semantic Cluster Map using BGE-M3 embeddings."""
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        try:
+            from nlp.tasks.semantic import build_cluster_map_data
+            from ..visualizations import generate_semantic_map_html
+            
+            # Fetch segments
+            active_doc_ids = self.doc_dao.get_active_ids()
+            if active_doc_ids:
+                bulk_segments = self.segment_dao.get_by_documents_bulk(active_doc_ids)
+                # Flatten the dictionary {doc_id: [segments]} into a flat list
+                segments = []
+                for doc_segs in bulk_segments.values():
+                    segments.extend(doc_segs)
+            else:
+                segments = self.segment_dao.get_all()
+            
+            if len(segments) < 3:
+                show_info(self, "Yetersiz Veri", "Anlamsal haritalama için en az 3 kodlanmış bölüme ihtiyacınız var.")
+                return
+            
+            # User warning for resources
+            msg = (
+                "Anlamsal haritalama işlemi derin öğrenme modelleri (BGE-M3) kullanır.\n\n"
+                "• Yaklaşık 2-4 GB RAM kullanımı gerektirebilir.\n"
+                "• Bilgisayarınızın gücüne göre işlem birkaç dakika sürebilir (Örn: 2000 segment için ~1 dk).\n"
+                "• GPU destekleniyorsa otomatik kullanılacaktır.\n\n"
+                "Analizi başlatmak istiyor musunuz?"
+            )
+            if not ask_confirmation(self, "Analiz Onayı", msg):
+                return
+            
+            from ..common.modern_progress_dialog import ModernProgressDialog
+            from ..worker_threads import SemanticWorker
+            from ..visualizations import generate_semantic_map_html
+
+            # Create and show progress dialog
+            progress = ModernProgressDialog(self, "Anlamsal Haritalama", "Anlamsal analiz başlatılıyor...", "İptal")
+            
+            # Start worker thread
+            self._sem_worker = SemanticWorker(segments)
+            
+            def handle_finished(cluster_data):
+                progress.close()
+                try:
+                    file_path = generate_semantic_map_html(cluster_data)
+                    self._open_visualization("Anlamsal Haritalama", file_path)
+                except Exception as e:
+                    show_error(self, "Görselleştirme Hatası", f"Harita dosyası oluşturulamadı: {e}")
+
+            def handle_error(error_msg):
+                progress.close()
+                if "Kütüphane_Eksik" in error_msg:
+                    show_error(self, "Gerekli Kütüphaneler Eksik", "Anlamsal haritalama için gerekli kütüphaneler eksik:\n\npip install umap-learn hdbscan sentence-transformers")
+                elif "Model_Missing" in error_msg:
+                    show_info(self, "Dil Modeli Gerekli", "Bu özellik BAAI/bge-m3 dil modelini gerektirir.\n\nLütfen üst menüden 'Dil Modellerini Kontrol Et' seçeneği ile modeli indirin.")
+                else:
+                    show_error(self, "Harita Hatası", f"Anlamsal haritalama oluşturulamadı:\n{error_msg}")
+
+            def handle_progress(val, msg):
+                progress.setLabelText(msg)
+
+            # Connect signals
+            self._sem_worker.finished.connect(handle_finished)
+            self._sem_worker.error.connect(handle_error)
+            self._sem_worker.progress.connect(handle_progress)
+            
+            # Handle cancellation
+            progress.canceled.connect(self._sem_worker.terminate)
+            
+            self._sem_worker.start()
+            progress.show()
+
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def _show_code_graph(self):
         """Show interactive code relationship graph."""

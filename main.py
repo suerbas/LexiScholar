@@ -107,6 +107,19 @@ def main():
         import torch
         import openai
         import whisper
+        
+        # Suppress QFont warnings after PyQt6 is imported
+        from PyQt6 import QtCore
+        def qt_message_handler(mode, context, message):
+            # Filter out QFont warnings
+            if "QFont::setPointSize" in message or "Point size" in message:
+                return
+            # Print other messages to stderr
+            import sys
+            print(message, file=sys.stderr)
+        
+        QtCore.qInstallMessageHandler(qt_message_handler)
+        
     except ImportError as e:
         print(f"Eksik kütüphane tespit edildi: {e.name}")
         if not auto_install_enabled:

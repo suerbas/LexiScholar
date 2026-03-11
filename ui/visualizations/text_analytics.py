@@ -6,7 +6,7 @@ Generates HTML for Keywords, Word Frequency, and KWIC.
 from typing import List, Dict
 from datetime import datetime
 import re
-from .core_utils import _save_html, _generate_empty_html, COMMON_STYLES
+from .core_utils import save_html, _generate_empty_html, COMMON_STYLES
 
 def generate_keywords_html(keywords: List[Dict], doc_title: str = "Tüm Belgeler") -> str:
     """Generate HTML visualization for keyword extraction results."""
@@ -57,7 +57,7 @@ def generate_keywords_html(keywords: List[Dict], doc_title: str = "Tüm Belgeler
         </table>
     </div>
 </div></body></html>"""
-    return _save_html(html, "keywords")
+    return save_html(html, "keywords")
 
 def generate_word_frequency_html(frequency_data: List[tuple], doc_title: str = "Tüm Belgeler") -> str:
     """Generate HTML visualization for word frequency results."""
@@ -91,7 +91,7 @@ def generate_word_frequency_html(frequency_data: List[tuple], doc_title: str = "
         </table>
     </div>
 </div></body></html>"""
-    return _save_html(html, "frequency")
+    return save_html(html, "frequency")
 
 def generate_kwic_html(results: List[Dict], keyword: str, doc_title: str = "") -> str:
     """Generate HTML for KWIC analysis."""
@@ -135,4 +135,4 @@ def generate_kwic_html(results: List[Dict], keyword: str, doc_title: str = "") -
         </table>
     </div>
 </div></body></html>"""
-    return _save_html(html, "kwic")
+    return save_html(html, "kwic")

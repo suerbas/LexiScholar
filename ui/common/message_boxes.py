@@ -41,7 +41,7 @@ class ScrollableMessageBox(ModernBaseDialog):
         except Exception: return
         progress = QProgressDialog("Metin çevriliyor...", None, 0, 0, self); progress.show(); QApplication.processEvents()
         try:
-            res = engine.generate_completion(self.message_text, system_prompt="Translate between TR/EN. Output ONLY translated markdown.", model="google/gemini-2.5-flash")
+            res = engine.generate_completion(self.message_text, system_prompt="You are a professional social science academic translator. Translate between TR/EN with high precision. Output ONLY translated markdown.", model="google/gemini-2.5-flash")
             self.message_text = res; self.text_edit.setMarkdown(res)
         except Exception: pass
         finally: progress.close()

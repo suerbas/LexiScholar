@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiScholar Bilgi Ansiklopedisi</title>
+    <title>LexiScholar Akademik Wiki</title>
     <link rel="stylesheet" href="style.css">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -22,13 +22,13 @@
                     <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
                         <i data-lucide="graduation-cap"></i>
                     </div>
-                    <span class="logo-text">LexiScholar</span>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -45,7 +45,7 @@
                     <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
                         <li><a href="openrouter_guide.html" class="sub-nav-link"
                                 style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
+                                API & Ayarlar</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
@@ -59,13 +59,11 @@
 
         <!-- Main Content -->
         <main>
-            <header style="display: none;"></header> <!-- Placeholder to maintain consistency -->
-
-            <section class="hero" style="margin-top: 2rem;">
+            <section class="hero">
                 <div class="hero-content">
-                    <h1>LexiScholar'ı Keşfedin</h1>
-                    <p>Nitel ve karma yöntem araştırmalarınız için geliştirilmiş en kapsamlı bilgi veri tabanına hoş
-                        geldiniz. Her modülün çalışma prensibini ve akademik ipuçlarını burada bulabilirsiniz.</p>
+                    <h1>Akademik Araştırma Wiki</h1>
+                    <p>LexiScholar'ın teknik kullanımından öte, nitel araştırma metodolojisi ve akademik standartlara
+                        dair kapsamlı rehber.</p>
                 </div>
             </section>
 
@@ -75,9 +73,8 @@
                     <div class="icon-wrapper">
                         <i data-lucide="file-up"></i>
                     </div>
-                    <h3>Veri İçe Aktarma</h3>
-                    <p>Excel anketleri, transkriptler ve ses dosyalarını projeye dahil etmenin en verimli yollarını
-                        öğrenin.</p>
+                    <h3>Metodolojik Hazırlık</h3>
+                    <p>Veri setinin ontolojik yapısı, transkripsiyon standartları ve örneklem yönetimi.</p>
                 </a>
 
                 <!-- Coding -->
@@ -85,9 +82,8 @@
                     <div class="icon-wrapper">
                         <i data-lucide="highlighter"></i>
                     </div>
-                    <h3>Kodlama ve Notlar</h3>
-                    <p>In-Vivo kodlama, hiyerarşik kod ağacı yönetimi ve analitik notlar (memos) ile verinizi
-                        anlamlandırın.</p>
+                    <h3>Kodlama ve Sınıflandırma</h3>
+                    <p>Açık kodlama, eksenel kodlama ve tematik ağların akademik inşası.</p>
                 </a>
 
                 <!-- Mixed Methods -->
@@ -95,9 +91,8 @@
                     <div class="icon-wrapper">
                         <i data-lucide="combine"></i>
                     </div>
-                    <h3>Karma Yöntemler</h3>
-                    <p>Nitel veriyi nicel değişkenlerle kıyaslayın, Alıntı Matrisleri ve Yan Yana Görünümler oluşturun.
-                    </p>
+                    <h3>Karma Yöntem Analizi</h3>
+                    <p>Nitel bulguları nicel değişkenlerle (triangulation) entegre etme teknikleri.</p>
                 </a>
 
                 <!-- AI Tools -->
@@ -105,9 +100,8 @@
                     <div class="icon-wrapper">
                         <i data-lucide="brain-circuit"></i>
                     </div>
-                    <h3>AI Asistanı</h3>
-                    <p>BERT tabanlı duygu analizi, LDA konu modelleme ve RAG destekli akademik sohbet özelliklerini
-                        keşfedin.</p>
+                    <h3>AI Destekli Bilgi Çıkarımı</h3>
+                    <p>LLM personalları, NLP parametreleri ve <strong>API/Model Ayarları</strong> için rehberlik.</p>
                 </a>
 
                 <!-- Visualizations -->
@@ -115,9 +109,8 @@
                     <div class="icon-wrapper">
                         <i data-lucide="network"></i>
                     </div>
-                    <h3>Görselleştirme</h3>
-                    <p>Belge Portreleri, Sankey Diyagramları ve İlişkisel Ağlar ile bulgularınızı etkileyici sunumlara
-                        dönüştürün.</p>
+                    <h3>Görsel Sunum Modelleri</h3>
+                    <p>Sankey, Heatmap ve Graph modellerinin akademik yayına dönüştürülmesi.</p>
                 </a>
 
                 <!-- Export -->
@@ -125,39 +118,30 @@
                     <div class="icon-wrapper">
                         <i data-lucide="download"></i>
                     </div>
-                    <h3>Dışa Aktarma</h3>
-                    <p>Kod kitapçıkları, raporlar ve ham verileri akademik formatlarda arşivleyin.</p>
-                </a>
-
-                <!-- Teamwork -->
-                <a href="teamwork_reliability.html" class="category-card">
-                    <div class="icon-wrapper">
-                        <i data-lucide="users"></i>
-                    </div>
-                    <h3>Takım Çalışması</h3>
-                    <p>Grup çalışması, Coder Yönetimi ve IRR analizi ile bilimsel geçerliliği artırın.</p>
+                    <h3>Akademik Raporlama</h3>
+                    <p>APA/Ulakbim uyumlu kod kitapçıkları ve metodoloji bölümlerinin dışa aktarımı.</p>
                 </a>
             </div>
 
             <section class="content-section">
-                <h2>Hızlı Başlangıç</h2>
-                <div class="feature-item">
-                    <h4>Proje Yapısı</h4>
-                    <p>LexiScholar, sol tarafta <strong>Belge Ağacı</strong> ve <strong>Kod Ağacı</strong>, ortada ise
-                        <strong>Metin Tarayıcı</strong> bulunan üçlü bir panel sistemine sahiptir. Sağ taraftaki
-                        <strong>Tepsi</strong> ise geçici olarak kodlara ve AI önerilerine hızlı erişim sağlar.
-                    </p>
+                <h2>Wiki Vizyonu</h2>
+                <div class="callout callout-definition">
+                    <h5><i data-lucide="info"></i> Epistemolojik Yaklaşım</h5>
+                    <p>LexiScholar Wiki, sadece "hangi buton ne yapar" sorusuna değil, "bu araç araştırmamın bilimsel
+                        değerine ne katar" sorusuna cevap vermek üzere tasarlanmıştır. Her modül, akademik yazınla
+                        uyumlu terminoloji ile açıklanmıştır.</p>
                 </div>
+
                 <div class="feature-item">
-                    <h4>Kodlama Mantığı</h4>
-                    <p>Metin üzerinde herhangi bir alanı seçip sürükleyerek Kod Ağacı'ndaki bir kodun üzerine
-                        bırakmanız, o segmenti kodlamanız için yeterlidir. Sağ tıklayarak <code>In-Vivo Kodlama</code>
-                        seçeneğini seçerseniz, seçtiğiniz metin doğrudan kod adı olarak atanır.</p>
+                    <h3>Hızlı Navigasyon</h3>
+                    <p>Uygulama içerisindeki <strong>ampul (💡)</strong> simgelerine tıkladığınızda, doğrudan ilgili
+                        metodolojik sayfaya ve parametre açıklamalarına yönlendirilirsiniz. Bu wiki, programınızla
+                        senkronize çalışır.</p>
                 </div>
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

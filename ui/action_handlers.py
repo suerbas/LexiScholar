@@ -66,15 +66,20 @@ class MainWindowActions:
                             self._on_code_selected(selected_code_id)
 
     def _confirm_exit(self):
-        """Show exit confirmation dialog with save/close options."""
+        """Show exit confirmation dialog with save/discard/cancel options."""
         if not self._is_dirty:
             return True # Exit immediately if no changes
             
-        from .common_ui import ask_confirmation
-        if ask_confirmation(self, "Çıkış Onayı", "Kaydedilmemiş değişiklikleriniz olabilir.\n\nÇıkmadan önce projeyi kaydetmek ister misiniz?"):
+        from .common_ui import ask_save_before_exit
+        result = ask_save_before_exit(self, "Çıkış Onayı", 
+                                    "Kaydedilmemiş değişiklikleriniz olabilir.\n\nÇıkmadan önce projeyi kaydetmek ister misiniz?")
+        
+        if result == "save":
             return self._save_project()
+        elif result == "discard":
+            return True # Exit without saving
         else:
-            return True
+            return False # Cancel exit
 
     def _update_project_label(self, name: str = None):
         """Update the project name label in the statusbar."""

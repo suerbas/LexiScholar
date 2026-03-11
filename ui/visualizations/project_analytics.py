@@ -6,7 +6,7 @@ Generates HTML for Portrait, Heatmap, Timeline, Sankey, and Search Results.
 from typing import List, Dict
 from datetime import datetime
 from .core_utils import (
-    _save_html, _save_plotly_html, _generate_empty_html, 
+    save_html, _save_plotly_html, _generate_empty_html, 
     COMMON_STYLES
 )
 
@@ -42,7 +42,7 @@ def generate_document_portrait_html(doc_title: str, grid_colors: List[str]) -> s
         </div>
     </div>
 </div></body></html>"""
-    return _save_html(html, "portrait")
+    return save_html(html, "portrait")
 
 def generate_coverage_heatmap_html(data: Dict) -> str:
     """Generate Code Coverage Heatmap using Plotly."""
@@ -177,4 +177,4 @@ def generate_search_results_html(results: List[Dict], search_term: str) -> str:
         </table>
     </div>
 </div></body></html>"""
-    return _save_html(html, "search")
+    return save_html(html, "search")

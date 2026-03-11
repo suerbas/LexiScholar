@@ -15,15 +15,7 @@ from .common_ui import show_info, show_warning, show_error, ask_confirmation
 
 logger = logging.getLogger(__name__)
 
-# Model Mapping (OpenRouter ID -> Name)
-MODEL_LIST = [
-    {"name": "Gemini 2.5 Flash", "id": "google/gemini-2.0-flash-001"}, # Updated target
-    {"name": "Claude 3.5 Sonnet", "id": "anthropic/claude-3.5-sonnet"},
-    {"name": "Qwen 3 All-Round", "id": "qwen/qwen-plus"},
-    {"name": "DeepSeek-V3", "id": "deepseek/deepseek-chat"},
-    {"name": "Llama 4 Scout", "id": "meta-llama/llama-3.3-70b-instruct"},
-    {"name": "Mixtral 8x22B Instruct", "id": "mistralai/mixtral-8x22b-instruct"}
-]
+from llm_engine import OpenRouterEngine
 
 class PriceFetcher(QThread):
     finished = pyqtSignal(dict)
@@ -53,7 +45,7 @@ class PriceFetcher(QThread):
 class AISettingsDialog(ModernBaseDialog):
     """Modernized AI Settings Dialog using ModernBaseDialog."""
     def __init__(self, parent=None):
-        super().__init__(parent, min_width=520, min_height=480)
+        super().__init__(parent, min_width=520, min_height=600)
         self.settings = QSettings("LexiScholar", "Config")
         self.pricing_data = {}
         self._setup_ui()
@@ -71,6 +63,7 @@ class AISettingsDialog(ModernBaseDialog):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff) # Disable scroll bar as requested
         scroll.setStyleSheet("background-color: transparent;")
         
         container = QWidget()
@@ -103,62 +96,78 @@ class AISettingsDialog(ModernBaseDialog):
         api_layout.addWidget(self.api_key_input)
         content_layout.addLayout(api_layout)
 
-        # Model Selector Section
+        # --- Model Cards Section ---
         model_layout = QVBoxLayout()
-        model_layout.setSpacing(6)
-        model_label = QLabel("Tercih Edilen Model")
-        model_label.setStyleSheet("font-weight: 700; font-size: 12px; color: #475569;")
+        model_layout.setSpacing(12)
+        model_label = QLabel("Kullanılan AI Modelleri")
+        model_label.setStyleSheet("font-weight: 700; font-size: 13px; color: #475569;")
         model_layout.addWidget(model_label)
+        
+        # Helper to create a model card
+        def create_model_card(title, desc, badge_text, badge_color):
+            card = QFrame()
+            card.setStyleSheet(f"""
+                QFrame {{
+                    background-color: white;
+                    border: 1.5px solid {COLORS['border']};
+                    border-radius: 10px;
+                }}
+            """)
+            card_layout = QHBoxLayout(card)
+            card_layout.setContentsMargins(16, 12, 16, 12)
+            
+            # Left side texts
+            text_layout = QVBoxLayout()
+            text_layout.setSpacing(4)
+            
+            title_layout = QHBoxLayout()
+            title_lbl = QLabel(title)
+            title_lbl.setStyleSheet("font-weight: 800; font-size: 14px; color: #1E293B; border: none;")
+            title_layout.addWidget(title_lbl)
+            
+            badge = QLabel(badge_text)
+            badge.setStyleSheet(f"background-color: {badge_color}; color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; border: none;")
+            badge.setFixedHeight(20)
+            title_layout.addWidget(badge)
+            title_layout.addStretch()
+            
+            text_layout.addLayout(title_layout)
+            
+            desc_lbl = QLabel(desc)
+            desc_lbl.setStyleSheet("color: #64748B; font-size: 12px; border: none;")
+            text_layout.addWidget(desc_lbl)
+            
+            card_layout.addLayout(text_layout)
+            
+            # Right side price label
+            price_lbl = QLabel("Fiyat hesaplanıyor...")
+            price_lbl.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            price_lbl.setStyleSheet("color: #4F46E5; font-size: 13px; font-weight: 700; border: none;")
+            card_layout.addWidget(price_lbl)
+            
+            return card, price_lbl
 
-        self.model_combo = QComboBox()
-        self.model_combo.setStyleSheet(f"""
-            QComboBox {{
-                padding: 6px 12px;
-                border: 1.5px solid {COLORS['border']};
-                border-radius: 8px;
-                background-color: white;
-                color: #1E293B;
-                font-size: 13px;
-                min-height: 32px;
-            }}
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: 32px;
-                border-left: 1px solid {COLORS['border']};
-                border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
-            }}
-            QComboBox::down-arrow {{
-                image: none;
-                border: none;
-                width: 0;
-                height: 0;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 6px solid #64748B;
-                margin-right: 0px;
-            }}
-            QComboBox QAbstractItemView {{
-                background-color: white;
-                border: 1px solid {COLORS['border']};
-                selection-background-color: {COLORS['primary_50']};
-                selection-color: #4F46E5;
-                outline: none;
-                padding: 4px;
-            }}
-            QComboBox::item {{
-                height: 32px;
-                padding-left: 10px;
-            }}
-        """)
-        for m in MODEL_LIST:
-            self.model_combo.addItem(m["name"], m["id"])
-        model_layout.addWidget(self.model_combo)
+        # Main Model Card
+        engine = OpenRouterEngine()
+        main_model_id = engine.DEFAULT_MODEL
+        self.main_model_card, self.main_price_lbl = create_model_card(
+            "Qwen 2.5 72B Instruct",
+            "Tüm analiz görevleri için optimize edilmiş çok dilli ana model.",
+            "ANA MODEL", "#4F46E5"
+        )
+        self.main_price_lbl.setProperty("model_id", main_model_id)
+        model_layout.addWidget(self.main_model_card)
 
-        self.pricing_info = QLabel("Fiyatlar yükleniyor...")
-        self.pricing_info.setStyleSheet("color: #94A3B8; font-size: 11px; font-style: italic; margin-top: 4px;")
-        model_layout.addWidget(self.pricing_info)
+        # Judge Model Card
+        judge_model_id = engine.JUDGE_MODEL
+        self.judge_model_card, self.judge_price_lbl = create_model_card(
+            "DeepSeek R1",
+            "Güçlü analitik çıkarım ve hakemlik sentezi için kullanılan otorite modeli.",
+            "HAKEM AI", "#8B5CF6"
+        )
+        self.judge_price_lbl.setProperty("model_id", judge_model_id)
+        model_layout.addWidget(self.judge_model_card)
+
         content_layout.addLayout(model_layout)
 
         # Info Box
@@ -226,17 +235,9 @@ class AISettingsDialog(ModernBaseDialog):
                 self.api_key_input.setText(engine.api_key)
         except Exception as e:
             logger.warning(f"Failed to load API key: {e}")
-        
-        # Load model from QSettings (this is safe to store)
-        model_id = self.settings.value("AI/MODEL_ID", "google/gemini-2.0-flash-001")
-        for i in range(self.model_combo.count()):
-            if self.model_combo.itemData(i) == model_id:
-                self.model_combo.setCurrentIndex(i)
-                break
 
     def _save_settings(self):
         api_key = self.api_key_input.text().strip()
-        model_id = self.model_combo.currentData()
         
         if not api_key:
             show_warning(self, "Uyarı", "Yapay zeka özelliklerini kullanabilmek için geçerli bir API anahtarı girmelisiniz.")
@@ -255,11 +256,8 @@ class AISettingsDialog(ModernBaseDialog):
             logger.error(f"Failed to save API key: {e}")
             show_warning(self, "Hata", f"API anahtarı kaydedilemedi: {e}")
             return
-        
-        # Save model preference to QSettings (safe)
-        self.settings.setValue("AI/MODEL_ID", model_id)
-        
-        show_info(self, "Başarılı", "Yapay zeka ayarları güvenli şekilde kaydedildi. Model seçiminiz anında tüm sisteme entegre edildi.")
+            
+        show_info(self, "Başarılı", "Yapay zeka ayarları güvenli şekilde kaydedildi.")
         self.accept()
 
     def _open_guide(self):
@@ -273,28 +271,25 @@ class AISettingsDialog(ModernBaseDialog):
     def _fetch_prices(self):
         self.fetcher = PriceFetcher()
         self.fetcher.finished.connect(self._on_prices_fetched)
-        self.fetcher.error.connect(lambda msg: self.pricing_info.setText(f"Fiyatlar güncellenemedi: {msg}"))
+        self.fetcher.error.connect(lambda msg: self.main_price_lbl.setText("Hata"))
         self.fetcher.start()
 
     def _on_prices_fetched(self, prices):
         self.pricing_data = prices
         self._update_model_labels()
-        self.pricing_info.setText("Fiyatlar güncellendi. Metrik: 1 Sayfa (~1000 okuma + 250 yazma tokeni)")
 
     def _update_model_labels(self):
-        for i in range(self.model_combo.count()):
-            m_id = self.model_combo.itemData(i)
-            m_name = MODEL_LIST[i]["name"] # Since items were added in same order
-            
+        for lbl in [self.main_price_lbl, self.judge_price_lbl]:
+            m_id = lbl.property("model_id")
             p_data = self.pricing_data.get(m_id)
             if p_data:
                 # Formula: (1000 * prompt_price) + (250 * completion_price)
-                # OpenRouter pricing is per token in decimals, often like 0.0000001
                 cost = (1000 * p_data["prompt"]) + (250 * p_data["completion"])
                 if cost == 0:
-                    label = f"{m_name} (Ücretsiz)"
+                    lbl.setText("Ücretsiz")
+                elif cost < 0.0001:
+                    lbl.setText("< $0.0001 / sf")
                 else:
-                    label = f"{m_name} (~${cost:.5f} / Sayfa)"
-                self.model_combo.setItemText(i, label)
+                    lbl.setText(f"~${cost:.4f} / sf")
             else:
-                self.model_combo.setItemText(i, f"{m_name} (Fiyat bilinmiyor)")
+                lbl.setText("Fiyat ?")

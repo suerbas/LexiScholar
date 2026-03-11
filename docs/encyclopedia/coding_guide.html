@@ -4,31 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiScholar Bilgi Ansiklopedisi - Kodlama Rehberi</title>
+    <title>Taksonomi ve Kodlama Sistemi - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside>
             <a href="index.html" style="text-decoration: none;">
                 <div class="logo">
-                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;">
-                        <i data-lucide="graduation-cap"></i>
-                    </div>
-                    <span class="logo-text">LexiScholar</span>
+                    <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
+                            data-lucide="graduation-cap"></i></div>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -42,11 +37,6 @@
                         Yöntemler</a></li>
                 <li class="nav-item">
                     <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
-                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
-                    </ul>
                 </li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
                         Görselleştirme</a></li>
@@ -57,44 +47,61 @@
             </ul>
         </aside>
 
-        <!-- Main Content -->
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <h1>Kodlama ve Notlandırma Sistemi</h1>
-                <p>Nitel analizin kalbi olan kodlama süreci, LexiScholar'da esneklik ve akademik derinlik için optimize
-                    edilmiştir.</p>
+            <section class="content-section">
+                <h1>Metodolojik Kodlama ve Taksonomi</h1>
+                <p>Nitel araştırmada kodlama, verinin "indirgenmesi" ve "kavramlaştırılması" (conceptualization)
+                    sürecidir. LexiScholar, bu süreci tümdengelim (deductive) ve tümevarım (inductive) yaklaşımlarla
+                    destekler.</p>
+
+                <div class="callout callout-definition" id="coding-definition">
+                    <h5><i data-lucide="hash"></i> Kod Nedir?</h5>
+                    <p>Metodolojik olarak kod; bir veri segmentine atanan, o segmentin anlamsal özünü temsil eden en
+                        kısa simgesel etikettir. Kodlar, veriden kategoriye (category) ve oradan temaya (theme) giden
+                        köprülerdir.</p>
+                </div>
 
                 <div class="feature-item" id="in-vivo">
-                    <h2>In-Vivo Kodlama (Katılımcının Sesinden)</h2>
-                    <p>Metin içerisinde katılımcının kendi ifadesini doğrudan kod adı olarak atamanızı sağlar. Bu,
-                        veriye sadık kalmanın en hızlı yoludur.</p>
-                    <ul>
-                        <li>Metni seçin ve sağ tıklayıp "In-Vivo Kodlama" butonuna basın.</li>
-                        <li>Kod otomatik olarak oluşturulur ve o segment işaretlenir.</li>
-                    </ul>
+                    <h2>In-Vivo Kodlama (Katılımcı Merkezli)</h2>
+                    <p>Araştırmacının kendi kavramları yerine, katılımcının bizzat kullandığı çarpıcı ifadeleri kod adı
+                        olarak seçmesidir. Fenomenolojik araştırmalarda verinin özgünlüğünü (authenticity) korumak için
+                        elzemdir.</p>
+                    <div class="callout callout-tip">
+                        <h5>Uygulama</h5>
+                        <p>Metinde geçen "cam tavan sendromu" ifadesini seçip sağ tıklayarak <strong>In-Vivo</strong>
+                            kodladığınızda, kavramsal bir çarpıtma riskini minimize etmiş olursunuz.</p>
+                    </div>
                 </div>
 
                 <div class="feature-item" id="hierarchy">
-                    <h2>Hiyerarşik Kod Ağacı</h2>
-                    <p>Kodlarınızı ana temalar ve alt kategoriler şeklinde bir ağaç yapısında düzenleyebilirsiniz.</p>
+                    <h2>Hiyerarşik Yapı ve Eksenel Kodlama (Axial Coding)</h2>
+                    <p>Kodlarınızı ana temalar ve alt kategoriler şeklinde düzenlemek, analizinizin teorik çatısını
+                        oluşturur. Eksenel kodlama aşamasında, kodlar arası ilişkiler (bağlam, koşul, strateji, sonuç)
+                        bu hiyerarşi üzerinden kurgulanır.</p>
                     <ul>
-                        <li><strong>Drag-and-Drop:</strong> Mevcut bir kodu başka bir kodun içine atarak alt kategori
-                            haline getirebilirsiniz.</li>
-                        <li><strong>Renk Atama:</strong> Her koda farklı bir renk atayarak metin üzerinde görsel
-                            ayrıştırma yapabilirsiniz.</li>
+                        <li><strong>Üst Kod (Parent):</strong> Genel tema (Örn: Ekonomik Kaygılar).</li>
+                        <li><strong>Alt Kod (Child):</strong> Spesifik boyut (Örn: Enflasyon Beklentisi).</li>
                     </ul>
                 </div>
 
                 <div class="feature-item" id="segments">
-                    <h2>Coded Segments (Kodlanan Segmentler)</h2>
-                    <p>Kod Ağacı'nda bir koda tıkladığınızda, o koda ait tüm alıntılar "Retrieved Segments" (Geri
-                        Çağrılan Segmentler) panelinde listelenir. Bu özellik, tematik analiz yaparken bulguları topluca
-                        görmenizi sağlar.</p>
+                    <h2>Segment Geri Çağırma (Retrieval)</h2>
+                    <p>Bir koda tıkladığınızda o temanın tüm belgelerdeki "izdüşümlerini" topluca görürsünüz. Bu,
+                        <strong>Sürekli Karşılaştırmalı Analiz</strong> (Constant Comparative Analysis) için temel
+                        mekanizmadır.</p>
                 </div>
+
+                <div class="feature-item" id="memos">
+                    <h2>Metodolojik Notlar (Memos)</h2>
+                    <p>Sadece kodlama yapmak yetmez; araştırmacının o segmenti neden o kodla eşleştirdiğine dair
+                        analitik düşüncelerini kaydetmesi gerekir. LexiScholar not sistemi, "Kendi Kendine Sorgulama"
+                        (Reflexivity) sürecini belgelemenize yardımcı olur.</p>
+                </div>
+
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

@@ -206,19 +206,55 @@ class NLPActions:
             show_warning(self, "Uyarı", "Analiz için aktif belge bulunamadı.")
             return
 
-        # RAM kontrolü — BERT modeli ~500-700 MB
-        if not _check_ram_before_nlp(self, model_size_mb=600):
-            return
+        # 1. Mode Selection Dialog
+        from .modern_dialogs import ModernComboboxDialog
+        modes = [
+            "Local (Standard) - BERT Modeli (Lokal/Gizli)",
+            "Online (AI) - Yapay Zeka (Hızlı/Gelişmiş)",
+            "Hybrid (Comparison) - BERT vs. Yapay Zeka"
+        ]
+        
+        selected_mode_str, ok = ModernComboboxDialog.get_item(
+            self, "Duygu Analizi Modu", 
+            "Analiz yöntemini seçin:", 
+            modes
+        )
+        if not ok: return
+        
+        mode_key = 'local'
+        if "Online" in selected_mode_str: mode_key = 'online'
+        elif "Hybrid" in selected_mode_str: mode_key = 'hybrid'
+
+        # 2. Model recommendation for Online/Hybrid
+        model = None
+        if mode_key in ['online', 'hybrid']:
+            # Check if API configured
+            from llm_engine import OpenRouterEngine
+            engine = OpenRouterEngine()
+            if not engine.is_configured():
+                if ask_confirmation(self, "API Anahtarı Eksik", 
+                                "Online analiz için bir OpenRouter API anahtarı gereklidir. Ayarlara gitmek ister misiniz?"):
+                    self._show_ai_settings()
+                return
+
+            model = engine.get_configured_model()
+            self._current_model_name = engine.get_model_display_name()
+
+        # RAM check for local parts
+        if mode_key in ['local', 'hybrid']:
+            if not _check_ram_before_nlp(self, model_size_mb=600):
+                return
 
         from .modern_dialogs import ModernProgressDialog
         from .worker_threads import NLPWorker
         
-        self.nlp_progress = ModernProgressDialog("Duygu analizi hazırlanıyor...", "İptal", 0, len(texts), self)
+        self.nlp_progress = ModernProgressDialog(f"Duygu analizi hazırlanıyor ({mode_key})...", "İptal", 0, len(texts), self)
         self.nlp_progress.setWindowTitle("NLP Analiz")
         self.nlp_progress.show()
         
-        # Setup worker thread
-        self.nlp_worker = NLPWorker('sentiment', texts)
+        # Setup worker thread with options
+        options = {'mode': mode_key, 'model': model}
+        self.nlp_worker = NLPWorker('sentiment', texts, options=options)
         self.nlp_worker.progress.connect(self._update_nlp_progress)
         self.nlp_worker.finished.connect(self._on_sentiment_finished)
         self.nlp_worker.error.connect(self._on_nlp_error)
@@ -244,21 +280,60 @@ class NLPActions:
             self.nlp_progress.close()
             
         try:
-            from .visualizations.semantic_analytics import generate_sentiment_html
-            file_path = generate_sentiment_html(results)
+            mode = results[0].get("mode", "local") if results else "local"
+            
+            from .visualizations.semantic_analytics import generate_sentiment_html, generate_hybrid_sentiment_html
             
             title = "Duygu Analizi"
+            model_info = getattr(self, "_current_model_name", "AI")
+            
+            if mode == 'hybrid':
+                file_path = generate_hybrid_sentiment_html(results, model_name=model_info)
+                title = "Hibrit Duygu Analizi"
+            else:
+                file_path = generate_sentiment_html(results, model_name=model_info)
+                if mode == 'online':
+                    title = f"Online Duygu Analizi ({model_info})"
+            
             doc_count = len(results)
             from datetime import datetime
-            subtitle = f"{doc_count} belge analiz edildi • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+            subtitle = f"{doc_count} belge analiz edildi ({mode}) • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
             
-            widget = self._open_visualization(title, file_path, subtitle=subtitle)
+            # Pass sentiment results directly to enable export functionality
+            widget = self._open_visualization(
+                title, 
+                file_path, 
+                subtitle=subtitle,
+                sentiment_results=results if ("duygu" in title.lower() or "sentiment" in title.lower()) else None,
+                model_type=model_info
+            )
             
             if widget:
-                # 1. Hide default toolbar (since we move controls to header)
-                # Reverting: Keep toolbar visible but remove the manual header button injection below
+                # Hide default toolbar (since we move controls to header)
                 widget.set_toolbar_visible(True)
                 widget.add_simple_controls()
+
+                # --- Hibrit modda "Sentezle 🪄" butonu ekle ---
+                if mode == 'hybrid':
+                    from PyQt6.QtWidgets import QPushButton
+                    synth_btn = QPushButton("Sentezle 🪄")
+                    synth_btn.setToolTip("İki modelin sonuçlarını hakem yapay zeka ile tek listeye dönüştür")
+                    synth_btn.setStyleSheet(
+                        "QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+                        "stop:0 #6C63FF, stop:1 #A78BFA); color: white; border: none; "
+                        "border-radius: 6px; padding: 5px 14px; font-weight: bold; }"
+                        "QPushButton:hover { background: #7C73FF; }"
+                        "QPushButton:pressed { background: #5C53EF; }"
+                    )
+                    _data_ref = results
+                    synth_btn.clicked.connect(lambda checked=False, d=_data_ref: self._on_sentiment_synthesize_requested(d))
+                    try:
+                        widget.toolbar_layout.addWidget(synth_btn)
+                    except AttributeError:
+                        try:
+                            widget.layout().addWidget(synth_btn)
+                        except Exception:
+                            pass
             
             self.statusbar.showMessage("Duygu analizi tamamlandı", 5000)
         except Exception as e:
@@ -275,7 +350,7 @@ class NLPActions:
                 self.nlp_worker = None
 
     def _show_topic_modeling(self):
-        """Show LDA topic modeling across all documents."""
+        """Show topic modeling across all documents with mode selection."""
         from PyQt6.QtWidgets import QApplication
         
         texts = self._get_document_texts()
@@ -283,18 +358,53 @@ class NLPActions:
             common_ui.show_warning(self, "Uyarı", "Konu modelleme için en az 2 aktif belge gerekli.")
             return
         
-        from .modern_dialogs import ModernProgressDialog
-        from .worker_threads import NLPWorker
+        # 1. Mode Selection Dialog
+        from .modern_dialogs import ModernComboboxDialog
+        modes = [
+            "Local (Standard) - LDA Modeli (Lokal/Gizli)",
+            "Online (AI) - Yapay Zeka (Hızlı/Gelişmiş)",
+            "Hybrid (Comparison) - LDA vs. Yapay Zeka"
+        ]
         
+        selected_mode_str, ok = ModernComboboxDialog.get_item(
+            self, "Konu Modelleme Modu", 
+            "Analiz yöntemini seçin:", 
+            modes
+        )
+        if not ok: return
+        
+        mode_key = 'local'
+        if "Online" in selected_mode_str: mode_key = 'online'
+        elif "Hybrid" in selected_mode_str: mode_key = 'hybrid'
+
+        # 2. Model recommendation for Online/Hybrid
+        model = None
+        if mode_key in ['online', 'hybrid']:
+            # Check if API configured
+            from llm_engine import OpenRouterEngine
+            engine = OpenRouterEngine()
+            if not engine.is_configured():
+                if ask_confirmation(self, "API Anahtarı Eksik", 
+                                "Online analiz için bir OpenRouter API anahtarı gereklidir. Ayarlara gitmek ister misiniz?"):
+                    self._show_ai_settings()
+                return
+
+            model = engine.get_configured_model()
+            self._current_model_name = engine.get_model_display_name()
+
         # Auto-adjust topic count
         n_topics = min(5, max(2, len(texts) // 2))
         
-        self.nlp_progress = ModernProgressDialog("Konu modelleme başlatılıyor...", "İptal", 0, 0, self)
+        from .modern_dialogs import ModernProgressDialog
+        from .worker_threads import NLPWorker
+        
+        self.nlp_progress = ModernProgressDialog(f"Konu modelleme hazırlanıyor ({mode_key})...", "İptal", 0, 0, self)
         self.nlp_progress.setWindowTitle("NLP Analiz")
         self.nlp_progress.show()
         
-        # Setup worker thread
-        self.nlp_worker = NLPWorker('topic_modeling', texts, options={'n_topics': n_topics})
+        # Setup worker thread with options
+        options = {'n_topics': n_topics, 'mode': mode_key, 'model': model}
+        self.nlp_worker = NLPWorker('topic_modeling', texts, options=options)
         self.nlp_worker.progress.connect(self._update_nlp_progress)
         self.nlp_worker.finished.connect(self._on_topics_finished)
         self.nlp_worker.error.connect(self._on_nlp_error)
@@ -309,22 +419,65 @@ class NLPActions:
             
         try:
             topic_data = results[0]
-            from .visualizations.semantic_analytics import generate_topics_html
+            mode = topic_data.get("mode", "local")
             
-            file_path = generate_topics_html(topic_data)
+            from .visualizations.semantic_analytics import (
+                generate_topics_html, 
+                generate_online_topics_html, 
+                generate_hybrid_topics_html
+            )
             
-            title = "Konu Modelleme"
-            topic_count = len(topic_data.get("topics", []))
-            doc_count = len(topic_data.get("doc_topics", []))
+            model_info = getattr(self, "_current_model_name", "AI")
+            
+            if mode == 'hybrid':
+                file_path = generate_hybrid_topics_html(topic_data, model_name=model_info)
+                title = "Hibrit Konu Modelleme"
+            elif mode == 'online':
+                file_path = generate_online_topics_html(topic_data, model_name=model_info)
+                title = f"Online Konu Modelleme ({model_info})"
+            else:
+                file_path = generate_topics_html(topic_data)
+                title = "Konu Modelleme"
+            
+            topic_count = len(topic_data.get("topics", [])) if mode != 'hybrid' else len(topic_data.get("local", {}).get("topics", []))
+            doc_count = len(topic_data.get("doc_topics", [])) if mode != 'hybrid' else len(topic_data.get("local", {}).get("doc_topics", []))
             from datetime import datetime
-            subtitle = f"{topic_count} konu keşfedildi • {doc_count} belge • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+            subtitle = f"{topic_count} konu • {doc_count} belge ({mode}) • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
             
-            widget = self._open_visualization(title, file_path, subtitle=subtitle)
+            # Pass topic results for export functionality
+            widget = self._open_visualization(
+                title,
+                file_path,
+                subtitle=subtitle,
+                topic_results=topic_data if ("konu" in title.lower() or "topic" in title.lower()) else None,
+                model_type=model_info
+            )
             
             if widget:
-                # 1. Show default toolbar
                 widget.set_toolbar_visible(True)
                 widget.add_simple_controls()
+
+                # --- Hibrit modda "Sentezle 🪄" butonu ekle ---
+                if mode == 'hybrid':
+                    from PyQt6.QtWidgets import QPushButton
+                    synth_btn = QPushButton("Sentezle 🪄")
+                    synth_btn.setToolTip("İki modelin sonuçlarını hakem yapay zeka ile tek listeye dönüştür")
+                    synth_btn.setStyleSheet(
+                        "QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+                        "stop:0 #6C63FF, stop:1 #A78BFA); color: white; border: none; "
+                        "border-radius: 6px; padding: 5px 14px; font-weight: bold; }"
+                        "QPushButton:hover { background: #7C73FF; }"
+                        "QPushButton:pressed { background: #5C53EF; }"
+                    )
+                    _data_ref = topic_data
+                    synth_btn.clicked.connect(lambda checked=False, d=_data_ref: self._on_topic_synthesize_requested(d))
+                    try:
+                        widget.toolbar_layout.addWidget(synth_btn)
+                    except AttributeError:
+                        try:
+                            widget.layout().addWidget(synth_btn)
+                        except Exception:
+                            pass
             
             self.statusbar.showMessage("Konu modelleme tamamlandı", 5000)
         except Exception as e:
@@ -347,19 +500,50 @@ class NLPActions:
             show_warning(self, "Uyarı", "Analiz için aktif belge bulunamadı.")
             return
 
-        # RAM kontrolü — Multilingual NER ~600-700 MB
-        if not _check_ram_before_nlp(self, model_size_mb=700):
-            return
+        from .modern_dialogs import ModernComboboxDialog
+        modes = [
+            "Local (Standard) - NER Modeli (Lokal/Gizli)",
+            "Online (AI) - Yapay Zeka (Hızlı/Gelişmiş)",
+            "Hybrid (Comparison) - NER vs. Yapay Zeka"
+        ]
+
+        selected_mode_str, ok = ModernComboboxDialog.get_item(
+            self, "Varlık Tanıma Modu",
+            "Analiz yöntemini seçin:",
+            modes
+        )
+        if not ok: return
+
+        mode_key = 'local'
+        if "Online" in selected_mode_str: mode_key = 'online'
+        elif "Hybrid" in selected_mode_str: mode_key = 'hybrid'
+
+        model = None
+        if mode_key in ['online', 'hybrid']:
+            from llm_engine import OpenRouterEngine
+            engine = OpenRouterEngine()
+            if not engine.is_configured():
+                if ask_confirmation(self, "API Anahtarı Eksik",
+                                "Online analiz için bir OpenRouter API anahtarı gereklidir. Ayarlara gitmek ister misiniz?"):
+                    self._show_ai_settings()
+                return
+
+            model = engine.get_configured_model()
+            self._current_model_name = engine.get_model_display_name()
+
+        if mode_key in ['local', 'hybrid']:
+            if not _check_ram_before_nlp(self, model_size_mb=700):
+                return
 
         from .modern_dialogs import ModernProgressDialog
         from .worker_threads import NLPWorker
         
-        self.nlp_progress = ModernProgressDialog("Varlıklar tanımlanıyor...", "İptal", 0, len(texts), self)
+        self.nlp_progress = ModernProgressDialog(f"Varlıklar tanımlanıyor ({mode_key})...", "İptal", 0, len(texts), self)
         self.nlp_progress.setWindowTitle("NLP Analiz")
         self.nlp_progress.show()
         
-        # Setup worker thread
-        self.nlp_worker = NLPWorker('ner', texts)
+        options = {'mode': mode_key, 'model': model}
+        self.nlp_worker = NLPWorker('ner', texts, options=options)
         self.nlp_worker.progress.connect(self._update_nlp_progress)
         self.nlp_worker.finished.connect(self._on_ner_finished)
         self.nlp_worker.error.connect(self._on_nlp_error)
@@ -374,21 +558,56 @@ class NLPActions:
             
         try:
             ner_data = results_list[0]
-            from .visualizations.semantic_analytics import generate_entities_html
-            file_path = generate_entities_html(ner_data)
+            mode = ner_data.get("mode", "local")
+            model_info = getattr(self, "_current_model_name", "AI")
+            from .visualizations.semantic_analytics import generate_entities_html, generate_online_entities_html, generate_hybrid_entities_html
+
+            if mode == 'hybrid':
+                file_path = generate_hybrid_entities_html(ner_data, model_name=model_info)
+                title = "Hibrit Varlık Tanıma (NER)"
+            elif mode == 'online':
+                file_path = generate_online_entities_html(ner_data, model_name=model_info)
+                title = f"Online Varlık Tanıma ({model_info})"
+            else:
+                file_path = generate_entities_html(ner_data)
+                title = "Varlık Tanıma (NER)"
             
-            title = "Varlık Tanıma (NER)"
             total_entities = sum(ner_data.get("summary", {}).values())
             doc_count = len(ner_data.get("documents", []))
             from datetime import datetime
-            subtitle = f"{doc_count} belge • {total_entities} varlık • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+            subtitle = f"{doc_count} belge • {total_entities} varlık ({mode}) • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
             
-            widget = self._open_visualization(title, file_path, subtitle=subtitle)
+            widget = self._open_visualization(title, file_path, subtitle=subtitle, ner_results=ner_data, model_type=model_info)
             
             if widget:
-                # 1. Show default toolbar
                 widget.set_toolbar_visible(True)
                 widget.add_simple_controls()
+
+                # --- Hibrit modda "Sentezle 🪄" butonu ekle ---
+                if mode == 'hybrid':
+                    from PyQt6.QtWidgets import QPushButton
+                    synth_btn = QPushButton("Sentezle 🪄")
+                    synth_btn.setToolTip("İki modelin sonuçlarını hakem yapay zeka ile tek listeye dönüştür")
+                    synth_btn.setStyleSheet(
+                        "QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+                        "stop:0 #6C63FF, stop:1 #A78BFA); color: white; border: none; "
+                        "border-radius: 6px; padding: 5px 14px; font-weight: bold; }"
+                        "QPushButton:hover { background: #7C73FF; }"
+                        "QPushButton:pressed { background: #5C53EF; }"
+                    )
+                    # Capture ner_data and model_info for the closure
+                    _ner_data_ref = ner_data
+                    _model_ref = model_info
+                    synth_btn.clicked.connect(lambda checked=False, d=_ner_data_ref, m=_model_ref: self._on_ner_synthesize_requested(d, m))
+                    # Try adding to the existing toolbar inside the widget
+                    try:
+                        widget.toolbar_layout.addWidget(synth_btn)
+                    except AttributeError:
+                        # Fallback: if there's no toolbar_layout, just try addWidget
+                        try:
+                            widget.layout().addWidget(synth_btn)
+                        except Exception:
+                            pass
             
             self.statusbar.showMessage("Varlık tanıma tamamlandı", 5000)
         except Exception as e:
@@ -403,6 +622,143 @@ class NLPActions:
                     pass
                 self.nlp_worker.deleteLater()
                 self.nlp_worker = None
+
+    def _on_ner_synthesize_requested(self, hybrid_ner_data: dict, original_model: str):
+        """Launches the AI-judge synthesis for hybrid NER results."""
+        from llm_engine import OpenRouterEngine
+        engine = OpenRouterEngine()
+        if not engine.is_configured():
+            if ask_confirmation(self, "API Anahtarı Eksik",
+                             "Sentez için bir OpenRouter API anahtarı gereklidir. Ayarlara gitmek ister misiniz?"):
+                self._show_ai_settings()
+            return
+
+        judge_model = engine.get_judge_model()
+
+
+        from .modern_dialogs import ModernProgressDialog
+        from .worker_threads import SynthesisWorker
+
+        # Show progress dialog
+        self.synth_progress = ModernProgressDialog(
+            "Hakem AI sonuçları sentezliyor, lütfen bekleyin...", "İptal", 0, 0, self
+        )
+        self.synth_progress.setWindowTitle("Akıllı Sentez")
+        self.synth_progress.show()
+
+        self.synthesis_worker = SynthesisWorker(
+            data=hybrid_ner_data,
+            task_type="ner",
+            judge_model=judge_model,
+            original_model=original_model
+        )
+        self.synthesis_worker.finished.connect(self._on_synthesis_finished)
+        self.synthesis_worker.error.connect(self._on_synthesis_error)
+        self.synth_progress.canceled.connect(self.synthesis_worker.cancel)
+        self.synthesis_worker.start()
+
+    def _on_sentiment_synthesize_requested(self, hybrid_sentiment_data: list):
+        """Launches the AI-judge synthesis for hybrid Sentiment results."""
+        from llm_engine import OpenRouterEngine
+        engine = OpenRouterEngine()
+        if not engine.is_configured():
+            if ask_confirmation(self, "API Anahtarı Eksik", 
+                             "Sentez için bir OpenRouter API anahtarı gereklidir. Ayarlara gitmek ister misiniz?"):
+                self._show_ai_settings()
+            return
+        
+        judge_model = engine.get_judge_model()
+        from .modern_dialogs import ModernProgressDialog
+        self.synth_progress = ModernProgressDialog("Hakem AI duygu sonuçlarını sentezliyor...", "İptal", 0, 0, self)
+        self.synth_progress.show()
+
+        from .worker_threads import SynthesisWorker
+        self.synthesis_worker = SynthesisWorker(data=hybrid_sentiment_data, task_type="sentiment", judge_model=judge_model)
+        self.synthesis_worker.finished.connect(self._on_synthesis_finished)
+        self.synthesis_worker.error.connect(self._on_synthesis_error)
+        self.synth_progress.canceled.connect(self.synthesis_worker.cancel)
+        self.synthesis_worker.start()
+
+    def _on_topic_synthesize_requested(self, hybrid_topic_data: dict):
+        """Launches the AI-judge synthesis for hybrid Topic modeling results."""
+        from llm_engine import OpenRouterEngine
+        engine = OpenRouterEngine()
+        if not engine.is_configured():
+            if ask_confirmation(self, "API Anahtarı Eksik", 
+                             "Sentez için bir OpenRouter API anahtarı gereklidir. Ayarlara gitmek ister misiniz?"):
+                self._show_ai_settings()
+            return
+        
+        judge_model = engine.get_judge_model()
+        from .modern_dialogs import ModernProgressDialog
+        self.synth_progress = ModernProgressDialog("Hakem AI konuları sentezliyor...", "İptal", 0, 0, self)
+        self.synth_progress.show()
+
+        from .worker_threads import SynthesisWorker
+        self.synthesis_worker = SynthesisWorker(data=hybrid_topic_data, task_type="topics", judge_model=judge_model)
+        self.synthesis_worker.finished.connect(self._on_synthesis_finished)
+        self.synthesis_worker.error.connect(self._on_synthesis_error)
+        self.synth_progress.canceled.connect(self.synthesis_worker.cancel)
+        self.synthesis_worker.start()
+
+    def _on_synthesis_finished(self, synthesized_data: object):
+        """Callback when AI-judge synthesis completes (for any task type)."""
+        if hasattr(self, 'synth_progress'):
+            self.synth_progress.close()
+
+        try:
+            from datetime import datetime
+            from .visualizations.semantic_analytics import (
+                generate_online_entities_html, 
+                generate_sentiment_html,
+                generate_topics_html
+            )
+
+            if isinstance(synthesized_data, list):
+                # Sentiment Synthesis Result
+                file_path = generate_sentiment_html(synthesized_data, model_name="Sentez (Hakem)")
+                title = "Sentezlenmiş Duygu Analizi ✨"
+                subtitle = f"{len(synthesized_data)} belge (sentezlenmiş) • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+                widget = self._open_visualization(title, file_path, subtitle=subtitle, sentiment_results=synthesized_data)
+            elif isinstance(synthesized_data, dict) and "topics" in synthesized_data:
+                # Topic Synthesis Result
+                file_path = generate_topics_html(synthesized_data)
+                title = "Sentezlenmiş Konu Modelleme ✨"
+                tc = len(synthesized_data.get("topics", []))
+                dc = len(synthesized_data.get("doc_topics", []))
+                subtitle = f"{tc} konu • {dc} belge • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+                widget = self._open_visualization(title, file_path, subtitle=subtitle, topic_results=synthesized_data)
+            else:
+                # Assume NER Synthesis Result
+                model_name = synthesized_data.get("model_name", "Hakem AI")
+                file_path = generate_online_entities_html(synthesized_data, model_name=f"Sentez ({model_name})")
+                total_entities = sum(synthesized_data.get("summary", {}).values())
+                doc_count = len(synthesized_data.get("documents", []))
+                subtitle = f"{doc_count} belge • {total_entities} varlık (sentezlenmiş) • {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+                title = "Sentezlenmiş Varlık Tanıma ✨"
+                widget = self._open_visualization(title, file_path, subtitle=subtitle, ner_results=synthesized_data)
+
+            if widget:
+                widget.set_toolbar_visible(True)
+                widget.add_simple_controls()
+
+            self.statusbar.showMessage("Akıllı sentez tamamlandı ✨", 7000)
+        except Exception as e:
+            show_error(self, "Sentez Hatası", f"Görselleştirme oluşturulamadı:\n{str(e)}")
+        finally:
+            if hasattr(self, 'synthesis_worker') and self.synthesis_worker:
+                self.synthesis_worker.deleteLater()
+                self.synthesis_worker = None
+
+
+    def _on_synthesis_error(self, error_msg: str):
+        """Callback when AI-judge synthesis fails."""
+        if hasattr(self, 'synth_progress'):
+            self.synth_progress.close()
+        show_error(self, "Sentez Hatası", f"Akıllı sentez sırasında hata oluştu:\n{error_msg}")
+        if hasattr(self, 'synthesis_worker') and self.synthesis_worker:
+            self.synthesis_worker.deleteLater()
+            self.synthesis_worker = None
 
     def _show_kwic_dialog(self):
         """Show Key Word In Context (KWIC) analysis dialog."""

@@ -4,57 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analiz Araçları - LexiScholar Ansiklopedisi</title>
+    <title>Analiz Metodolojisi - LexiScholar Wiki</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        .visual-guide {
-            background: #1e293b;
-            border: 1px dashed #475569;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-            font-family: monospace;
-            color: #94a3b8;
-            font-size: 0.9em;
-            line-height: 1.4;
-        }
-
-        .visual-guide strong {
-            color: #f59e0b;
-        }
-
-        .scenario-box {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin: 15px 0;
-        }
-
-        .scenario-title {
-            font-weight: 700;
-            color: #f59e0b;
-            display: block;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            font-size: 0.8em;
-            letter-spacing: 0.05em;
-        }
-
-        .anti-pattern {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid #ef4444;
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin: 15px 0;
-        }
-
-        .anti-pattern strong {
-            color: #ef4444;
-        }
-    </style>
 </head>
 
 <body>
@@ -64,13 +17,13 @@
                 <div class="logo">
                     <div class="icon-wrapper" style="width: 32px; height: 32px; font-size: 1rem;"><i
                             data-lucide="graduation-cap"></i></div>
-                    <span class="logo-text">LexiScholar</span>
+                    <span class="logo-text">LexiScholar Wiki</span>
                 </div>
             </a>
 
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
-                <input type="text" class="search-input" placeholder="Ara...">
+                <input type="text" class="search-input" placeholder="Bilgi bankasında ara...">
             </div>
 
             <ul class="nav-links">
@@ -82,14 +35,8 @@
                             data-lucide="bar-chart-3"></i> Analiz Araçları</a></li>
                 <li class="nav-item"><a href="mixed_methods.html" class="nav-link"><i data-lucide="layers"></i> Karma
                         Yöntemler</a></li>
-                <li class="nav-item">
-                    <a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay Zeka</a>
-                    <ul class="sub-nav-links" style="list-style: none; padding-left: 2.5rem; margin-top: 0.25rem;">
-                        <li><a href="openrouter_guide.html" class="sub-nav-link"
-                                style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: block; padding: 0.4rem 0;">➔
-                                OpenRouter Rehberi</a></li>
-                    </ul>
-                </li>
+                <li class="nav-item"><a href="ai_features.html" class="nav-link"><i data-lucide="sparkles"></i> Yapay
+                        Zeka</a></li>
                 <li class="nav-item"><a href="visualizations.html" class="nav-link"><i data-lucide="layout"></i>
                         Görselleştirme</a></li>
                 <li class="nav-item"><a href="teamwork_reliability.html" class="nav-link"><i data-lucide="users"></i>
@@ -100,289 +47,215 @@
         </aside>
 
         <main>
-            <section class="content-section" style="margin-top: 2rem;">
-                <h1>Gelişmiş Analiz Araçları</h1>
-                <p>LexiScholar, sadece metin okumak için değil, veriler arasındaki örüntüleri (patterns) matematiksel ve
-                    mantıksal olarak sorgulamak için tasarlanmıştır. Aşağıda her bir aracın ne işe yaradığı, nasıl
-                    okunması gerektiği ve örnek senaryoları detaylandırılmıştır.</p>
+            <section class="content-section">
+                <h1>Analiz Araçları ve Metodolojik Çerçeve</h1>
+                <p>Nitel araştırma süreci, verinin sadece tasnif edilmesi değil, derinlemesine anlamlandırılması
+                    sürecidir. LexiScholar, bu süreci "Betimsel", "İlişkisel" ve "Tahminleyici" (AI destekli) analiz
+                    katmanlarıyla destekler.</p>
+
+                <div class="callout callout-definition">
+                    <h5><i data-lucide="database"></i> Analitik Temel</h5>
+                    <p>LexiScholar'daki her analiz aracı, Grounded Theory (Gömülü Kuram), Fenomenoloji veya İçerik
+                        Analizi gibi temel metodolojilere hizmet edecek parametrik esnekliğe sahiptir.</p>
+                </div>
 
                 <!-- TIMELINE -->
                 <div class="feature-item" id="timeline">
-                    <h2>Kod Zaman Çizelgesi (Timeline)</h2>
-                    <p>Bir belgedeki kodlanmış segmentlerin başlangıç ve bitiş konumlarını yatay çubuklar halinde
-                        gösterir.</p>
+                    <h2>Kod Zaman Çizelgesi (Chronological Context)</h2>
+                    <p>Timeline analizi, verinin zamansal veya döküman akışı üzerindeki seyrini (sequential flow)
+                        inceler. Bir koda ait segmentlerin belge içindeki konumlanması, anlatının dramatik yapısını veya
+                        katılımcının öncelik sıralamasını deşifre eder.</p>
 
                     <div class="visual-guide">
-                        GÖRSEL OKUMA REHBERİ:<br>
-                        [Kod A] |-------| |-----------|<br>
-                        [Kod B] |-------------| |----|<br>
-                        [Kod C] |----------|<br>
-                        ------- 0dk -- 10dk -- 20dk -- 30dk --> (Belge Akışı)<br><br>
-                        <strong>Yatay Eksen:</strong> Belgenin başından sonuna akışı (zaman/karakter).<br>
-                        <strong>Dikey Eksen:</strong> Kodlarınız.<br>
-                        <strong>Renkli Çubuklar:</strong> Kodun aktif olduğu aralıklar.
+                        METODOLOJİK OKUMA:<br>
+                        [Eksenel Kod A] |===| |=======|<br>
+                        [Eksenel Kod B] |=======| |===|<br>
+                        --------------------------------------------><br>
+                        <strong>Analitik Çıkarım:</strong> Kodların ardışıklığı (sequencing), neden-sonuç ilişkilerini
+                        (causality) veya olay örgüsündeki kırılma noktalarını görselleştirir.
                     </div>
 
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek Senaryo</span>
-                        Bir mülakatta katılımcı, ilk 10 dakika "Çocukluk Anıları"ndan bahsetmiş, sonraki 20 dakika
-                        "Kariyer Zorlukları"na odaklanmış olabilir. Timeline'da "Çocukluk" kodunun belgenin solunda,
-                        "Kariyer" kodunun sağında yoğunlaştığını net bir şekilde görürsünüz.
+                    <div class="callout callout-tip">
+                        <h5><i data-lucide="lightbulb"></i> Akademik İpucu</h5>
+                        <p>Eğer bir mülakatta katılımcı sürekli "Geçmiş Deneyimler" kodundan "Gelecek Beklentileri"
+                            koduna sıçrıyorsa, bu durum katılımcının şimdiki zamanı geçmişle meşrulaştırdığına dair
+                            psikolojik bir örüntüye (pattern) işaret edebilir.</p>
                     </div>
-
-                    <ul>
-                        <li><strong>Nasıl yorumlanır?</strong> Üst üste binen çubuklar (Overlap), o an katılımcının iki
-                            konuyu aynı anda konuştuğunu gösterir (örneğin "Aile" ve "Kariyer" aynı anda).</li>
-                        <li><strong>İpuçları:</strong> Çok uzun belgelerde (ör. 2 saatlik mülakat) konu geçişlerini
-                            (Topic Shift) yakalamak için idealdir.</li>
-                    </ul>
                 </div>
 
-                <!-- HEATMAP -->
+                <!-- HEATMAP / COVERAGE -->
                 <div class="feature-item" id="coverage-heatmap">
-                    <h2>Kod Kapsam Haritası (Isı Haritası)</h2>
-                    <p>Kodların belgelerdeki yoğunluğunu renk skalasıyla gösteren bir matristir.</p>
-
-                    <div class="visual-guide">
-                        GÖRSEL OKUMA REHBERİ:<br>
-                        | Belge 1 | Belge 2 | Belge 3 |<br>
-                        [Ekonomi] | ⬛⬛⬛⬛ | ⬜⬜⬜⬜ | ⬛⬛⬜⬜ |<br>
-                        [Eğitim ] | ⬜⬜⬜⬜ | ⬛⬛⬛⬛ | ⬛⬜⬜⬜ |<br>
-                        [Sağlık ] | ⬛⬜⬜⬜ | ⬛⬜⬜⬜ | ⬛⬛⬛⬛ |<br><br>
-                        <strong>Koyu/Parlak Renk:</strong> O kod belgenin büyük bir kısmını kaplıyor.<br>
-                        <strong>Açık/Soluk Renk:</strong> Kod çok az kullanılmış veya hiç yok.
-                    </div>
-
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek Senaryo</span>
-                        3 farklı şehirden katılımcılarınız var. Haritaya baktığınızda "Ulaşım Sorunu" kodunun İstanbul
-                        belgelerinde kıpkırmızı (çok yoğun), İzmir belgelerinde ise açık mavi (az yoğun) olduğunu fark
-                        edersiniz. Bu, ulaşım sorununun İstanbul için daha baskın bir tema olduğunu kanıtlar.
+                    <h2>Kod Kapsam Matrisi (Density Analysis)</h2>
+                    <p>Isı haritası (Heatmap), kodlamaların hacimsel yoğunluğunu ölçer. Bu araç, nitel veriyi
+                        nicelleştirme (quantitizing) sürecinin ilk adımıdır.</p>
+                    <ul>
+                        <li><strong>Yoğunluk (Frequency):</strong> Kodun belge içindeki ağırlığı.</li>
+                        <li><strong>Kapsam (Coverage):</strong> Temanın dökümanın yüzde kaçına nüfuz ettiği.</li>
+                    </ul>
+                    <div class="callout callout-warning">
+                        <h5><i data-lucide="alert-triangle"></i> Dikkat</h5>
+                        <p>Yüksek yoğunluk her zaman yüksek önem anlamına gelmez. Bir kodun çok sık geçmesi,
+                            katılımcının o konuyu geçiştirdiği veya tekrara düştüğü anlamına da gelebilir. Veriyi
+                            mutlaka bağlamı ile birlikte değerlendirin.</p>
                     </div>
                 </div>
 
                 <!-- DOCUMENT PORTRAIT -->
                 <div class="feature-item" id="document-portrait">
-                    <h2>Belge Portresi</h2>
-                    <p>Belgeyi eşit parçalara (ör. her biri 100 kelimelik karelere) böler ve her kareyi o sırada baskın
-                        olan kodun rengine boyar.</p>
-
+                    <h2>Belge Portresi (Structural Portrait)</h2>
+                    <p>Belge portresi, bir dökümanın genetik haritası gibidir. Metni semantik birimlere bölerek her bir
+                        birimin baskın kod rengini yansıtır. Bu araç, belgenin <strong>homojenlik</strong> veya
+                        <strong>heterojenlik</strong> durumunu saptar.
+                    </p>
                     <div class="visual-guide">
-                        GÖRSEL OKUMA REHBERİ:<br>
-                        🟦🟦🟦🟦🟦 (Giriş bölümü: Mavi kodlar hakim)<br>
-                        🟦🟦🟥🟥🟥 (Gelişme: Kırmızı kodlar devreye giriyor)<br>
-                        🟥🟥🟩🟩🟩 (Sonuç: Yeşil kodlarla bitiyor)<br><br>
-                        Her kare = Belgenin bir dilimi (segment).<br>
-                        Renk = O dilimdeki baskın kod.
+                        GÖSTERGE: Eğer portre parçalı ve çok renkliyse, bu durum "Çok Sesli (Polyphonic)" bir anlatıyı;
+                        tek renk hakimse "Odaklanmış (Monolithic)" bir anlatıyı temsil eder.
                     </div>
-
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek Senaryo</span>
-                        Bir roman analizi yapıyorsunuz. "Mutluluk" kodunu sarı, "Hüzün" kodunu gri yaptınız. Portreye
-                        baktığınızda belgenin ilk yarısının tamamen sarı, ikinci yarısının gri olduğunu görmek,
-                        hikayenin trajik bir dönüşüm geçirdiğini tek bakışta anlatır.
-                    </div>
-
-                    <ul>
-                        <li><strong>Homojenlik:</strong> Portre tek bir renk tonundaysa, belge tek bir konuya
-                            odaklanmıştır.</li>
-                        <li><strong>Heterojenlik:</strong> Çok renkli (alaca) bir portre, belgenin sık sık konu
-                            değiştirdiğini gösterir.</li>
-                    </ul>
                 </div>
 
                 <!-- SANKEY -->
                 <div class="feature-item" id="sankey">
-                    <h2>Kod İlişkileri (Sankey Diyagramı)</h2>
-                    <p>Kodlar arasındaki akışı ve bağlantı gücünü kalın şeritlerle gösterir.</p>
-
-                    <div class="visual-guide">
-                        GÖRSEL OKUMA REHBERİ:<br>
-                        [Kod A] ============> [Kod B]<br>
-                        [Kod A] ----> [Kod C]<br><br>
-                        <strong>Kalın Şerit:</strong> Güçlü ilişki (Sık sık birlikte geçmişler).<br>
-                        <strong>İnce Şerit:</strong> Zayıf ilişki.
-                    </div>
-
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek Senaryo</span>
-                        "İklim Değişikliği" kodu ile "Kuraklık" kodu arasında çok kalın bir bağ varken, "İklim
-                        Değişikliği" ile "Turizm" arasında ince bir bağ olması; katılımcıların iklimi daha çok
-                        tarımsal/su sorunlarıyla ilişkilendirdiğini gösterir.
+                    <h2>İlişkisel Akış (Sankey Diyagramı)</h2>
+                    <p>Sankey diyagramları, kodlar arasındaki semantik geçişkenliği görselleştirir. Özellikle "Kod
+                        Birlikte Oluşumu" (Co-occurrence) verilerini akışkan bir formda sunar.</p>
+                    <div class="callout callout-tip">
+                        <h5><i data-lucide="link-2"></i> Teori İnşası</h5>
+                        <p>Kuram oluştururken (Theory Building), merkezde duran bir "Çekirdek Kategori"den (Core
+                            Category) diğer alt kategorilere giden akışların kalınlığı, kuramın yapısal gücünü ispatlar.
+                        </p>
                     </div>
                 </div>
 
-                <!-- WORD CLOUD -->
-                <div class="feature-item" id="word-cloud">
-                    <h2>Kelime Bulutu</h2>
-                    <p>Metinlerde en sık geçen kelimeleri görselleştirir. Kelime ne kadar büyükse, o kadar sık
-                        geçmiştir.</p>
-                    <div class="anti-pattern">
-                        <strong>⚠️ Yanılgı Uyarısı:</strong>
-                        Kelime bulutu sadece "frekansı" gösterir, "önemi" değil. "Ve", "bir", "şey" gibi bağlaçlar en
-                        büyük görünebilir. Bu yüzden mutlaka "Stop Words" (Durak Kelimeler) filtresini kullanın.
-                    </div>
-                </div>
-
-                <!-- CROSSTAB -->
-                <div class="feature-item" id="crosstab">
-                    <h2>Çapraz Tablo (Crosstab)</h2>
-                    <p>Kodlarınızı değişkenlere (Cinsiyet, Eğitim, Şehir vb.) göre matris formatında karşılaştırır.</p>
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek Senaryo</span>
-                        "Teknoloji Kullanımı" kodunun Kadınlarda %20, Erkeklerde %80 oranında geçtiğini görmek için bu
-                        tabloyu kullanırsınız. Bu, nitel veriyi nicel (sayısal) olarak desteklemenizi sağlar.
-                    </div>
-                </div>
-
-                <!-- NEW SECTIONS ADDED -->
-                <div class="feature-item" id="word-frequency">
-                    <h2>Kelime Frekansı Analizi</h2>
-                    <p>Metinlerdeki veya kodlanmış alıntı dizilerindeki kelimelerin geçiş sıklığını nicel olarak
-                        hesaplar. Metnin temasını bulmak veya durak kelimeleri hariç tutup araştırmanın öne çıkan
-                        anahtar kavramlarını belirlemek için kritik bir araçtır.</p>
-                    <ul>
-                        <li><strong>Stop-Words (Durak Kelimeler):</strong> "ve", "ile", "veya" gibi anlamsız bağlaçların
-                            saf dışı bırakılmasını sağlar.</li>
-                        <li><strong>Minimum KarakterSınırı:</strong> Çok kısa kelimelerin analiz dışı tutulmasını sağlar
-                            (ör. en az 4 harfli kelimeler).</li>
-                    </ul>
-                </div>
-
-                <div class="feature-item" id="code-matrix">
-                    <h2>Kod Matrisi (Code Matrix Browser)</h2>
-                    <p>Çalışmanızdaki nitel kodların, seçeceğiniz belirli belge veya belge gruplarında ne derecede
-                        yoğunlaştığını çapraz bir tablo/matris şeklinde gösterir.</p>
-                    <div class="visual-guide">
-                        GÖRSEL OKUMA REHBERİ:<br>
-                        Hücrenin içindeki rakamlar (veya hücredeki karenin büyüklüğü), o kodun o belgede kaç defa
-                        kullanıldığını simgeler. Kod yoğunluğu yüksek belgeleri hızla keşfetmenizi sağlar.
-                    </div>
-                </div>
-
-                <div class="feature-item" id="summary-grid">
-                    <h2>Özet Tablosu (Summary Grid)</h2>
-                    <p>Belgeler ile kodlar arasındaki matriste, bir hücreye çift tıklayarak yazarın (araştırmacının)
-                        ilgili kesişim noktasına dair özet notunu eklemesini sağlar. Binlerce sayfalık verinin rafine
-                        edilmiş devasa bir rapor tablosudur.</p>
-                    <ul>
-                        <li>Araştırma verilerinizi ham halinden kurtarıp sentez aşamasına geçmeniz için ideal bir
-                            "okuma-yazma" alanıdır.</li>
-                    </ul>
-                </div>
-
-                <div class="feature-item" id="comparison">
-                    <h2>Belge Karşılaştırma Aracı</h2>
-                    <p>Farklı belgelerde aynı koda atanmış alıntı parçalarını yan yana getirir. Katılımcıların aynı
-                        soruya/duruma verdiği spesifik yanıtları metin tabanlı olarak kıyaslamak içindir.</p>
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek Senaryo</span>
-                        Röportaj 1 ve Röportaj 2 katılımcılarının "Motivasyon" temasındaki sözlerini aynı ekranda yan
-                        yana scroll ederek okumanızı sağlar.
-                    </div>
-                </div>
-
-                <div class="feature-item" id="document-search">
-                    <h2>Belge İçi Arama ve Otomatik Kodlama</h2>
-                    <p>Tek veya çoklu belge içerisinde Regex, Büyük/Küçük harf duyarlılığı veya standart metin araması
-                        yaparak, bulunan sonuçlara anında hedef bir "nitel kod" yapıştırmanızı sağlar.</p>
-                    <ul>
-                        <li>Binlerce sayfalık metin içerisinde belirli bir kelime grubunun (ör:"endüstri 4.0") izini
-                            anında sürüp tümünü "Dijitalleşme" başlığıyla anında kodlayabilirsiniz.</li>
-                    </ul>
-                </div>
-
+                <!-- STATISTICS -->
                 <div class="feature-item" id="code-stats">
-                    <h2>Kod İstatistikleri</h2>
-                    <p>Projedeki her bir nitel kodun; Toplam Kodlama Sayısını, Kapsadığı Belge Adedini, Toplam Karakter
-                        Hacmini ve Yüzde Dağılım Hissesini detaylı olarak sunan nicel ölçüm panelidir.</p>
+                    <h2>Kod İstatistikleri ve Dağılım</h2>
+                    <p>Kodların frekans, karakter sayısı ve yüzde bazlı dağılımları. Bu veriler, tezinizdeki "Bulgular"
+                        bölümünde sunacağınız tabloların ham kaynağını oluşturur.</p>
                 </div>
 
                 <div class="feature-item" id="variable-statistics">
                     <h2>Değişken İstatistikleri</h2>
-                    <p>Projenizdeki değişkenlerin (Cinsiyet, Yaş, Eğitim vb.) frekans dağılımlarını ve yüzdelerini analiz eder.</p>
-                    <ul>
-                        <li><strong>Frekans Tabloları:</strong> Kaç katılımcının "Kadın", kaçının "Erkek" olduğunu veya eğitim durumlarının dağılımını gösterir.</li>
-                        <li><strong>Eksik Veri Analizi:</strong> Hangi belgelerde değişken verisinin girilmediğini tespit etmenizi sağlar.</li>
-                    </ul>
+                    <p>Katılımcı demografisi (Cinsiyet, Yaş, Deneyim vb.) üzerinden yapılan betimsel istatistikler.
+                        Nitel veriyi örneklem grubu bazında segmente etmenize yardımcı olur.</p>
+                </div>
+
+                <!-- INTER-RATER RELIABILITY -->
+                <div class="feature-item" id="irr">
+                    <h2>Uzlaşma Analizi (Reliability & Concordance)</h2>
+                    <p>Çoklu araştırmacı projelerinde (Team Projects), kodlama birliğinin bilimsel ölçümü. LexiScholar,
+                        <strong>Cohen's Kappa</strong> ve <strong>Holsti</strong> katsayılarını kullanarak öznelliği
+                        minimize eder.
+                    </p>
+                    <div class="visual-guide">
+                        KAPPA SKALASI:<br>
+                        < 0.20: Zayıf Uyum<br>
+                            0.41 - 0.60: Orta Düzey<br>
+                            <strong>0.61 - 0.80: Önemli (Substantial) Uyum</strong><br>
+                            0.81 - 1.00: Mükemmel Uyum
+                    </div>
+                </div>
+
+                <!-- ADVANCED TOOLS -->
+                <div class="feature-item" id="query-tool">
+                    <h2>Gelişmiş Mantıksal Sorgu (Boolean Logic)</h2>
+                    <p>Mantıksal operatörler (AND, OR, NOT, NEAR) kullanarak veriyi rafine etme süreci. "A temasından
+                        bahseden ama B temasından bahsetmeyen katılımcıların" görüşlerini izole etmek için kullanılır.
+                    </p>
                 </div>
 
                 <div class="feature-item" id="cooccurrence">
-                    <h2>Kod Birlikte Oluşumu (Co-occurrence)</h2>
-                    <p>Aynı paragraf, cümle veya belgede birden fazla kodun ne sıklıkla birlikte kesişerek atandığını
-                        saptar. İlişkili kavram setleri veya bağımlı temaları ispat etmek için vazgeçilmez bir
-                        metotudur.</p>
+                    <h2>Birlikte Oluşum Matrisi (Co-occurrence)</h2>
+                    <p>Hangi temaların aynı anda (intersection) veya komşuluk (proximity) ilişkisi içinde olduğunu
+                        saptar. İlişkisel nitel analizin kalbidir. Karşılıklı bağımlılıkları (interdependencies) ortaya
+                        çıkarır.</p>
                 </div>
 
-                <div class="feature-item" id="irr">
-                    <h2>Uzlaşma Analizi (Inter-Rater Reliability - IRR)</h2>
-                    <p>Aynı veri setini inceleyen birden fazla "Araştırmacı" veya "Uzman"ın, ne derece mutabık kalarak
-                        benzer kodlamalar yaptığını sayısal olarak ölçer. Sayısal ölçüm için <strong>Cohen's
-                            Kappa</strong>, Holsti'nin R oranı ve brüt yüzde uyum yöntemlerinden faydalanılır.</p>
-                    <div class="scenario-box">
-                        <span class="scenario-title">Bilimsel Geçerlilik</span>
-                        Bir tezin veya makalenin nitel geçerliliğini ispat etmek için IRR skorunun %80 veya Cohen's
-                        Kappa skorunun 0.70 üzerinde olması akademik bir argümandır. LexiScholar bunu otomatik hesaplar.
-                        <br><br>
-                        <a href="teamwork_reliability.html#irr-analysis" style="color: #10b981; font-weight: 600;">➔
-                            Takım Çalışması ve Senkronizasyon Detayları İçin Tıklayın</a>
-                    </div>
+                <!-- SUMMARY GRID -->
+                <div class="feature-item" id="summary-grid">
+                    <h2>Özet Izgarası (Analytical Synthesis)</h2>
+                    <p>Ham veriden (data) analitik kategoriye (concept) geçiş aşamasıdır. Araştırmacı, her bir kod-belge
+                        kesişimi için kendi yorumlayıcı özetini (memo-like summaries) buraya işler. Bu matris, son
+                        raporun derivesidir.</p>
                 </div>
 
-                <div class="feature-item" id="query-tool">
-                    <h2>Gelişmiş Mantıksal Sorgu Merkezi (Boolean Query)</h2>
-                    <p>Belgeleriniz arasında kompleks mantık ağlarını (VE, VEYA, DEĞİL) kullanarak en karmaşık koşullu
-                        durumları süzmenizi sağlayan sorgulama motorudur.</p>
-                    <div class="visual-guide">
-                        GÖRSEL OKUMA REHBERİ:<br>
-                        VE (AND): Tüm şartları sağlayan kesişim noktaları.<br>
-                        VEYA (OR): Herhangi birini ifade eden birleşim kümesi.<br>
-                        DEĞİL (NOT): İstenmeyenlerin hariç tutulması.<br>
-                        *Örn: ("Stres" VE "Covid-19" kodları olan) ANCAK ("Aşı" kodu OLMAYAN) paragrafları getir.*
-                    </div>
+                <div class="feature-item" id="comparison">
+                    <h2>Belge ve Kod Karşılaştırma</h2>
+                    <p>Vaka analizi (Case Study) tasarımlarında, farklı vakaların aynı temaya yaklaşımını yan yana
+                        (juxtaposition) okumaya imkan tanır.</p>
                 </div>
 
-                <!-- YAPAY ZEKA ARAÇLARI -->
-                <h2 style="margin-top: 60px; border-bottom: 2px solid #f59e0b; color: #f59e0b;">Yapay Zeka (AI) Araçları
+                <!-- AI SECTION -->
+                <h2 style="border-top: 2px solid var(--border-color); padding-top: 3rem;">Yapay Zeka (AI) ve NLP Katmanı
                 </h2>
-                <p>LexiScholar, metin madenciliği için yerel ve bulut tabanlı AI modellerini kullanır.</p>
+
+                <div class="feature-item" id="ai-chat">
+                    <h2>AI Metin Analisti ve Sohbet</h2>
+                    <p>RAG (Retrieval-Augmented Generation) teknolojisi ile döküman içeriğine odaklı, halüsinasyon riski
+                        minimize edilmiş akademik asistan.</p>
+                    <div class="callout callout-definition" id="ai-context">
+                        <h5>Persona Yapısı</h5>
+                        <p>Sistem, bir "Kıdemli QDA Metodoloğu" kimliğiyle yanıt vererek sadece bilgi vermekle kalmaz,
+                            çıkarımlarının metodolojik gerekçelerini de sunar.</p>
+                    </div>
+                </div>
 
                 <div class="feature-item" id="ai-summary">
-                    <h3>📝 Otomatik Özetleme</h3>
-                    <p>Uzun metinleri okumadan önce ana fikrini anlamanızı sağlar.</p>
-                    <ul>
-                        <li><strong>Nasıl Çalışır?</strong> Metindeki en önemli cümleleri istatistiksel olarak seçer
-                            (Extractive Summarization).</li>
-                        <li><strong>Kullanım:</strong> 50 sayfalık bir raporu kodlamaya başlamadan önce 1 sayfalık
-                            özetini çıkarıp genel çerçeveyi çizebilirsiniz.</li>
-                    </ul>
+                    <h2>AI Destekli Soyutlama (Summarization)</h2>
+                    <p>Metnin anlamsal özünü (semantic core) çıkarma. Büyük veri setlerinde ön-okuma (pre-reading)
+                        yükünü hafifletir.</p>
                 </div>
 
                 <div class="feature-item" id="ai-sentiment">
-                    <h3>😊 Duygu Analizi</h3>
-                    <p>Metnin duygusal tonunu (Pozitif, Negatif, Nötr) ölçer.</p>
-                    <div class="scenario-box">
-                        <span class="scenario-title">Örnek</span>
-                        Müşteri yorumlarını analiz ediyorsunuz. AI, "Ürün harika ama kargo geç geldi" cümlesini analiz
-                        edip "Ürün: Pozitif", "Kargo: Negatif" çıkarımı yapabilir (Aspect-Based Sentiment).
-                    </div>
+                    <h2>Duygu ve Ton Analizi (Sentiment Analysis)</h2>
+                    <p>Lokal BERT modelleri ve Online LLM'ler ile desteklenen hibrit yapı. Metindeki örtük duyguyu
+                        (latent affect) saptar.</p>
+                </div>
+
+                <div class="feature-item" id="ai-topic-modeling">
+                    <h2>Otomatik Konu Tespiti (Topic Modeling)</h2>
+                    <p>LDA ve AI tabanlı kümeleme. Verideki gizli (hidden) yapıları istatistiksel ve anlamsal olarak
+                        gruplandırır. Exploratory (keşfedici) analiz için başlangıç noktasıdır.</p>
                 </div>
 
                 <div class="feature-item" id="ai-ner">
-                    <h3>🏷️ Varlık Tanıma (NER)</h3>
-                    <p>Metindeki özel isimleri (Kişi, Yer, Organizasyon) otomatik bulur ve kodlar.</p>
-                    <ul>
-                        <li><strong>Örnek:</strong> "Ahmet Bey, yarın Ankara'da Google ofisini ziyaret edecek."</li>
-                        <li><strong>Çıktı:</strong> Ahmet Bey (Kişi), Ankara (Yer), Google (Organizasyon).</li>
-                        <li><strong>Fayda:</strong> Binlerce sayfalık metinde geçen tüm şehir isimlerini tek tıkla
-                            kodlayabilirsiniz.</li>
-                    </ul>
+                    <h2>Varlık Tanıma (NER)</h2>
+                    <p>Kişi, organizasyon, yer ve zaman gibi varlıkların (entities) otomatik indekslenmesi. Özellikle
+                        arşiv araştırmaları ve haber analizleri için zaman kazandırıcıdır.</p>
                 </div>
+
+                <div class="feature-item" id="semantic-mapping">
+                    <h2>Anlamsal Haritalama (Semantic Mapping) <span class="badge"
+                            style="background:#8B5CF6;color:white;padding:2px 6px;border-radius:4px;font-size:12px;">Yeni
+                            (v3.7)</span></h2>
+                    <p>BAAI/bge-m3 yapay zeka modeli kullanılarak metinlerinizin çok boyutlu uzayda matematiksel olarak
+                        konumlandırılmasıdır (Embedding). UMAP ve HDBSCAN algoritmalarıyla kodlanmış bölümleri dinamik
+                        bir matris üzerinde kümelendirir, örtük örüntüleri (latent patterns) keşfetmenizi sağlar.</p>
+                    <div class="callout callout-method">
+                        <h5>Açımlayıcı Yaklaşım</h5>
+                        <p>Kelime örtüşmese bile, anlamsal olarak benzer (semantically similar) fikirleri aynı uzayda
+                            birbirine yakın konumlandırır. Bu, salt frekans sayımından anlamsal bağlama (context) geçişi
+                            ifade eder.</p>
+                    </div>
+                </div>
+
+                <!-- COMPATIBILITY ANCHORS FOR UI HELP BULBS -->
+                <div id="visual-timeline"></div>
+                <div id="conceptual-sankey"></div>
+                <div id="hierarchical-treemap"></div>
+                <div id="tree-map"></div>
+                <div id="document-search"></div>
+                <div id="word-cloud"></div>
+                <div id="code-cloud"></div>
+                <div id="keyword-analysis"></div>
+                <div id="word-frequency"></div>
+                <div id="crosstab"></div>
+                <div id="code-matrix"></div>
+                <div id="graph"></div>
 
             </section>
 
             <footer>
-                <p>&copy; 2026 LexiScholar Bilgi Ansiklopedisi - Sürüm 3.1.5 Beta</p>
+                <p>&copy; 2026 LexiScholar Akademik Wiki - Sürüm 1.0 (Methodology Enhanced)</p>
             </footer>
         </main>
     </div>

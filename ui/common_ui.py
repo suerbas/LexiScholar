@@ -30,6 +30,12 @@ def ask_confirmation(parent, title, message, yes_text="Evet", no_text="Hayır", 
     dialog = ModernConfirmationDialog(parent, title, message, yes_text, no_text, default_yes)
     return dialog.get_result()
 
+def ask_save_before_exit(parent, title="Değişiklikleri Kaydet", message="Kaydedilmemiş değişiklikleriniz var. Çıkmadan önce kaydetmek ister misiniz?"):
+    """Standardized three-option dialog for save before exit (Save, Discard, Cancel)."""
+    from ui.common.modern_save_exit_dialog import ModernSaveExitDialog
+    dialog = ModernSaveExitDialog(parent, title, message)
+    return dialog.get_result()
+
 def get_open_file(parent, title="Dosya Seç", filter="Tüm Dosyalar (*.*)"):
     """Standardized file open dialog."""
     path, _ = QFileDialog.getOpenFileName(parent, title, "", filter)

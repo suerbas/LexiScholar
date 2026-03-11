@@ -1,0 +1,17 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\Suat\OneDrive\Desktop\Lexischolar_v3.5b_yeni
+configfile: pytest.ini
+plugins: anyio-4.12.1
+collected 117 items / 4 deselected / 113 selected
+
+tests\test_chart_widgets.py ....                                         [  3%]
+tests\test_commands.py ..................                                [ 19%]
+tests\test_dao_codes.py ...........                                      [ 29%]
+tests\test_dao_documents.py ................                             [ 43%]
+tests\test_dao_segments.py ..................                            [ 59%]
+tests\test_nlp_engine.py .........................                       [ 81%]
+tests\test_nlp_worker_tasks.py ..                                        [ 83%]
+tests\test_pdf_processor_offsets.py .                                    [ 84%]
+tests\test_project_manager.py .............                              [ 95%]
+tests\test_report_export_security.py .....

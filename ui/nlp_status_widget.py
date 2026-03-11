@@ -14,6 +14,7 @@ _MODEL_LABELS = {
     "sentiment-analysis:en": "Duygu-EN",
     "ner:tr":                 "NER-TR",
     "ner:en":                 "NER-EN",
+    "embedding:multilingual": "BGE-M3",
 }
 
 _STYLE_ACTIVE = (
@@ -77,9 +78,9 @@ class NLPStatusWidget(QWidget):
         super().__init__(parent)
         self._setup_ui()
 
-        # Model durumu — 30 sn
+        # Model durumu — 2 sn
         self._model_timer = QTimer(self)
-        self._model_timer.setInterval(30_000)
+        self._model_timer.setInterval(2_000)
         self._model_timer.timeout.connect(self._refresh_models)
         self._model_timer.start()
 

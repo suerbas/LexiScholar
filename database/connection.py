@@ -261,6 +261,9 @@ def init_db(db_path: str = "lexischolar.db") -> bool:
                 if "comment" not in schema:
                     logger.info("Migrating coded_segments table to add comment column...")
                     cursor.execute("ALTER TABLE coded_segments ADD COLUMN comment TEXT")
+                if "embedding" not in schema:
+                    logger.info("Migrating coded_segments table to add embedding column for semantic search...")
+                    cursor.execute("ALTER TABLE coded_segments ADD COLUMN embedding BLOB")
             except Exception as e:
                 logger.warning(f"Coded segments migration skip: {e}")
 

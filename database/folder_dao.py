@@ -27,7 +27,7 @@ class FolderDAO:
             if 'conn' in locals() and conn:
                 conn.rollback()
             logger.error(f"Failed to create folder: {e}")
-            raise DatabaseError(f"Klasör oluşturulamadı: {e}")
+            raise DatabaseError(f"Failed to create folder: {e}")
 
     def get_by_id(self, folder_id: int) -> Optional[dict]:
         """Get folder by ID."""

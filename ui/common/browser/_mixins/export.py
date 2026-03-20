@@ -178,30 +178,30 @@ class BrowserExportMixin:
                     model_type = topic_data.get("model_name", "LDA")
                     success = export_topics_to_excel(file_path, topic_data, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "Excel export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"Excel export için openpyxl kütüphanesi gerekli:\n{e}")
 
     def _export_topics_html(self, topic_data, hybrid=False):
         """Export topic modeling results to HTML."""
         try:
             if hybrid:
-                from ...visualizations.semantic_analytics import generate_hybrid_topics_html
+                from ....visualizations.semantic_analytics import generate_hybrid_topics_html
                 model_name = topic_data.get("online", {}).get("model_name", "AI")
                 generated_html_path = generate_hybrid_topics_html(topic_data, model_name=model_name)
                 default_name = "hibrit_konu_modelleme.html"
             else:
                 mode = topic_data.get("mode", "local")
                 if mode == "online":
-                    from ...visualizations.semantic_analytics import generate_online_topics_html
+                    from ....visualizations.semantic_analytics import generate_online_topics_html
                     generated_html_path = generate_online_topics_html(topic_data, model_name=topic_data.get("model_name", "AI"))
                 else:
-                    from ...visualizations.semantic_analytics import generate_topics_html
+                    from ....visualizations.semantic_analytics import generate_topics_html
                     generated_html_path = generate_topics_html(topic_data)
                 default_name = "konu_modelleme.html"
             
@@ -217,10 +217,10 @@ class BrowserExportMixin:
                     html_content = src.read()
                 with open(file_path, 'w', encoding='utf-8') as dst:
                     dst.write(html_content)
-                from ...common_ui import show_info
+                from ....common_ui import show_info
                 show_info(self, "Başarılı", f"HTML kaydedildi:\n{file_path}")
         except Exception as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Hata", f"HTML export sırasında hata oluştu:\n{str(e)}")
 
     def _export_topics_word(self, topic_data, hybrid=False):
@@ -248,13 +248,13 @@ class BrowserExportMixin:
                     model_type = topic_data.get("model_name", "LDA")
                     success = export_topics_to_word(file_path, topic_data, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "Word export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
 
     def _export_sentiment_excel(self, results, model_type):
@@ -283,13 +283,13 @@ class BrowserExportMixin:
                 else:
                     success = export_sentiment_to_excel(file_path, results, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "Excel export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"Excel export için openpyxl kütüphanesi gerekli:\n{e}")
 
     def _export_sentiment_word(self, results, model_type):
@@ -318,13 +318,13 @@ class BrowserExportMixin:
                 else:
                     success = export_sentiment_to_word(file_path, results, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "Word export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
 
     def _export_sentiment_html(self, results, model_type):
@@ -353,13 +353,13 @@ class BrowserExportMixin:
                 else:
                     success = export_sentiment_to_html(file_path, results, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "HTML export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"HTML export sırasında hata oluştu:\n{e}")
 
     def _export_ner_word(self, ner_data, model_type):
@@ -375,13 +375,13 @@ class BrowserExportMixin:
             if file_path:
                 success = export_ner_to_word(file_path, ner_data, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "Word export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"Word export için python-docx kütüphanesi gerekli:\n{e}")
 
     def _export_ner_html(self, ner_data, model_type):
@@ -397,13 +397,13 @@ class BrowserExportMixin:
             if file_path:
                 success = export_ner_to_html(file_path, ner_data, model_type)
                 if success:
-                    from ...common_ui import show_info
+                    from ....common_ui import show_info
                     show_info(self, "Başarılı", f"Rapor kaydedildi:\n{file_path}")
                 else:
-                    from ...common_ui import show_error
+                    from ....common_ui import show_error
                     show_error(self, "Hata", "HTML export sırasında hata oluştu.")
         except ImportError as e:
-            from ...common_ui import show_error
+            from ....common_ui import show_error
             show_error(self, "Eksik Kütüphane", f"HTML export sırasında hata oluştu:\n{e}")
 
     def _save_visualization_screenshot(self):
@@ -446,10 +446,10 @@ class BrowserExportMixin:
         # Use QWebEngineView.grab() to capture the rendered page
         pixmap = self.browser.grab()
         if pixmap.isNull():
-            from ...common_ui import show_warning
+            from ....common_ui import show_warning
             show_warning(self, "Hata", "Görsel yakalanırken hata oluştu.")
             return
 
         if not pixmap.save(save_path):
-            from ...common_ui import show_warning
+            from ....common_ui import show_warning
             show_warning(self, "Hata", f"Dosya kaydedilemedi:\n{save_path}")

@@ -1,4 +1,4 @@
-# 🏛️ LexiScholar v3.7.0
+# 🏛️ LexiScholar v3.8 Beta
 
 > *Özel, Yapay Zeka Destekli Nitel Veri Analizi Platformu.*
 
@@ -35,6 +35,14 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 | 🗃️ **Çok Format Desteği** | PDF, DOCX, XLSX, ODS, RTF, TXT, MP3, MP4 ve daha fazı |
 
 ---
+
+## 🚀 v3.8 Beta — Yenilikler (Mart 2026)
+
+### 🛡️ Kapsamlı Güvenlik ve Kararlılık Denetimi (Audit)
+- **Veritabanı İşlem Güvenliği:** `get_db_connection` üzerinde tam rollback desteği ve Thread-safe olmayan bağlantı yönetimi iyileştirmeleri. Veritabanı kilitleme (locking) riskleri minimize edildi.
+- **FTS5 Tam Metin Arama Senkronizasyonu:** Belgeler üzerinde yapılan her ekleme, güncelleme ve silme işlemini anlık olarak arama motoruna yansıtan SQL Trigger altyapısı kuruldu.
+- **Export Katmanı Güvenliği:** HTML ve CSV çıktıları üzerinde CSS Injection ve Spreadsheet Formula Injection saldırılarına karşı sertifikalı validasyon kuralları eklendi.
+- **NLP & LLM Kararlılığı:** NER (Varlık Tanıma) worker süreçlerine "Askıya Alma/İptal" desteği eklendi. LLM yanıtlarındaki JSON tespit algoritması bağlam-duyarlı hale getirilerek hatalı çıktı üretimi engellendi.
 
 ## 🚀 v3.7.0 — Yenilikler
 
@@ -83,10 +91,10 @@ Akademik araştırmalarda Nitel Veri Analizi (QDA); yüksek lisans, doktora öğ
 ## 🏗️ Mimari Genel Bakış
 
 ```
-LexiScholar v3.7.0
+LexiScholar v3.8 Beta
 │
 ├── main.py                  # Giriş noktası, ortam kurulumu
-├── __version__.py           # Merkezi versiyon bilgisi (v3.7.0)
+├── __version__.py           # Merkezi versiyon bilgisi (v3.8 Beta)
 ├── nlp_engine.py            # NLP işlevleri (duygu, NER, KWIC, konu modeli)
 ├── llm_engine.py            # OpenRouter API wrapper
 │

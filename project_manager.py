@@ -138,9 +138,11 @@ class ProjectManager:
             # Backup using SQLite API
             source_conn = sqlite3.connect(str(self.db_path))
             dest_conn = sqlite3.connect(str(snapshot_path))
-            source_conn.backup(dest_conn)
-            dest_conn.close()
-            source_conn.close()
+            try:
+                source_conn.backup(dest_conn)
+            finally:
+                dest_conn.close()
+                source_conn.close()
             
             # Cleanup old snapshots (keep last 5)
             snapshots = sorted(list(backup_root.glob("auto_snapshot_*.db")))
@@ -204,9 +206,11 @@ class ProjectManager:
             if self.db_path.resolve() != db_dest.resolve():
                 source_conn = sqlite3.connect(str(self.db_path))
                 dest_conn = sqlite3.connect(str(db_dest))
-                source_conn.backup(dest_conn)
-                dest_conn.close()
-                source_conn.close()
+                try:
+                    source_conn.backup(dest_conn)
+                finally:
+                    dest_conn.close()
+                    source_conn.close()
             
             # Create project metadata
             metadata = {

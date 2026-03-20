@@ -121,3 +121,7 @@ def check_local_model_updates(download_updates: bool = False, models_to_download
 def get_nlp_memory_info() -> dict:
     loaded = _cache.loaded_models()
     return {"loaded": loaded, "count": len(loaded), "max": 2}
+
+def unload_all_models():
+    """Tüm yüklü NLP modellerini bellekten temizler."""
+    _cache.unload_all()

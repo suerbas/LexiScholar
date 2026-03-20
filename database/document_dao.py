@@ -47,13 +47,13 @@ class DocumentDAO:
                         return doc_id
                 except Exception as retry_e:
                     logger.error(f"Retry failed after fixing constraints: {retry_e}")
-                    raise DatabaseError(f"Veritabanı yapısı güncellenirken hata oluştu:\n{e}\n{retry_e}")
+                    raise DatabaseError(f"Failed to update database schema:\n{e}\n{retry_e}")
 
             logger.warning(f"Document already exists: {file_path}. Error: {e}")
-            raise DatabaseError(f"Veritabanı hatası (Bu belge zaten mevcut olabilir):\n{e}")
+            raise DatabaseError(f"Database error (document might already exist):\n{e}")
         except Exception as e:
             logger.error(f"Failed to create document: {e}")
-            raise DatabaseError(f"Belge oluşturulurken bir hata oluştu: {str(e)}")
+            raise DatabaseError(f"Failed to create document: {str(e)}")
     
     def get_by_id(self, doc_id: int) -> Optional[dict]:
         """Get document by ID."""
@@ -101,7 +101,7 @@ class DocumentDAO:
                 return cursor.rowcount > 0
         except Exception as e:
             logger.error(f"Failed to delete document {doc_id}: {e}")
-            raise DatabaseError(f"Belge silinemedi (ID: {doc_id}): {str(e)}")
+            raise DatabaseError(f"Failed to delete document (ID: {doc_id}): {str(e)}")
 
     def move_to_folder(self, doc_id: int, folder_id: Optional[int]) -> bool:
         """Move document to a folder (or root if folder_id is None)."""
@@ -113,7 +113,7 @@ class DocumentDAO:
                 return cursor.rowcount > 0
         except Exception as e:
             logger.error(f"Failed to move document {doc_id}: {e}")
-            raise DatabaseError(f"Belge taşınamadı: {str(e)}")
+            raise DatabaseError(f"Failed to move document: {str(e)}")
 
     def update_order(self, doc_id: int, new_order: int) -> bool:
         """Update the display order of a document."""
@@ -187,7 +187,7 @@ class DocumentDAO:
                 return True
         except Exception as e:
             logger.error(f"Failed to update document content: {e}")
-            raise DatabaseError(f"Belge içeriği güncellenemedi: {str(e)}")
+            raise DatabaseError(f"Failed to update document content: {str(e)}")
 
     def rename(self, doc_id: int, new_title: str) -> bool:
         """Update the title of a document."""

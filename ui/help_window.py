@@ -18,7 +18,7 @@ HELP_CONTENT = {
         <p>LexiScholar, nitel araştırma süreçlerinizi dijitalleştirmek, hızlandırmak ve derinleştirmek için tasarlanmış profesyonel bir <b>CAQDAS</b> (Bilgisayar Destekli Nitel Veri Analizi Yazılımı) çözümüdür.</p>
         <p>Bu kılavuz, kodlama sisteminden ileri düzey yapay zeka analizlerine kadar projenizin her aşamasında size rehberlik edecektir. Sol taraftaki menüyü kullanarak veya yukarıdaki arama kutusuna <i>"sankey", "değişken", "whisper"</i> gibi terimler yazarak istediğiniz konuya hızlıca ulaşabilirsiniz.</p>
         <div class="note">
-            <b>YENİ:</b> Versiyon 3.5 avec gelen <b>Gelişmiş Görselleştirme Galerisi</b>, <b>Dinamik Grafik Filtreleme</b> ve modern arayüz iyileştirmeleri ile araştırmalarınızı bir üst seviyeye taşıyın.
+            <b>YENİ:</b> Versiyon 3.8 ile gelen <b>Kapsamlı Güvenlik Denetimi İyileştirmeleri</b>, <b>FTS5 Tam Metin Arama Senkronizasyonu</b> ve hibrit AI analizlerindeki kararlılık artışları ile araştırmalarınızı bir üst seviyeye taşıyın.
         </div>
         <h2>Nitel Araştırmada Dijital Yardımcınız</h2>
         <p>LexiScholar, sadece metinleri renklendirmekle kalmaz; mülakatlarınızı deşifre eder (Whisper), metinlerdeki akademik tonu ölçer (Sentiment) ve kodlarınız arasındaki stratejik bağları görselleştirir.</p>

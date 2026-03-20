@@ -47,7 +47,7 @@ class CodeDAO:
             if 'conn' in locals() and conn:
                 conn.rollback()
             logger.error(f"Failed to create code: {e}")
-            raise DatabaseError(f"Kod oluşturulamadı: {e}")
+            raise DatabaseError(f"Failed to create code: {e}")
     
     def get_all(self) -> List[dict]:
         """Get all codes."""

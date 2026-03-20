@@ -30,7 +30,7 @@ class VariableDAO:
             if 'conn' in locals() and conn:
                 conn.rollback()
             logger.error(f"Failed to create variable: {e}")
-            raise DatabaseError(f"Değişken oluşturulamadı: {e}")
+            raise DatabaseError(f"Failed to create variable: {e}")
     
     def get_all(self) -> List[dict]:
         """Get all defined variables."""

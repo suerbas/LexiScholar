@@ -44,7 +44,7 @@ class MemoDAO:
             if 'conn' in locals() and conn:
                 conn.rollback()
             logger.error(f"Failed to create memo: {e}")
-            raise DatabaseError(f"Memo oluşturulamadı: {e}")
+            raise DatabaseError(f"Failed to create memo: {e}")
 
     def get_by_document(self, document_id: int, coder_id: int = None) -> List[dict]:
         """Get all memos for a document, optionally filtered by coder."""

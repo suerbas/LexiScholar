@@ -111,6 +111,8 @@ class RibbonMixin:
         export_menu.addAction("📘 Kod Kitabı (Codebook)", self._export_codebook)
         export_menu.addAction("📊 Proje Özeti (Dashboard)", self._show_project_summary_report)
         export_menu.addSeparator()
+        export_menu.addAction("📦 Projeyi Yedekle (ZIP)", getattr(self, '_export_project_backup', lambda: None))
+        export_menu.addSeparator()
         export_menu.addAction("📝 Memo Raporu (Word)", lambda: self._export_memo_report('word'))
         export_menu.addAction("📄 Memo Raporu (Metin)", lambda: self._export_memo_report('txt'))
         btn_export.setMenu(export_menu)

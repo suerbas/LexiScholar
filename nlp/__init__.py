@@ -17,7 +17,7 @@ from nlp.utils.text_utils import (
 from nlp.utils.json_parser import _parse_json_response
 from nlp.models.cache import NLPModelCache, _cache
 from nlp.models.manager import (
-    check_local_model_updates, get_nlp_memory_info, _get_online_engine,
+    check_local_model_updates, get_nlp_memory_info, unload_all_models, _get_online_engine,
     _get_model_registry, _get_model_meta_path, _read_model_meta, _write_model_meta, _has_local_model_files
 )
 from nlp.models.prompts import (

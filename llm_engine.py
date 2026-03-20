@@ -160,7 +160,7 @@ Yanıtını sadece şu JSON formatında ver:
             # If response_format is provided or inferred, add it
             if response_format:
                 kwargs["response_format"] = response_format
-            elif "json" in system_prompt.lower() or "json" in prompt.lower():
+            elif "json" in system_prompt.lower():
                 kwargs["response_format"] = {"type": "json_object"}
 
             response = self.client.chat.completions.create(

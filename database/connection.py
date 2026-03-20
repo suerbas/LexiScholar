@@ -69,7 +69,7 @@ def get_connection(db_path: str = "lexischolar.db") -> sqlite3.Connection:
         return conn
     except sqlite3.Error as e:
         logger.error(f"Database connection failed: {e}")
-        raise DatabaseError(f"Veritabanına bağlanılamadı: {e}")
+        raise DatabaseError(f"Failed to connect to database: {e}")
 
 @contextmanager
 def get_db_connection(db_path: str = "lexischolar.db"):
@@ -87,8 +87,13 @@ def get_db_connection(db_path: str = "lexischolar.db"):
         conn = get_connection(db_path)
         yield conn
     except Exception as e:
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
         logger.error(f"Database operation failed: {e}")
-        raise DatabaseError(f"Veritabanı hatası: {e}")
+        raise DatabaseError(f"Database error: {e}")
     finally:
         # Don't close connection - it's managed by the pool
         pass
@@ -417,6 +422,31 @@ def init_db(db_path: str = "lexischolar.db") -> bool:
                         "INSERT INTO documents_fts(rowid, title, extracted_text) "
                         "SELECT id, title, COALESCE(extracted_text,'') FROM documents"
                     )
+
+                # Create triggers to maintain FTS index sync
+                cursor.execute("""
+                    CREATE TRIGGER IF NOT EXISTS documents_fts_ai
+                    AFTER INSERT ON documents BEGIN
+                        INSERT INTO documents_fts(rowid, title, extracted_text)
+                        VALUES (new.id, new.title, COALESCE(new.extracted_text, ''));
+                    END
+                """)
+                cursor.execute("""
+                    CREATE TRIGGER IF NOT EXISTS documents_fts_ad
+                    AFTER DELETE ON documents BEGIN
+                        INSERT INTO documents_fts(documents_fts, rowid, title, extracted_text)
+                        VALUES ('delete', old.id, old.title, COALESCE(old.extracted_text, ''));
+                    END
+                """)
+                cursor.execute("""
+                    CREATE TRIGGER IF NOT EXISTS documents_fts_au
+                    AFTER UPDATE ON documents BEGIN
+                        INSERT INTO documents_fts(documents_fts, rowid, title, extracted_text)
+                        VALUES ('delete', old.id, old.title, COALESCE(old.extracted_text, ''));
+                        INSERT INTO documents_fts(rowid, title, extracted_text)
+                        VALUES (new.id, new.title, COALESCE(new.extracted_text, ''));
+                    END
+                """)
             except Exception as e:
                 logger.warning(f"FTS5 table setup skip (SQLite may lack FTS5): {e}")
 
@@ -426,4 +456,4 @@ def init_db(db_path: str = "lexischolar.db") -> bool:
             
     except sqlite3.Error as e:
         logger.error(f"Database initialization failed: {e}")
-        raise DatabaseError(f"Veritabanı oluşturulamadı: {e}")
+        raise DatabaseError(f"Failed to initialize database: {e}")

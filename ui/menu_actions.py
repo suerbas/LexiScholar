@@ -151,6 +151,28 @@ class MenuActions:
             if exporter.save_report(file_path, content, 'html'):
                 os.startfile(file_path)
 
+    def _export_project_backup(self):
+        """Export the current project as a ZIP backup."""
+        if not getattr(self, '_active_project_name', None):
+            common_ui.show_info(self, "Bilgi", "Yedeklenecek aktif bir proje yok.")
+            return
+            
+        file_path = common_ui.get_save_file(
+            self, "Projeyi Yedekle", f"{self._active_project_name}_yedek.zip",
+            "ZIP Arşivi (*.zip)"
+        )
+        
+        if file_path:
+            from project_manager import ProjectManager
+            pm = ProjectManager(self.db_path)
+            # Ensure the project is saved first
+            pm.save_project(self._active_project_name)
+            
+            success, result = pm.export_project_backup(file_path)
+            if success:
+                common_ui.show_info(self, "Yedekleme Başarılı", f"Proje başarıyla yedeklendi:\n{result}")
+            else:
+                common_ui.show_error(self, "Yedekleme Hatası", result)
     
     def _show_guide(self):
         """Open the comprehensive Turkish usage guide in the default web browser."""

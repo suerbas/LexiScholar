@@ -4,9 +4,9 @@ Tüm modüller için tek kaynak (Single Source of Truth).
 """
 
 # Uygulama sürüm numarası (UI, log ve PyInstaller için)
-APP_VERSION = "3.7.0"
+APP_VERSION = "3.8.0"
 APP_NAME = "LexiScholar"
-APP_DISPLAY_VERSION = "Sürüm 3.7.0"
+APP_DISPLAY_VERSION = "v3.8 Beta"
 
 # Proje dosyası şema versiyonu (project.json içinde saklanır,
 # gelecekteki migration'lar bu değere göre çalışır)

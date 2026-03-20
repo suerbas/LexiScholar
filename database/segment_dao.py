@@ -43,10 +43,8 @@ class CodedSegmentDAO:
                 conn.commit()
                 return segment_id
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to create segment: {e}")
-            raise DatabaseError(f"Segment oluşturulamadı: {e}")
+            raise DatabaseError(f"Failed to create segment: {e}")
     
     def update_weight(self, segment_id: int, weight: int) -> bool:
         """Update the weight of a segment. Returns True on success."""
@@ -58,8 +56,6 @@ class CodedSegmentDAO:
                 conn.commit()
                 return cursor.rowcount > 0
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to update segment weight: {e}")
             return False
 
@@ -75,8 +71,6 @@ class CodedSegmentDAO:
                 conn.commit()
                 return cursor.rowcount > 0
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to update segment paraphrase: {e}")
             return False
 
@@ -92,8 +86,6 @@ class CodedSegmentDAO:
                 conn.commit()
                 return cursor.rowcount > 0
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to update segment comment: {e}")
             return False
 
@@ -123,8 +115,6 @@ class CodedSegmentDAO:
                 rows = cursor.fetchall()
                 return [dict(row) for row in rows]
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to get segments for document {document_id}: {e}")
             return []
 
@@ -160,8 +150,6 @@ class CodedSegmentDAO:
                     result[row['document_id']].append(dict(row))
                 return result
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Bulk fetch segments failed: {e}")
             return {}
     
@@ -190,8 +178,6 @@ class CodedSegmentDAO:
                 rows = cursor.fetchall()
                 return [dict(row) for row in rows]
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to get segments for code {code_id}: {e}")
             return []
 
@@ -230,8 +216,6 @@ class CodedSegmentDAO:
                 rows = cursor.fetchall()
                 return [dict(row) for row in rows]
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to get segments by criteria: {e}")
             return []
     
@@ -244,8 +228,6 @@ class CodedSegmentDAO:
                 conn.commit()
                 return cursor.rowcount > 0
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to delete segment {segment_id}: {e}")
             return False
     
@@ -258,8 +240,6 @@ class CodedSegmentDAO:
                 conn.commit()
                 return cursor.rowcount > 0
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to update segment code: {e}")
             return False
     
@@ -279,8 +259,6 @@ class CodedSegmentDAO:
                 row = cursor.fetchone()
                 return dict(row) if row else None
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to get segment {segment_id}: {e}")
             return None
 
@@ -309,8 +287,6 @@ class CodedSegmentDAO:
                 conn.commit()
                 return True
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to delete segments in batch: {e}")
             return False
     def get_by_boolean_query(self, and_ids: list, or_ids: list, not_ids: list, doc_scope: bool = True) -> List[dict]:
@@ -382,8 +358,6 @@ class CodedSegmentDAO:
                 return [dict(row) for row in cursor.fetchall()]
                 
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Boolean query failed: {e}")
             return []
     def get_all(self) -> List[dict]:
@@ -402,7 +376,5 @@ class CodedSegmentDAO:
                 rows = cursor.fetchall()
                 return [dict(row) for row in rows]
         except sqlite3.Error as e:
-            if 'conn' in locals() and conn:
-                conn.rollback()
             logger.error(f"Failed to get all segments: {e}")
             return []

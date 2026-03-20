@@ -27,7 +27,7 @@ class CoderDAO:
                 return cursor.lastrowid
         except Exception as e:
             logger.error(f"Failed to create coder: {e}")
-            raise DatabaseError(f"Kodlayıcı oluşturulamadı: {str(e)}")
+            raise DatabaseError(f"Failed to create coder: {str(e)}")
     
     def get_by_id(self, coder_id: int) -> Optional[dict]:
         """Get coder by ID."""

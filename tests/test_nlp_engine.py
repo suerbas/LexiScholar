@@ -155,8 +155,9 @@ class TestModelBasedNLP:
 
 class TestNlpFallbacks:
     def test_sentiment_fallback_returns_valid_shape(self, monkeypatch):
+        import nlp.models.cache
+        monkeypatch.setattr(nlp.models.cache._cache, "get_sentiment", lambda lang: None)
         import nlp_engine
-        monkeypatch.setattr(nlp_engine._cache, "get_sentiment", lambda lang: None)
         result = nlp_engine.analyze_sentiment("Bu ürün çok iyi ve başarılı.")
         assert "label" in result
         assert "score" in result
@@ -164,7 +165,8 @@ class TestNlpFallbacks:
         assert result["label"] in ("very positive", "positive", "neutral", "negative", "very negative")
 
     def test_entities_fallback_returns_list(self, monkeypatch):
+        import nlp.models.cache
+        monkeypatch.setattr(nlp.models.cache._cache, "get_ner", lambda lang: None)
         import nlp_engine
-        monkeypatch.setattr(nlp_engine._cache, "get_ner", lambda lang: None)
         result = nlp_engine.extract_entities("Ankara Üniversitesi Türkiye'dedir.")
         assert isinstance(result, list)

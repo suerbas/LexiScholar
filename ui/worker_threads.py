@@ -157,6 +157,9 @@ class NLPWorker(QThread):
                     "comparison": compare_entity_results(local_entities, online_entities)
                 })
 
+        if self._is_canceled:
+            return
+            
         final_data = [_aggregate_entity_documents(documents, mode=mode)]
         self.finished.emit(final_data)
 
@@ -526,7 +529,9 @@ class SurveyImportWorker(QThread):
                         segment_text=cl_text
                     )
                     
-                    current_pos = end_pos + 2 # +2 for "\n\n"
+                    # Move position marker by exact block size plus the double newline joiner
+                    block_len = len(header) + len(cl_text)
+                    current_pos += block_len + 2
                 
                 imported_count = i + 1
             

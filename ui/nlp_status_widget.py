@@ -76,6 +76,13 @@ class NLPStatusWidget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        try:
+            from nlp import get_nlp_memory_info, unload_all_models
+            self._get_nlp_memory_info = get_nlp_memory_info
+            self._unload_all_models = unload_all_models
+        except ImportError:
+            self._get_nlp_memory_info = None
+            self._unload_all_models = None
         self._setup_ui()
 
         # Model durumu — 2 sn
@@ -151,12 +158,14 @@ class NLPStatusWidget(QWidget):
         self._refresh_ram()
 
     def _refresh_models(self):
-        try:
-            from nlp_engine import get_nlp_memory_info
-            info = get_nlp_memory_info()
-            loaded = info.get("loaded", [])
-        except Exception:
+        if not hasattr(self, "_get_nlp_memory_info") or self._get_nlp_memory_info is None:
             loaded = []
+        else:
+            try:
+                info = self._get_nlp_memory_info()
+                loaded = info.get("loaded", [])
+            except Exception:
+                loaded = []
 
         while self._model_container.count():
             item = self._model_container.takeAt(0)
@@ -203,8 +212,8 @@ class NLPStatusWidget(QWidget):
 
     def _unload_models(self):
         try:
-            from nlp_engine import _cache
-            _cache.unload_all()
+            from nlp import unload_all_models
+            unload_all_models()
         except Exception:
             pass
         self.refresh()

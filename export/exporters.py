@@ -1,8 +1,17 @@
 import html
+import re
+import logging
 from pathlib import Path
 from typing import List, Dict, Protocol
 from datetime import datetime
 from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
+
+def _validate_hex_color(color: str) -> str:
+    if color and re.fullmatch(r'#[0-9a-fA-F]{3,6}', color.strip()):
+        return color.strip()
+    return '#4f46e5'
 
 @dataclass
 class ExportMetadata:
@@ -61,6 +70,7 @@ class MarkdownFormatter:
 
 class HTMLFormatter:
     def format(self, metadata: ExportMetadata) -> str:
+        safe_color = _validate_hex_color(metadata.code_color)
         html_out = f"""<!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -68,9 +78,9 @@ class HTMLFormatter:
     <title>Kod Raporu: {html.escape(metadata.code_name)}</title>
     <style>
         body {{ font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; padding: 20px; }}
-        .header {{ background: white; padding: 30px; border-radius: 12px; border-left: 6px solid {metadata.code_color}; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; margin-bottom: 40px; }}
-        h1 {{ color: {metadata.code_color}; }}
-        .segment {{ background: white; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid {metadata.code_color}; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }}
+        .header {{ background: white; padding: 30px; border-radius: 12px; border-left: 6px solid {safe_color}; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; margin-bottom: 40px; }}
+        h1 {{ color: {safe_color}; }}
+        .segment {{ background: white; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid {safe_color}; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }}
         .document-title {{ color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding: 10px 0; }}
     </style>
 </head>
@@ -96,11 +106,13 @@ class HTMLFormatter:
         html_out += "</body></html>"
         return html_out
 
+_INJECTION_PREFIXES = ("=", "+", "-", "@", "\t")
+
 def _sanitize_spreadsheet_cell(value):
     if value is None:
         return ""
     text = str(value)
-    if text and text[0] in ("=", "+", "-", "@"):
+    if text and text[0] in _INJECTION_PREFIXES:
         return f"'{text}"
     return text
 
@@ -112,7 +124,7 @@ def export_segments(file_path: str, formatter: ExportFormatter, metadata: Export
             f.write(content)
         return True
     except Exception as e:
-        print(f"Export failed: {e}")
+        logger.error(f"Export failed: {e}", exc_info=True)
         return False
 
 def export_to_txt(file_path: str, code_name: str, code_color: str, segments: List[Dict]) -> bool:
@@ -153,7 +165,7 @@ def export_to_docx(file_path: str, code_name: str, code_color: str, segments: Li
         doc.save(file_path)
         return True
     except Exception as e:
-        print(f"DOCX export error: {e}")
+        logger.error(f"DOCX export error: {e}", exc_info=True)
         return False
 
 def export_memos_to_docx(file_path: str, memos: List[Dict]) -> bool:
@@ -173,9 +185,9 @@ def export_memos_to_docx(file_path: str, memos: List[Dict]) -> bool:
         meta_p.add_run(f"Toplam Not: {len(memos)}").italic = True
         
         # Group memos by category
-        doc_memos = [m for m in memos if m.get('document_id') and not m.get('start_pos')]
         segment_memos = [m for m in memos if m.get('start_pos')]
-        code_memos = [m for m in memos if m.get('code_id')]
+        code_memos = [m for m in memos if m.get('code_id') and not m.get('start_pos')]
+        doc_memos = [m for m in memos if m.get('document_id') and not m.get('start_pos') and not m.get('code_id')]
         
         if doc_memos:
             doc.add_heading('📂 Belge Notları', level=1)
@@ -201,7 +213,7 @@ def export_memos_to_docx(file_path: str, memos: List[Dict]) -> bool:
         doc.save(file_path)
         return True
     except Exception as e:
-        print(f"Memo DOCX export error: {e}")
+        logger.error(f"Memo DOCX export error: {e}", exc_info=True)
         return False
 
 def export_to_html(file_path: str, code_name: str, code_color: str, segments: List[Dict]) -> bool:
@@ -221,7 +233,7 @@ def export_to_csv(file_path: str, code_name: str, code_color: str, segments: Lis
         df.to_csv(file_path, index=False, encoding='utf-8-sig')
         return True
     except Exception as e:
-        print(f"CSV export error: {e}")
+        logger.error(f"CSV export error: {e}", exc_info=True)
         return False
 
 def export_to_xlsx(file_path: str, code_name: str, code_color: str, segments: List[Dict]) -> bool:
@@ -247,7 +259,7 @@ def export_to_xlsx(file_path: str, code_name: str, code_color: str, segments: Li
         df.to_excel(file_path, index=False)
         return True
     except Exception as e:
-        print(f"XLSX export error: {e}")
+        logger.error(f"XLSX export error: {e}", exc_info=True)
         return False
 
 def export_to_json(file_path: str, code_name: str, code_color: str, segments: List[Dict]) -> bool:
@@ -263,7 +275,7 @@ def export_to_json(file_path: str, code_name: str, code_color: str, segments: Li
             json.dump(data, f, ensure_ascii=False, indent=4)
         return True
     except Exception as e:
-        print(f"JSON export error: {e}")
+        logger.error(f"JSON export error: {e}", exc_info=True)
         return False
 
 def export_to_markdown(file_path: str, code_name: str, code_color: str, segments: List[Dict]) -> bool:
